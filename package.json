@@ -1,0 +1,24 @@
+{
+  "name": "lagou_front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KangLinDDD/lagou_front.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KangLinDDD/lagou_front/issues"
+  },
+  "homepage": "https://github.com/KangLinDDD/lagou_front#readme",
+  "dependencies": {
+    "jquery-validation": "^1.19.0",
+    "vue": "^2.6.10"
+  }
+}
