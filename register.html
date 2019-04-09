@@ -13,14 +13,14 @@
   <meta
     content="拉勾,拉勾网,拉勾招聘,拉钩, 拉钩网 ,互联网招聘,拉勾互联网招聘, 移动互联网招聘, 垂直互联网招聘, 微信招聘, 微博招聘, 拉勾官网, 拉勾百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘, 校招,社会招聘,社招"
     name="keywords" />
-
   <meta name="baidu-site-verification" content="QIQ6KC1oZ6" />
   <link rel="stylesheet" type="text/css" href="style/css/style.css" />
   <script src="node_modules/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="style/js/jquery.lib.min.js"></script>
   <script type="text/javascript" src="style/js/core.min.js"></script>
-  <script src="node_modules/vue/dist/vue.js"></script>
   <script type="text/javascript" src="./config/config.js"></script>
+  <script src="node_modules/layui-layer/dist/layer.js"></script>
+  <script src="node_modules/vue/dist/vue.js"></script>
 </head>
 
 <body id="login_bg">
@@ -48,16 +48,17 @@
             <input type="radio" v-model="type" value="1" name="type" />
           </li>
         </ul>
-        <input type="text" id="email" name="email" v-model="email" tabindex="1" placeholder="请输入常用邮箱地址" />
+        <input type="text" id="email" name="email" @focus="closeError" @blur="" v-model="email" tabindex="1"
+          placeholder="请输入常用邮箱地址" />
         <span class="error" style="display:none;" id="beError"></span>
-        <span class="error" v-text="errorMsg" v-show="!isRegister"></span>
+        <span class="error" v-text="errorMsg" v-show="isRegister"></span>
         <input type="password" id="password" v-model="password" name="password" tabindex="2" placeholder="请输入密码" />
         <label class="fl registerJianJu" for="checkbox">
-         我已阅读并同意
+          我已阅读并同意
           <a href="" target="_blank">《拉勾用户协议》</a>
           <input type="checkbox" id="checkbox" name="checkbox" checked class="checkbox valid" />
         </label>
-        <input type="submit" id="submitLogin" @click="register" value="注  册" />
+        <input type="submit" :disabled="isRegister" id="submitLogin" @click="register" value="注  册" />
       </form>
       <div class="login_right">
         <div>已有拉勾帐号</div>
@@ -95,13 +96,12 @@
         type: '',
         email: '',
         password: '',
-        isRegister: true,
+        isRegister: false,
         errorMsg: ''
       },
       methods: {
         closeError() {
-          alert(0)
-          this.isRegister = true
+          this.isRegister = false
         },
         register() {
           var _this = this
@@ -151,10 +151,15 @@
                 method: 'POST'
               }).done(function (resp) {
                 if (resp.register) {
-                  // 跳转到登录页
-                  // window.location.href = './login.html'
+                  layer.msg('注册成功', {
+                    icon: 1,
+                    time: 2000,
+                    end: () => {
+                      window.location.href = './login.html'
+                    }
+                  })
                 } else {
-                  _this.isRegister = false
+                  _this.isRegister = true
                   _this.errorMsg = resp.message
                 }
               })
