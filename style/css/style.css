@@ -1,22 +1,10 @@
 ﻿@charset "utf-8";
-/*********************************************
-* CSS Document for lagou.com 拉勾招聘 
-* Start Time 2013-06-14
-* Author : Vee
-* Contect : vee@3wcoffee.com
-**********************************************
-* background:#0d9572;             绿 背景色
-* background:#0d9572;             绿 按钮
-* background:#00694e;             绿 按钮 current
-* color:#019875;                  绿字体
-* background:#fafafa;             灰 背景色
-* border:1px dashed #cfd0d2；     灰 边框
-* height:30px;                    list page btn
-* height:46px;                    login and register btn
-* height:60px;                    detail page btn .btn_big
-**********************************************/
+[v-cloak] {
+  display: none !important;
+}
 *{outline: none; }html,body{height:100%;}
 #body{min-height: 100%;height: auto !important; height: 100%; margin: 0 0 -37px;}
+.body{min-height: 100%;height: auto !important; height: 100%; margin: 0 0 -37px;}
 body{margin:0;padding:0; font:14px/22px "微软雅黑","宋体",Arial; color:#333;word-wrap:break-word;}
 .clearfix:after{content: "";height: 0;clear: both;visibility: hidden;}
 .clearfix{display: inline-block;}  /* for IE/Mac */
@@ -68,7 +56,7 @@ span.error{display:block;width: 200px; margin:5px 0 10px 0; font-size:14px; colo
 #header dt span{float:left;}
 #header dt span.red{width:9px;height:9px;background:url(img/noticeDot.png) no-repeat;margin:11px 0 0 10px;}
 #header dt i{ position:absolute; top:14px; right:25px;  border:4px solid #fff; border-color:#fff #019875 #019875; display:block; font-size:0px; height:0; width:0;-webkit-transition: transform 0.2s ease 0s;-moz-transition: transform 0.2s ease 0s;-o-transition: transform 0.2s ease 0s;transition: transform 0.2s ease 0s;}
-#header dt:hover i, #header dl.expend dt i{-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);transform:rotate(180deg); top:12px; border-color:#019875 #019875 #fff #019875\9;}
+#header dt:hover i, #header dl.expend dt i{-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);transform:rotate(180deg); top:12px; border-color:#019875 #019875 #fff}
 #header dd{ display:none;}
 #header dd.btm{ border-bottom:1px dashed #34ad91;}
 #header dd a{display:block; color:#fff; padding:0 20px; background:#019875;}
@@ -123,7 +111,7 @@ span.error{display:block;width: 200px; margin:5px 0 10px 0; font-size:14px; colo
 .da-thumbs li a,.da-thumbs li a img {display: block;position: relative;}
 .da-thumbs li a {color:#fff;overflow: hidden;}
 .da-thumbs li a div {position: absolute;background: #333;background: rgba(1,152,117,0.9);*background:#0d9572;background:#0d9572\0;filter:alpha(Opacity=90);	width: 100%;height: 100%;}
-.da-thumbs li a em{display:block;width:100px;height:5px;background:rgba(255,255,255,0.3);*background:#fff;background:#fff\0;filter:alpha(Opacity=30);margin:0 6px;}
+.da-thumbs li a em{display:block;width:100px;height:5px;background:rgba(255,255,255,0.3);*background:#fff;background:#fff;filter:alpha(Opacity=30);margin:0 6px;}
 .da-thumbs li a h2{font-size:24px;height:24px;line-height:24px;margin:10px 8px 8px 8px;font-weight:normal;text-align:center;overflow:hidden;}
 .da-thumbs li a p{font-size:12px;margin:6px 8px;line-height:18px;}
 ul.hot_tags{margin-bottom:23px; overflow:hidden;}
@@ -1161,7 +1149,7 @@ ul.my_delivery{margin:20px 48px;}
 .status_list .top h3{color:#019875;}
 .status_list .list_body div{color:#888888;}
 .status_list .list_body span{color:#333333;}
-#recordPopBox{width:490px; border:5px solid rgba(0,0,0,0.2); border:5px solid #cccccc\9; /*IE8以及以下版本浏览器*/background: #fff; position:fixed;z-index:1000; left:50%;top:50%;margin:-250px 0 0 -250px;}
+#recordPopBox{width:490px; border:5px solid rgba(0,0,0,0.2); border:5px solid #cccccc; /*IE8以及以下版本浏览器*/background: #fff; position:fixed;z-index:1000; left:50%;top:50%;margin:-250px 0 0 -250px;}
 #recordPopBox dt{font-size:18px;line-height:44px; color:#fff;height:44px;background:#019875;padding:0 15px;}
 #recordPopBox dt a.boxclose{position: absolute;top: 7px;right: 7px;background: url(img/controls.png) no-repeat;width: 30px;height: 30px;text-indent: -9999px;}
 #recordPopBox dt a.boxclose:hover{background-position:0 -30px;}
@@ -1867,7 +1855,7 @@ ul.resumeLists li.job_item .checkbox{margin-top:30px;}
 .jobListShow .links{position:relative; top:-20px;right:10px; }
 .jobListShow .links a{color:#0d9572; text-decoration:none;}
 .jobListShow .links a:hover{color:#0d9572;}
-.check_popbox{color:#333 !important;width:300px; font-size:18px; padding:10px 15px 20px 15px; border:3px solid rgba(0,0,0,0.2); border:3px solid #cccccc\9; /*IE8以及以下版本浏览器*/background: #fff; position:relative;}
+.check_popbox{color:#333 !important;width:300px; font-size:18px; padding:10px 15px 20px 15px; border:3px solid rgba(0,0,0,0.2); border:3px solid #cccccc; /*IE8以及以下版本浏览器*/background: #fff; position:relative;}
 .check_popbox_verify{position:absolute !important;z-index:10;left:-230px;top:40px;}
 .check_popbox_unverified{position:absolute !important;z-index:10;left:-160px;top:40px;}
 .check_popbox_verifyAll{position:absolute !important;z-index:10;left:-110px;top:56px;}
@@ -1979,7 +1967,7 @@ ul.my_collections li i{float:right;width:1px;height:24px;background: url(img/arr
 .user_registerRadio li em{ background:url(img/user_choose.png) no-repeat;width:17px;height:18px;}
 .user_firstBinWarn{ width:720px;background:#faf3e1;height:28px;font-size:16px;color:#555;margin-left:15px;padding-top:14px;}
 .user_firstBinWarn em{ display:inline-block;background:url(img/user_warn.png) no-repeat;width:18px;height:17px;}
-.user_noAccountform label.user_modifyYangshi{;font-size:14px;display:block;padding-left:23px;width:100%;height:30px;}
+.user_noAccountform label.user_modifyYangshi{font-size:14px;display:block;padding-left:23px;width:100%;height:30px;}
 .user_noLagouAccount .agreeNotice{ background:none;font-size:14px;margin-top:10px;}
 .user_noLagouAccount label.agreeNotice.checked{ background:none;}
 .user_noAccountform label.user_modifyYangshi input[type="checkbox"]{display:none;}
@@ -1996,7 +1984,7 @@ ul.my_collections li i{float:right;width:1px;height:24px;background: url(img/arr
 .user_noModify li span{color:#333;}
 .noModify li a{ color: #019875}
 .user_thirdLogin{ margin-top: 23px; width: 674px; height: 38px; font-size: 18px;}
-.user_thirdLogin dt{ float: left; margin:0 20px; display: inline}
+.user_thirdLogin dt{ margin:0 20px; display: inline}
 .user_thirdLogin dd{ float: left ;height: 38px; line-height: 38px; padding-left: 0;}
 .user_thirdLogin dd span{ padding: 0 10px;}
 .user_thirdLogin dd  a{  color: #019875}
@@ -2033,7 +2021,7 @@ ul.my_collections li i{float:right;width:1px;height:24px;background: url(img/arr
 .savePassword td input[type="submit"]{ height: 35px; color: #fff; background: #019875; font-size: 18px;padding:0 20px;line-height: 35px; margin-left: 10px;}
 .savePassword td input[type="submit"]:hover{background: #00694e;-webkit-transition: .2s;-moz-transition: .2s;transition: .2s;}
 .savePassword td span.error{margin:0 0 -10px 10px;}
-.user_nobindModify li{list-style:none;font-size:20px;color:#777777;height:38px;lihe-height:38px;}
+.user_nobindModify li{list-style:none;font-size:20px;color:#777777;height:38px;line-height:38px;}
 .user_nobindModify li a{color:#019875}
 /*end user setting*/
 
