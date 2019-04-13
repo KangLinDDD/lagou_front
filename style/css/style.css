@@ -93,14 +93,14 @@ span.error{display:block;width: 200px; margin:5px 0 10px 0; font-size:14px; colo
 #sidebar .menu_main a:hover{/* background:#019875; */ color:#019875;text-decoration:underline;}
 #sidebar .current .menu_main{background:#fff; border:2px solid #c9cbce; border-right:none; z-index:102;}
 #sidebar .menu_sub{width:540px;padding:15px 30px 5px 30px; position:absolute;top:0;left:230px; z-index:101; border:2px solid #c9cbce;background:#fff;}
-#sidebar .menu_sub dl{margin:0 0 20px;*position:relative;}
+#sidebar .menu_sub dl{margin:0 0 20px;position:relative;}
 #sidebar .menu_sub dt{width:70px;font-size:14px;margin:0;text-align:right;position:absolute;*left:0;}
 #sidebar .menu_sub dt a{padding:0; color:#333;line-height:28px;text-decoration:underline;}
 #sidebar .menu_sub dt a:hover{color:#019875; text-decoration:underline;}
 #sidebar .menu_sub dd{margin-left:100px;overflow:hidden;}
 #sidebar .menu_sub dd a{white-space:nowrap;padding:0 10px;background:url(img/arr.png) -29px center no-repeat; color:#777;line-height:28px;margin-left:-1px;}
 #sidebar .menu_sub dd a:hover{color:#019875; text-decoration:underline;}
-#sidebar .menu_sub dd a.curr{color:#019875;background-position:-29px center !important;}
+#sidebar .menu_sub dd a.curr{color:#019875;background-position:-29px center !important;float:left}
 #sidebar .subscribe{display:block;font-size:18px;height:46px;line-height:46px;background:#fafafa url(img/sub_icon.png) 180px center no-repeat;padding:0 80px 0 20px;margin-top:12px;border-bottom:2px solid #019875;}
 
 /*index content*/
