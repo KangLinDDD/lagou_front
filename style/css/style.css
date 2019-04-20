@@ -1,6 +1,6 @@
 ﻿@charset "utf-8";
 [v-cloak] {
-  display: none !important;
+  display: none!important;
 }
 *{outline: none; }html,body{height:100%;}
 #body{min-height: 100%;height: auto !important; height: 100%; margin: 0 0 -37px;}
@@ -84,7 +84,7 @@ span.error{display:block;width: 200px; margin:5px 0 10px 0; font-size:14px; colo
 .searchtype_arrow{ height:0;width:0;overflow: hidden;font-size: 0;line-height: 0; border-width:5px 5px 0; border-style:solid dashed; border-color:#019875 transparent transparent;-webkit-transition:all 0.4s ease 0s;-moz-transition:all 0.4s ease 0s;-ms-transition:all 0.4s ease 0s;transition:all 0.4s ease 0s; position:absolute; top:18px;left:73px;}
 .searchtype_arrow.transform{-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);transform: rotate(180deg);-webkit-transition:all 0.4s ease 0s;-moz-transition:all 0.4s ease 0s;-ms-transition:all 0.4s ease 0s;transition:all 0.4s ease 0s;}
 #sidebar{width:230px;  position: absolute; z-index:101;*position: relative; *float:left; }
-.fixed {position:fixed !important; /* IE 6 不支持 fixed，只能用 absolute */top:0 !important;}
+.fix {position:fixed !important; /* IE 6 不支持 fixed，只能用 absolute */top:0 !important;}
 #sidebar .mainNavs{background:#fafafa; }
 #sidebar .menu_main{width:206px;padding:6px 12px; *padding-bottom:10px; border:2px solid #fafafa; border-right:none;overflow:hidden;position:relative;}
 #sidebar .menu_main h2{font-size:18px;padding-left:8px;font-weight:500; /* background:url(img/arr.png) right 5px no-repeat; */}
@@ -2030,4 +2030,39 @@ ul.my_collections li i{float:right;width:1px;height:24px;background: url(img/arr
 #tip_didi a{color:#888686;float:right;text-decoration:underline;*margin:-27px 10px 0 0;}
 #tip_didi_img{width:273px;height:118px;background:url(img/tip_didi.png) no-repeat;position:absolute;z-index:100;margin:-20px 0 0 140px;*margin:-20px 0 0 70px;}
 #tip_didi_img a{display:block;width:86px;height:28px;margin:75px 0 0 97px;}
+.ui-autocomplete {
+  width: 488px;
+  background: #fafafa !important;
+  position: relative;
+  z-index: 10;
+  border: 2px solid #91cebe;
+}
+
+.ui-autocomplete-category {
+  font-size: 16px;
+  color: #999;
+  width: 50px;
+  position: absolute;
+  z-index: 11;
+  right: 0px;
+  /*top: 6px; */
+  text-align: center;
+  border-top: 1px dashed #e5e5e5;
+  padding: 5px 0;
+}
+
+.ui-menu-item {
+  *width: 439px;
+  vertical-align: middle;
+  position: relative;
+  margin: 0px;
+  margin-right: 50px !important;
+  background: #fff;
+  border-right: 1px dashed #ededed;
+}
+
+.ui-menu-item a {
+  display: block;
+  overflow: hidden;
+}
 /*end*/
