@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/KangLinDDD/lagou_front#readme",
   "dependencies": {
+    "element-ui": "^2.7.2",
     "jquery-validation": "^1.19.0",
     "layui-layer": "^1.0.9",
     "vue": "^2.6.10"
