@@ -60,20 +60,26 @@
           <dl>
             <dt>月薪范围 <em></em></dt>
             <dd>
-              <div :class="{'optionsHover':index.salaryIndex === 0}" @click="selectSalary(0,2,0)">2k以下</div>
-              <div :class="{'optionsHover':index.salaryIndex === 1}" @click="selectSalary(2,5,1)">2k-5k</div>
-              <div :class="{'optionsHover':index.salaryIndex === 2}" @click="selectSalary(5,10,2)">5k-10k</div>
-              <div :class="{'optionsHover':index.salaryIndex === 3}" @click="selectSalary(10,15,3)">10k-15k</div>
-              <div :class="{'optionsHover':index.salaryIndex === 4}" @click="selectSalary(15,25,4)">15k-25k</div>
-              <div :class="{'optionsHover':index.salaryIndex === 5}" @click="selectSalary(25,50,5)">25k-50k</div>
-              <div :class="{'optionsHover':index.salaryIndex === 6}" @click="selectSalary(50,'',6)">50k以上</div>
+              <div :class="{'optionsHover':searchData.min_salary==0&& searchData.max_salary==2}"
+                @click="selectSalary(0,2,0)">2k以下</div>
+              <div :class="{'optionsHover':searchData.min_salary==2&& searchData.max_salary==5}"
+                @click="selectSalary(2,5,1)">2k-5k</div>
+              <div :class="{'optionsHover':searchData.min_salary==5&& searchData.max_salary==10}"
+                @click="selectSalary(5,10,2)">5k-10k</div>
+              <div :class="{'optionsHover':searchData.min_salary==10&& searchData.max_salary==15}"
+                @click="selectSalary(10,15,3)">10k-15k</div>
+              <div :class="{'optionsHover':searchData.min_salary==15&& searchData.max_salary==25}"
+                @click="selectSalary(15,25,4)">15k-25k</div>
+              <div :class="{'optionsHover':searchData.min_salary==25&& searchData.max_salary==50}"
+                @click="selectSalary(25,50,5)">25k-50k</div>
+              <div :class="{'optionsHover':searchData.min_salary==50}" @click="selectSalary(50,'',6)">50k以上</div>
             </dd>
           </dl>
           <dl>
             <dt>工作经验<em></em></dt>
             <dd>
               <div v-for="(item,indexs) in datas.experience" :key="indexs"
-                :class="{'optionsHover':index.experienceIndex === indexs}" @click='setItem("experience",indexs,indexs)'>
+                :class="{'optionsHover':searchData.experience == indexs}" @click='setItem("experience",indexs,indexs)'>
                 {{item}}</div>
             </dd>
           </dl>
@@ -81,7 +87,7 @@
             <dt>最低学历 <em></em></dt>
             <dd>
               <div v-for="(item,indexs) in datas.education" :key="indexs"
-                :class="{'optionsHover':index.educationIndex === indexs}" @click='setItem("education",indexs,indexs)'>
+                :class="{'optionsHover':searchData.education == indexs}" @click='setItem("education",indexs,indexs)'>
                 {{item}}</div>
             </dd>
           </dl>
@@ -89,7 +95,7 @@
             <dt>工作性质 <em></em></dt>
             <dd>
               <div v-for="(item,indexs) in datas.nature" :key="indexs"
-                :class="{'optionsHover':index.natureIndex === indexs}" @click='setItem("nature",indexs,indexs)'>{{item}}
+                :class="{'optionsHover':searchData.nature == indexs}" @click='setItem("nature",indexs,indexs)'>{{item}}
               </div>
             </dd>
           </dl>
@@ -97,7 +103,7 @@
             <dt>发布时间 <em></em></dt>
             <dd>
               <div v-for="(item,indexs) in datas.updatetime" :key="indexs"
-                :class="{'optionsHover':index.updatetimeIndex === indexs}" @click='setTime(indexs)'>{{item}}</div>
+                :class="{'optionsHover':index.updatetimeIndex == indexs}" @click='setTime(indexs)'>{{item}}</div>
             </dd>
           </dl>
         </div>
@@ -139,62 +145,62 @@
             <li @click="changeStatus(1)">职位</li>
           </ul>
           <div class="searchtype_arrow"></div>
-          <input type="text" id="search_input" v-model="jobName" @keyup.enter="getJobLists"
+          <input type="text" id="search_input" v-model="searchData.jobName" @keyup.enter="getJobLists"
             placeholder="请输入职位名称，如：产品经理" />
           <input type="button" id="search_button" @click="getJobLists" value="搜索" />
         </div>
         <dl class="hotSearch">
           <dt>热门搜索：</dt>
           <dd v-for="hot in hotSearch" :key="hot.id"><a
-              :href="'./list.html?jobName='+hot.searchName">{{hot.searchName}}</a>
+              @click="changeJob(hot.searchName)">{{hot.searchName}}</a>
           </dd>
         </dl>
         <div class="breakline"></div>
         <dl class="workplace" id="workplaceSelect">
           <dt class="fl">工作地点：</dt>
           <dd>
-            <a href="javascript:;" class="current">全国</a>
+            <span class="current">全国</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">北京</a>
+            <span>北京</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">上海</a>
+            <span>上海</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">广州</a>
+            <span>广州</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">深圳</a>
+            <span>深圳</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">成都</a>
+            <span>成都</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">杭州</a>
+            <span>杭州</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">武汉</a>
+            <span>武汉</span>
             |
           </dd>
           <dd>
-            <a href="javascript:;">南京</a>
+            <span>南京</span>
             |
           </dd>
           <dd class="more">
-            <a href="javascript:;">其他</a>
+            <a style="cursor:pointer;" href="javascript:;">其他</a>
             <div class="triangle citymore_arrow"></div>
           </dd>
           <dd id="box_expectCity" class="searchlist_expectCity dn">
-            <span class="bot"></span>
-            <span class="top"></span>
+            <a class="bot"></a>
+            <a class="top"></a>
             <dl>
               <dt>ABCDEF</dt>
               <dd>
@@ -328,116 +334,10 @@
             </div>
           </li>
         </ul>
-        <!-- 分页 -->
-        <!-- <div class="Pagination"></div> -->
-        <el-pagination class="Pagination myself" background layout="prev, pager, next" page-size="10" :total="total" 
-        prev-text="上一页" next-text="下一页" @current-change="changePage">
+        <el-pagination class="Pagination myself" :current-page="currentPage" background layout="prev, pager, next"
+          page-size="10" :total="total" prev-text="上一页" next-text="下一页" @current-change="changePage">
         </el-pagination>
       </div>
-      <!-- <script>
-        $(function () {
-          $(".workplace dd").not('.more').children('a').click(function () {
-            $('#lc').val(1);
-            editForm("cityInput", $(this).html());
-          });
-
-          $("#box_expectCity dd span").click(function () {
-            $('#lc').val(1);
-            editForm("cityInput", $(this).html());
-          });
-
-          $('#options dd div').click(function () {
-            var firstName = $(this).parents('dl').children('dt').text();
-            var fn = $.trim(firstName);
-            if (fn == "月薪范围") {
-              editForm("yxInput", $(this).html());
-            }
-            else if (fn == "工作经验") {
-              editForm("gjInput", $(this).html());
-            }
-            else if (fn == "最低学历") {
-              editForm("xlInput", $(this).html());
-            }
-            else if (fn == "工作性质") {
-              editForm("gxInput", $(this).html());
-            }
-            else if (fn == "发布时间") {
-              editForm("stInput", $(this).html());
-            }
-          });
-
-          $('#selected ul').delegate('li span.select_remove', 'click', function (event) {
-            var firstName = $(this).parent('li').find('strong').text();
-            var fn = $.trim(firstName);
-            if (fn == "月薪范围")
-              editForm("yxInput", "");
-            else if (fn == "工作经验")
-              editForm("gjInput", "");
-            else if (fn == "最低学历")
-              editForm("xlInput", "");
-            else if (fn == "工作性质")
-              editForm("gxInput", "");
-            else if (fn == "发布时间")
-              editForm("stInput", "");
-          });
-
-          /* search结果	*/
-          (function ($) {
-            var searchVal = $('#search_input').val();
-            var reg = /\s/g;
-            searchVal = searchVal.replace(reg, "").split("");
-
-            var resultL = '';
-            var resultR = '';
-            $('.hot_pos li').each(function () {
-              resultL = $('.hot_pos_l a', this).text().split("");
-              $.each(resultL, function (i, v) {
-                if ($.inArray(v.toLowerCase(), searchVal) != -1 || $.inArray(v.toUpperCase(), searchVal) != -1) {
-                  resultL[i] = '<span>' + v + '</span>';
-                }
-              });
-              $('.hot_pos_l a', this).html(resultL.join(''));
-
-              resultR = $('.hot_pos_r .mb10 a', this).text().split("");
-              $.each(resultR, function (i, v) {
-                if ($.inArray(v.toLowerCase(), searchVal) != -1 || $.inArray(v.toUpperCase(), searchVal) != -1) {
-                  resultR[i] = '<span>' + v + '</span>';
-                }
-              });
-              $('.hot_pos_r .mb10 a', this).html(resultR.join(''));
-            });
-
-          })(jQuery);
-
-          //didi tip
-          if ($.cookie('didiTip') != 1 && false) {
-            $('#tip_didi').show();
-          }
-          $('#tip_didi a').click(function () {
-            $(this).parent().remove();
-            $.cookie('didiTip', 1, { expires: 30, path: '/' });
-          });
-
-        });
-
-        function editForm(inputId, inputValue) {
-          $("#" + inputId).val(inputValue);
-          var keyword = $.trim($('#search_input').val());
-          var reg = /[`~!@\$%\^\&\*\(\)_<>\?:"\{\},\\\/;'\[\]]/ig;
-          var re = /#/g;
-          var r = /\./g;
-          var kw = keyword.replace(reg, " ");
-
-          if (kw == '') {
-            $('#searchForm').attr('action', 'list.html所有职位').submit();
-          } else {
-            kw = kw.replace(re, '井');
-            kw = kw.replace(r, '。');
-            $('#searchForm').attr('action', 'list.html' + kw).submit();
-          }
-          //$("#searchForm").submit();
-        }
-      </script> -->
       <div class="clear"></div>
       <a id="backtop" title="回到顶部" rel="nofollow"></a>
     </div><!-- end #container -->
@@ -485,15 +385,49 @@
           updatetimeIndex: ''
         }
       },
-      mounted() {
+      created() {
         this.searchData = window.getParams() ? window.getParams() : {}
         this.jobName = this.searchData.jobName ? this.searchData.jobName : ''
         this.searchType = this.searchData.searchType ? this.searchData.searchType : '1'
+        this.city = this.searchData.city ? this.searchData.city : ''
+        if (this.city === '全国') {
+          this.searchData.city = ''
+        }
+        this.currentPage = this.searchData.currentPage ? this.searchData.currentPage : 1
+        this.searchData.currentPage = ''
         this.searchTypes = this.searchType
         this.searchData.searchType = ''
+        switch (timeStampToDay(this.searchData.updatetime)) {
+          case 1: {
+            this.index.updatetimeIndex = 0
+            break
+          }
+          case 31: {
+            this.index.updatetimeIndex = 1
+            break
+          }
+          case 7: {
+            this.index.updatetimeIndex = 2
+            break
+          }
+          case 30: {
+            this.index.updatetimeIndex = 3
+            break
+          }
+        }
         // 获取数据
         this.searchDatas()
-        this.getHotSearch()
+        this.getHotSearch();
+        var ele = $('#workplaceSelect dd span')
+        ele.removeClass('current')
+        for (var a = 0; a < ele.length; a++) {
+          if (ele[a].innerText === this.city) {
+            ele[a].classList.add('current')
+          }
+        }
+      },
+      mounted() {
+
       },
       methods: {
         getHotSearch() {
@@ -532,21 +466,21 @@
         setItem(field, val, index) {
           this.searchData[field] = val
           this.index[field + 'Index'] = index
-          this.searchDatas()
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
-        changePage(currentPage){
-          this.currentPage = currentPage
-          this.searchDatas()
+        changePage(currentPage) {
+          this.searchData.currentPage = currentPage
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
         selectSalary(min, max, index) {
           this.searchData.min_salary = min
           this.searchData.max_salary = max
           this.index.salaryIndex = index
-          this.searchDatas()
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
         getJobLists() {
-          this.searchData = {}
-          this.searchDatas()
+          // this.searchData = {}
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
         searchDatas() {
           // 工作
@@ -569,28 +503,42 @@
           this.index.updatetimeIndex = index
           switch (index) {
             case 0: {
-              this.searchData.updatetime = window.getDay(0)
+              this.searchData.updatetime = window.getTimeStamp(0)
               break;
             }
             case 1: {
-              this.searchData.updatetime = window.getDay(2)
+              this.searchData.updatetime = window.getTimeStamp(2)
               break;
             }
             case 2: {
               // 一周内
-              this.searchData.updatetime = window.getDay(6)
+              this.searchData.updatetime = window.getTimeStamp(6)
               break;
             }
             case 3: {
               // 一月内（30天）
-              this.searchData.updatetime = window.getDay(29)
+              this.searchData.updatetime = window.getTimeStamp(29)
               break;
             }
           }
-          this.searchDatas()
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
+        },
+        changeJob(job){
+          this.searchData.jobName = job
+          window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         }
       },
+      updated() {
+
+      }
     })
+  </script>
+  <script>
+    $('#workplaceSelect dd span').on('click', function () {
+      app.$data.searchData.city = $(this).text()
+      window.location.href = window.local + '/list.html?' + jsonToUrl(app.$data.searchData)
+    })
+
   </script>
 </body>
 

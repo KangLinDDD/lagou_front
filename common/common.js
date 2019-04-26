@@ -27,7 +27,6 @@ function getDay (day) {
   var tDate = today.getDate();
   tMonth = doHandleMonth(tMonth + 1);
   tDate = doHandleMonth(tDate);
-  console.log(tYear + "-" + tMonth + "-" + tDate)
   return tYear + "-" + tMonth + "-" + tDate;
 }
 function doHandleMonth (month) {
@@ -36,4 +35,21 @@ function doHandleMonth (month) {
     m = "0" + month;
   }
   return m;
+}
+function jsonToUrl(json){
+  json=JSON.stringify(json)
+  json = json.replace(/,/g,'&')
+  json = json.replace(/:/g,'=')
+  json = json.replace(/"/g,'')
+  json = json.slice(1)
+  json = json.slice(0,-1)
+  return json
+}
+function getTimeStamp(day){
+  var today = new Date();
+  var targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * day
+  return targetday_milliseconds
+}
+function timeStampToDay(timestamp){
+  return Math.floor((new Date().getTime() - timestamp)/(1000 * 60 * 60 * 24) +1)
 }

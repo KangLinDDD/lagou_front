@@ -202,8 +202,12 @@ ul.hot_pos i{width: 12px;height: 14px;position:absolute;background:url(img/hot.p
 .workplace dd,.workplace li{float:left; margin-left:5px;}
 .workplace dd.more,.workplace li.more{padding-right:15px;position:relative;}
 .workplace a{ color:#555; padding:2px 5px; cursor:pointer;}
-.workplace a:hover{background:#0d9572; color:#fff;}
-.workplace a.current{background:#0d9572; color:#fff;}
+.workplace a:hover{background-color:#0d9572; color:#fff;}
+.workplace a.current{background-color:#0d9572; color:#fff;}
+.workplace span{ color:#555; padding:2px 5px; cursor:pointer;}
+.workplace span:hover{background-color:#0d9572; color:#fff;}
+.workplace span.current{background-color:#0d9572; color:#fff;}
+.workplace #box_expectCity span.current{background-color:#0d9572; color:#fff;}
 .Pagination{margin:20px 0; overflow:hidden;line-height:30px;}
 #container .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #009875;
