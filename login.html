@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <script src="common/common.js"></script>
   <script src="node_modules/vue/dist/vue.js"></script>
   <script id="allmobilize" charset="utf-8" src="./style/js/allmobilize.min.js"></script>
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -113,14 +114,9 @@
                   withCredentials: true
                 },
                 success: function (res) {
-                  if (res === 1) {
+                  if (res.statusCode === 200) {
                     _this.loginFailed = false
-                    //    登陆成功
-                    if(window.history.length>0){
-                      window.history.back(-1)
-                    }else{
-                      window.location.href = './index.html'
-                    }
+                    window.location.href = './index.html'
                   } else {
                     //    登录失败
                     _this.loginFailed = true

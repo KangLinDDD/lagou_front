@@ -4,9 +4,10 @@
 <head>
   <script src="node_modules/vue/dist/vue.min.js"></script>
   <script src="config/config.js"></script>
-  <script id="allmobilize" charset="utf-8" src="style/js/allmobilize.min.js"></script>
+  <script id="allmobilize" charset="utf-8" src="style/js/allmobilize.min.js" id="allmobilize"></script>
   <meta http-equiv="Cache-Control" content="no-siteapp" />
   <link rel="alternate" media="handheld" />
+  <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-chalk/index.css">
   <!-- end 云适配 -->
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>拉勾网-最专业的互联网招聘平台</title>
@@ -19,6 +20,7 @@
   <link rel="stylesheet" type="text/css" href="style/css/style.css" />
   <link rel="stylesheet" type="text/css" href="style/css/external.min.css" />
   <link rel="stylesheet" type="text/css" href="style/css/popup.css" />
+  <script src="./node_modules/element-ui/lib/index.js"></script>
   <script src="./node_modules/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="style/js/jquery.lib.min.js"></script>
   <script src="style/js/ajaxfileupload.js" type="text/javascript"></script>
@@ -40,11 +42,24 @@
             <li><a href="jianli.html" rel="nofollow">我的简历</a></li>
             <li><a href="create.html" rel="nofollow">发布职位</a></li>
           </ul>
-          <ul class="loginTop">
+          <ul class="loginTop" v-if="!logined">
             <li><a href="login.html" rel="nofollow">登录</a></li>
             <li>|</li>
             <li><a href="register.html" rel="nofollow">注册</a></li>
           </ul>
+          <dl class="collapsible_menu" v-else>
+            <dt>
+              <span>{{userInfo.name}}</span>
+              <span class="red dn" id="noticeDot-0"></span>
+              <i></i>
+            </dt>
+            <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
+            <dd><a href="collections.html">我收藏的职位</a></dd>
+            <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
+            <dd><a href="create.html">我要招人</a></dd>
+            <dd><a href="accountBind.html">帐号设置</a></dd>
+            <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
+          </dl>
         </div>
       </div><!-- end #header -->
       <div id="container">
@@ -76,7 +91,7 @@
         <div class="content">
           <div id="search_box">
             <form id="" name="searchForm" action="list.html" method="get">
-              <ul id="searchType" >
+              <ul id="searchType">
                 <li @click="changeStatus(1)" v-hide="searchType === '1'" class="type_selected">职位</li>
                 <li @click="changeStatus(2)" v-hide="searchType === '2'">公司</li>
               </ul>
@@ -127,7 +142,13 @@
             </div>
           </div>
           <!--/#main_banner-->
-
+          <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+            <span>您的个人信息不完整，是否完善？</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" class="ele-button" @click="addUserInfo">确 定</el-button>
+            </span>
+          </el-dialog>
           <ul id="da-thumbs" class="da-thumbs">
             <li>
               <a href="" target="_blank">
@@ -406,18 +427,49 @@
         newJobs: [],
         hotSearch: [],
         scroll: 0,
-        searchType: 1
+        searchType: 1,
+        userInfo: {},
+        logined: false,
+        dialogVisible: false
       },
       mounted() {
         this.getJobLists()
         this.gethotJobs()
         this.getNewJobs()
         this.getHotSearch()
-        window.addEventListener('scroll', this.menu)
+        this.getUserInfo()
+        // window.addEventListener('scroll', this.menu)
       },
       methods: {
-        menu() {
-          this.scroll = document.documentElement.scrollTop;
+        // menu() {
+        //   this.scroll = document.documentElement.scrollTop;
+        // },
+        addUserInfo() {
+          this.dialogVisible = false
+          window.location.href = './jianli.html'
+        },
+        getUserInfo() {
+          var _this = this
+          $.ajax({
+            url: window.lagou + '/login/index/checkCookie',
+            method: 'post',
+            dataType: 'json',
+            xhrFields: {
+              withCredentials: true
+            },
+            success: (res) => {
+              console.log(res)
+              if (res.id) {
+                _this.userInfo.id = res.id
+                _this.userInfo.name = res.name ? res.name : '游客'
+                _this.dialogVisible = res.name==='' ? true : false
+                console.log(_this.dialogVisible)
+                _this.logined = true
+              }
+            }, error: (res) => {
+              console.log('error')
+            }
+          })
         },
         getJobLists() {
           var _this = this
