@@ -145,7 +145,7 @@
             <li @click="changeStatus(1)">职位</li>
           </ul>
           <div class="searchtype_arrow"></div>
-          <input type="text" id="search_input" v-model="searchData.jobName" @keyup.enter="getJobLists"
+          <input type="text" id="search_inputs" v-model="searchData.jobName" @keyup.enter="getJobLists"
             placeholder="请输入职位名称，如：产品经理" />
           <input type="button" id="search_button" @click="getJobLists" value="搜索" />
         </div>

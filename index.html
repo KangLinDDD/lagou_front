@@ -438,12 +438,12 @@
         this.getNewJobs()
         this.getHotSearch()
         this.getUserInfo()
-        // window.addEventListener('scroll', this.menu)
+        window.addEventListener('scroll', this.menu)
       },
       methods: {
-        // menu() {
-        //   this.scroll = document.documentElement.scrollTop;
-        // },
+        menu() {
+          this.scroll = document.documentElement.scrollTop;
+        },
         addUserInfo() {
           this.dialogVisible = false
           window.location.href = './jianli.html'
@@ -458,13 +458,16 @@
               withCredentials: true
             },
             success: (res) => {
-              console.log(res)
-              if (res.id) {
+              // 普通用户
+              if (res.type === 0) {
                 _this.userInfo.id = res.id
                 _this.userInfo.name = res.name ? res.name : '游客'
                 _this.dialogVisible = res.name==='' ? true : false
-                console.log(_this.dialogVisible)
                 _this.logined = true
+              }else if(res.type === 1){
+                // hr用户
+              }else{
+                // 登录失败
               }
             }, error: (res) => {
               console.log('error')

@@ -77,11 +77,11 @@ span.error{display:block;width: 200px; margin:5px 0 10px 0; font-size:14px; colo
 #noticeTip a.closeNT:hover{transform: rotate(180deg);-ms-transform: rotate(180deg);-webkit-transform: rotate(180deg);-o-transform: rotate(180deg);-moz-transform: rotate(180deg);}
 #container{width:1024px;margin:35px auto 0; padding-bottom:100px; }
 #search_box{width:744px;height:41px; position:relative;}
-#search_input{border:2px solid #747778;border-right:none;width:574px; height:23px; line-height:23px;float:left;font-size:16px;padding:7px 8px;margin:0;}
+#search_inputs{border:2px solid #747778;border-right:none;width:574px; height:23px; line-height:23px;float:left;font-size:16px;padding:7px 8px;margin:0;}
 #search_button{height:41px;width:152px; color:#FFF; font-size:18px;border:none;background:#747778;float:right; cursor:pointer;}
 #search_button:hover{background:#616364;} 
 #search_box{border:2px solid #019875;width:740px;height:37px; position:relative;}
-#search_input{width:476px; height:23px; line-height:23px;float:left;font-size:16px;padding:7px 8px 7px 10px;margin:0 0 0 94px;border:0;}
+#search_inputs{width:476px; height:23px; line-height:23px;float:left;font-size:16px;padding:7px 8px 7px 10px;margin:0 0 0 94px;border:0;}
 #search_button{height:37px;width:152px; color:#FFF; font-size:18px;border:none;background:#019875;float:right; cursor:pointer;}
 #search_button:hover{background:#028b6b;}
 #searchType{cursor:pointer;position:absolute;list-style:none;padding:0;margin:0;width:98px;background:#fff;left:-2px;top:0;}
