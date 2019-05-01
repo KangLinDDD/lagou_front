@@ -96,7 +96,7 @@
                 <li @click="changeStatus(2)" v-hide="searchType === '2'">公司</li>
               </ul>
               <div class="searchtype_arrow"></div>
-              <input type="text" id="search_input" name="jobName" tabindex="1" value="" placeholder="请输入职位名称，如：产品经理" />
+              <input type="text" id="search_inputs" name="jobName" tabindex="1" value="" placeholder="请输入职位名称，如：产品经理" />
               <input type="hidden" v-model="searchType" name="searchType" />
               <input type="submit" id="search_button" value="搜索" />
             </form>

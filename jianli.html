@@ -3,8 +3,12 @@
 
 <head>
   </script>
+  <script src="config/config.js"></script>
+  <script src="node_modules/vue/dist/vue.min.js"></script>
+  <script src="node_modules/element-ui/lib/index.js"></script>
   <!-- <script type="text/javascript" async="" src="style/js/conversion.js"></script> -->
   <script src="style/js/allmobilize.min.js" charset="utf-8" id="allmobilize"></script>
+  <style type="text/css"></style>
   <meta content="no-siteapp" http-equiv="Cache-Control">
   <link media="handheld" rel="alternate">
   <!-- end 云适配 -->
@@ -14,28 +18,29 @@
   <meta name="description" content="拉勾网是3W旗下的互联网领域垂直招聘网站,互联网职业机会尽在拉勾网">
   <meta name="keywords"
     content="拉勾,拉勾网,拉勾招聘,拉钩, 拉钩网 ,互联网招聘,拉勾互联网招聘, 移动互联网招聘, 垂直互联网招聘, 微信招聘, 微博招聘, 拉勾官网, 拉勾百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘, 校招,社会招聘,社招">
-  <meta content="QIQ6KC1oZ6" name="baidu-site-verification">
   <link href="style/css/style.css" type="text/css" rel="stylesheet">
   <link href="style/css/external.min.css" type="text/css" rel="stylesheet">
   <link href="style/css/popup.css" type="text/css" rel="stylesheet">
-  <!-- <script src="./node_modules/jquery/dist/jquery.min.js"></script> -->
-  <script src="./style/js/jquery.1.10.1.min.js"></script>
+  <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-chalk/index.css">
+  <script type="text/javascript" src="style/js/jquery.1.10.1.min.js"></script>
   <script src="style/js/jquery.lib.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="style/js/ajaxfileupload.js"></script>
   <script src="style/js/additional-methods.js" type="text/javascript"></script>
-  <script src="./node_modules/vue/dist/vue.min.js"></script>
-</head>  
+  <script src="node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+  <!-- <script src="node_modules/jquery/dist/jquery.js" type="text/javascript"></script> -->
+</head>
 
 <body>
-  <div id="body">
+  <div id="body" v-cloak>
     <div id="header">
       <div class="wrapper">
-        <a class="logo" href="h/">
+        <a class="logo" href="">
           <img width="229" height="43" alt="拉勾招聘-专注互联网招聘" src="style/images/logo.png">
         </a>
         <ul id="navheader" class="reset">
           <li><a href="index.html">首页</a></li>
           <li><a href="companylist.html">公司</a></li>
+          <li><a target="_blank" href="h/toForum.html">论坛</a></li>
           <li class="current"><a rel="nofollow" href="jianli.html">我的简历</a></li>
         </ul>
         <dl class="collapsible_menu">
@@ -91,8 +96,8 @@
 
           <div class="profile_box" id="basicInfo">
             <h2>基本信息</h2>
-            <span class="c_edit"></span>
-            <div class="basicShow">
+            <span class="c_edit" @click="changeBasicStatus" :class="{'dn':status.basic}"></span>
+            <div class="basicShow" :class="{'dn':status.basic}">
               <span>jason | 男 | 大专 | 3年工作经验<br>
                 18644444444 | jason@qq.com<br>
               </span>
@@ -103,8 +108,8 @@
             </div>
             <!--end .basicShow-->
 
-            <div class="basicEdit dn">
-              <form id="profileForm">
+            <div class="basicEdit" :class="{'dn':!status.basic}">
+              <form id="profileForm" action="tp5.com/jianli/index/index" method="post">
                 <table>
                   <tbody>
                     <tr>
@@ -112,16 +117,16 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="姓名" value="jason" name="name" id="name">
+                        <input type="text" placeholder="姓名" v-model="userInfo.name" value="" name="name" id="name">
                       </td>
                       <td valign="top"></td>
                       <td>
                         <ul class="profile_radio clearfix reset">
-                          <li class="current">
+                          <li :class="{'current':!status.sex}" @click="setSex()">
                             男<em></em>
                             <input type="radio" checked="checked" name="gender" value="男">
                           </li>
-                          <li>
+                          <li @click="setSex()" :class="{'current':status.sex}">
                             女<em></em>
                             <input type="radio" name="gender" value="女">
                           </li>
@@ -133,42 +138,21 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="hidden" id="topDegree" value="大专" name="topDegree">
-                        <input type="button" value="大专" id="select_topDegree"
-                          class="profile_select_190 profile_select_normal">
-                        <div class="boxUpDown boxUpDown_190 dn" id="box_topDegree" style="display: none;">
-                          <ul>
-                            <li>大专</li>
-                            <li>本科</li>
-                            <li>硕士</li>
-                            <li>博士</li>
-                            <li>其他</li>
-                          </ul>
-                        </div>
+                        <el-select class="basic" v-model="userInfo.education" placeholder="请选择">
+                          <el-option v-for="item in select.education" :key="item.value" :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="hidden" id="workyear" value="" name="workyear">
-                        <input type="button" value="" id="select_workyear"
-                          class="profile_select_190 profile_select_normal">
-                        <div class="boxUpDown boxUpDown_190 dn" id="box_workyear" style="display: none;">
-                          <ul>
-                            <li>应届毕业生</li>
-                            <li>1年</li>
-                            <li>2年</li>
-                            <li>3年</li>
-                            <li>4年</li>
-                            <li>5年</li>
-                            <li>6年</li>
-                            <li>7年</li>
-                            <li>8年</li>
-                            <li>9年</li>
-                            <li>10年</li>
-                            <li>10年以上</li>
-                          </ul>
-                        </div>
+                        <el-select class="basic" v-model="userInfo.experience" placeholder="请选择">
+                          <el-option v-for="item in select.experience" :key="item.value" :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
                       </td>
                     </tr>
                     <tr>
@@ -176,7 +160,7 @@
                         <span class="redstar">*</span>
                       </td>
                       <td colspan="3">
-                        <input type="text" placeholder="手机号码" value="18644444444" name="tel" id="tel">
+                        <input type="text" placeholder="手机号码" v-model="userInfo.tel" value="" name="tel" id="tel">
                       </td>
                     </tr>
                     <tr>
@@ -184,30 +168,25 @@
                         <span class="redstar">*</span>
                       </td>
                       <td colspan="3">
-                        <input type="text" placeholder="接收面试通知的邮箱" value="jason@qq.com" name="email" id="email">
+                        <input type="text" placeholder="接收面试通知的邮箱" v-model="userInfo.email" value="" name="email"
+                          id="email">
                       </td>
                     </tr>
                     <tr>
                       <td valign="top"> </td>
                       <td colspan="3">
-                        <input type="hidden" id="currentState" value="" name="currentState">
-                        <input type="button" value="目前状态" id="select_currentState"
-                          class="profile_select_410 profile_select_normal">
-                        <div class="boxUpDown boxUpDown_410 dn" id="box_currentState" style="display: none;">
-                          <ul>
-                            <li>我目前已离职，可快速到岗</li>
-                            <li>我目前正在职，正考虑换个新环境</li>
-                            <li>我暂时不想找工作</li>
-                            <li>我是应届毕业生</li>
-                          </ul>
-                        </div>
+                        <el-select class="basic status" v-model="userInfo.status" placeholder="请选择">
+                          <el-option v-for="item in select.status" :key="item.value" :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
                       </td>
                     </tr>
                     <tr>
                       <td></td>
                       <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" @click.stop="saveUserInfo" value="保 存" class="">
+                        <a class="btn_profile_cancel" @click="clearData" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -218,11 +197,12 @@
                 <div class="portrait_upload" id="portraitNo">
                   <span>上传自己的头像</span>
                 </div>
-                <div class="portraitShow dn" id="portraitShow">
-                  <img width="120" height="120" src="">
+                <div class="portraitShow" id="portraitShow">
+                  <img width="120" height="120" src="style/images/default_headpic.png">
                   <span>更换头像</span>
                 </div>
-                <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M" name="headPic" id="headPic"
+                <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M"
+                  onchange="img_check(this,'h/resume/uploadPhoto.json','headPic');" name="headPic" id="headPic"
                   class="myfiles">
                 <!-- <input type="hidden" id="headPicHidden" /> -->
                 <em>
@@ -234,14 +214,14 @@
               <!--end .new_portrait-->
             </div>
             <!--end .basicEdit-->
-            <input type="hidden" id="nameVal" value="jason">
-            <input type="hidden" id="genderVal" value="男">
+            <input type="hidden" id="nameVal" value="">
+            <!-- <input type="hidden" id="genderVal" value="男"> -->
             <input type="hidden" id="topDegreeVal" value="大专">
-            <input type="hidden" id="workyearVal" value="3年">
-            <input type="hidden" id="currentStateVal" value="">
-            <input type="hidden" id="emailVal" value="jason@qq.com">
-            <input type="hidden" id="telVal" value="18644444444">
-            <input type="hidden" id="pageType" value="1">
+            <input type="hidden" id="workyearVal" value="应届毕业生">
+            <input type="hidden" id="currentStateVal" value="我目前已离职，可快速到岗">
+            <!-- <input type="hidden" id="emailVal" value="jason@qq.com"> -->
+            <!-- <input type="hidden" id="telVal" value="18644444444"> -->
+            <!-- <input type="hidden" id="pageType" value="1"> -->
           </div>
           <!--end #basicInfo-->
 
@@ -1543,7 +1523,7 @@
         <!--end .content_r-->
       </div>
 
-      <input type="hidden" id="userid" name="userid" value="314873">
+      <!-- <input type="hidden" id="userid" name="userid" value="314873"> -->
 
       <!-------------------------------------弹窗lightbox ----------------------------------------->
       <div style="display:none;">
@@ -1682,8 +1662,8 @@
       </div>
       <!------------------------------------- end ----------------------------------------->
 
-      <script src="style/js/Chart.min.js" type="text/javascript"></script>
-      <script src="style/js/profile.min.js" type="text/javascript"></script>
+      <!-- <script src="style/js/Chart.min.js" type="text/javascript"></script> -->
+      <!-- <script src="style/js/profile.min.js" type="text/javascript"></script> -->
       <!-- <div id="profileOverlay"></div> -->
       <div class="" id="qr_cloud_resume" style="display: none;">
         <div class="cloud">
@@ -1691,10 +1671,10 @@
           <a class="close" href="javascript:;"></a>
         </div>
       </div>
-      <script>
+      <!-- <script>
         $(function () {
           $.ajax({
-            url: "",
+            url: '' + "/mycenter/showQRCode",
             type: "GET",
             async: false
           }).done(function (data) {
@@ -1706,18 +1686,18 @@
           if (!$.cookie(sessionId)) {
             $.cookie(sessionId, 0, { expires: 1 });
           }
-          if ($.cookie(sessionId) && $.cookie(sessionId) != 5) {
-            $('#qr_cloud_resume').removeClass('dn');
-          }
-          $('#qr_cloud_resume .close').click(function () {
-            $('#qr_cloud_resume').fadeOut(200);
-            resumeQR = parseInt($.cookie(sessionId)) + 1;
-            $.cookie(sessionId, resumeQR, { expires: 1 });
-          });
+          if ($.cookie(sessionId) && $.cookie(sessionId) != 5){
+          $('#qr_cloud_resume').removeClass('dn');
+        }
+        $('#qr_cloud_resume .close').click(function () {
+          $('#qr_cloud_resume').fadeOut(200);
+          resumeQR = parseInt($.cookie(sessionId)) + 1;
+          $.cookie(sessionId, resumeQR, { expires: 1 });
         });
-      </script>
+});
+      </script> -->
       <div class="clear"></div>
-      <input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken">
+      <!-- <input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken"> -->
       <a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
     </div><!-- end #container -->
   </div><!-- end #body -->
@@ -1733,12 +1713,12 @@
     </div>
   </div>
 
-  <script src="style/js/core.min.js" type="text/javascript"></script>
-  <script src="style/js/popup.min.js" type="text/javascript"></script>
+  <!-- <script src="style/js/core.min.js" type="text/javascript"></script> -->
+  <!-- <script src="style/js/popup.min.js" type="text/javascript"></script> -->
 
   <!--  -->
 
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
     $(function () {
       $('#noticeDot-1').hide();
       $('#noticeTip a.closeNT').click(function () {
@@ -1763,14 +1743,14 @@
           if (notice.status[0] == 0) {
             $('#noticeDot-0').hide();
             $('#noticeTip').hide();
-            $('#noticeNo').text('').show().parent('a').attr('href', ctx + '/mycenter/delivery.html');
-            $('#noticeNoPage').text('').show().parent('a').attr('href', ctx + '/mycenter/delivery.html');
+            $('#noticeNo').text('').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
+            $('#noticeNoPage').text('').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
           } else {
             $('#noticeDot-0').show();
             $('#noticeTip strong').text(notice.status[0]);
             $('#noticeTip').show();
-            $('#noticeNo').text('(' + notice.status[0] + ')').show().parent('a').attr('href', ctx + '/mycenter/delivery.html');
-            $('#noticeNoPage').text(' (' + notice.status[0] + ')').show().parent('a').attr('href', ctx + '/mycenter/delivery.html');
+            $('#noticeNo').text('(' + notice.status[0] + ')').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
+            $('#noticeNoPage').text(' (' + notice.status[0] + ')').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
           }
           $('#noticeDot-1').hide();
         };
@@ -1780,7 +1760,7 @@
       }
     };
     CallCenter.init(url);
-  </script>
+  </script> -->
 
   <div id="cboxOverlay" style="display: none;"></div>
   <div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;">
@@ -1809,6 +1789,173 @@
     </div>
     <div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div>
   </div>
+  <script>
+    var app = new Vue({
+      el: '#body',
+      data: {
+        userInfo: {
+          name: "",
+          sex: '',
+          education: '',
+          experience: '',
+          tel: '',
+          email: '',
+          status: '',
+          headImgUrl: ''
+        },
+        status: {
+          basic: false,
+          sex: false
+        },
+        select: {
+          education: [
+            {
+              value: '1',
+              label: '大专'
+            },
+            {
+              value: '2',
+              label: '本科'
+            },
+            {
+              value: '3',
+              label: '硕士'
+            },
+            {
+              value: '4',
+              label: '博士'
+            },
+            {
+              value: '0',
+              label: '其他'
+            },
+          ],
+          experience: [
+            {
+              value: 0,
+              label: '不限'
+            },
+            {
+              value: 1,
+              label: '应届毕业生'
+            },
+            {
+              value: 2,
+              label: '一年以下'
+            },
+            {
+              value: 3,
+              label: '1-3年'
+            },
+            {
+              value: 4,
+              label: '3-5年'
+            },
+            {
+              value: 5,
+              label: '5-10年'
+            },
+            {
+              value: 6,
+              label: '10年以上'
+            }
+          ],
+          status:[
+            {
+              value:0,
+              label:'我目前已离职，可快速到岗'
+            },
+            {
+              value:1,
+              label:'我目前正在职，正考虑换个新环境'
+            },
+            {
+              value:2,
+              label:'我暂时不想找工作'
+            },
+            {
+              value:3,
+              label:'我是应届毕业生'
+            }
+          ]
+        }
+      },
+      methods: {
+        changeBasicStatus() {
+          this.status.basic = !this.status.basic
+        },
+        clearData() {
+          this.userInfo = {}
+        },
+        setSex() {
+          this.status.sex = !this.status.sex
+          this.userInfo.sex = this.status.sex ? 1 : 0
+        },
+        // setEducation(val) {
+        //   this.userInfo.education = val
+        // },
+        // setExperience(val) {
+        //   this.userInfo.experience = val
+        // },
+        // setStatus(val) {
+        //   this.userInfo.status = val
+        // },
+        saveUserInfo() {
+          $('#profileForm').validate({
+            rules: {
+              name: {
+                required: true,
+                minlength: 2
+              },
+              tel: {
+                required: true,
+                digits: true
+              },
+              email: {
+                required: true,
+                email: true
+              }
+            },
+            messages: {
+              name: {
+                required: '请输入您的名字',
+                minlength: '名字不能少于两个汉字'
+              },
+              tel: {
+                required: '请输入手机号',
+                digits: '请输入整数'
+              },
+              email: {
+                required: '请输入邮箱',
+                email: '请输入有效的邮箱地址'
+              }
+            },
+            submitHandle(form) {
+              var _this = this
+              alert('====')
+              $.ajax({
+                url: window.lagou + '/jianli/index/index',
+                data: _this.userInfo,
+                dataType:'json',
+                success: (res) => {
+
+                },
+                error: (res) => {
+
+                }
+              })
+            }
+          })
+        },
+      },
+      mounted() {
+
+      },
+      created() {
+
+      }
+    })
+  </script>
 </body>
 
 </html>

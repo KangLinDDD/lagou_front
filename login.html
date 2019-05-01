@@ -37,8 +37,6 @@
         <img src="style/images/cloud_m.png" width="136" height="95" alt="cloud" />
       </div>
     </div>
-
-    <input type="hidden" id="resubmitToken" value="" />
     <div class="login_box">
       <form id="loginForm" action="">
         <input type="text" id="email" name="email" @focus="reset" v-model="email" value="" tabindex="1"
@@ -51,11 +49,7 @@
           <input type="checkbox" id="remember" value="" checked="checked" name="autoLogin" />
           记住我</label>
         <a href="./reset.html" class="fr" target="_blank">忘记密码？</a>
-        <input type="submit" id="submitLogin" @click="check" value="登 录" />
-        <input type="hidden" id="callback" name="callback" value="" />
-        <input type="hidden" id="authType" name="authType" value="" />
-        <input type="hidden" id="signature" name="signature" value="" />
-        <input type="hidden" id="timestamp" name="timestamp" value="" />
+        <input type="submit" id="submitLogin" @click.stop="check" value="登 录" />
       </form>
       <div class="login_right">
         <div>还没有拉勾帐号？</div>
