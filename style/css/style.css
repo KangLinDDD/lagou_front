@@ -5,6 +5,19 @@
 .error{
   color:#ff6a6a;
 }
+.city{
+  font: 18px/32px "微软雅黑","宋体",Arial;
+    color: #999;
+    width: 287px;
+    height: 46px;
+    margin-left: 10px;
+    position: absolute;
+    top: 66px;
+    cursor: pointer;
+}
+#expectJob .expectEdit .expect .el-input__icon{height: 46px;}
+#expectJob .expectEdit .expect input[type="text"]{height:46px;display:block;}
+#headPic .el-upload--picture-card{width:auto;height:auto;}
 .el-select-dropdown__item.selected{color: #019875 !important}
 #profileForm .basic input[type="text"]{
   width: 190px;
@@ -832,7 +845,7 @@ a.greylink{ color:#555;font-size:18px; margin-right:60px;text-decoration:underli
 .portraitShow span{position:absolute;left:0;bottom:0; height:30px;width:120px;display:block;background:#000;filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;color:#fff; text-align:center; line-height:30px;}
 .new_portrait input[type="file"]{position:absolute; z-index:2;filter:alpha(Opacity=0);-moz-opacity:0;opacity: 0; width:120px; height:120px; cursor:pointer;}
 .portrait_upload span{ float:right; border:1px solid #d6d6d6; background:#fff; margin:90px 10px 0 0;}
-.new_portrait em{ font-style:normal; position:absolute; top:130px;  color:#555;}
+.new_portrait em{ font-style:normal; position:absolute; top:135px;  color:#555;}
 .add_member{float:left; font-size:18px; line-height:25px; text-decoration:underline; margin:55px 20px 0 0; color:#555;}
 .add_member i{width:25px; height:25px;background:url(img/c_edit.png) 0 -25px no-repeat; float:left; margin-right:5px;}
 .add_member:hover{ color:#019875;}
@@ -1297,7 +1310,7 @@ ul.my_delivery{margin:20px 48px;}
 /*profile.html*/
 .basicEdit{padding:30px 38px 60px 38px;background:#fafafa;overflow:hidden}
 .basicEdit h1{font-size:20px;line-height:44px;border-bottom:1px solid #e5e5e5;margin:0 0 30px 0}
-.basicEdit .new_portrait{float:left;margin:10px 0 0 43px;width:120px;height:180px;position:relative}
+.basicEdit .new_portrait{float:left;margin:10px 0 0 43px;width:120px;height:180px;position:relative;cursor:pointer;}
 #profileForm{width:450px;float:left;margin:10px 0;}
 #profileForm table{border-spacing:0;border-collapse:collapse}
 #profileForm table td{padding:0 0 17px 0;vertical-align: top;}

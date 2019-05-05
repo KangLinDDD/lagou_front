@@ -30,12 +30,15 @@
             <td></td>
             <td colspan="3">
               <input type="submit" @click="saveUserInfo" value="保 存" class="btn_profile_save">
-              <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+              <a class="btn_profile_cancel" @click="cancleClick" href="javascript:;">取 消</a>
             </td>
           </tr>
         </tbody>
       </table>
     </form>
+    <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M"
+      onchange="img_check(this,window.lagou + '/jianli/index/basicInfo','headPic');" name="headPic" id="headPic"
+      class="myfiles">
   </div>
 
   <script>
@@ -43,19 +46,16 @@
       el: '#body',
       data: {
         userInfo: {
-          name: "",
-          sex: '',
-          education: '',
-          experience: '',
-          tel: '',
-          email: '',
-          status: '',
-          headImgUrl: ''
+          name: "aaa"
+        },
+        temInfo:{
+          name: ''
         }
       },
       methods: {
         saveUserInfo() {
-          console.log('aaaa')
+          this.temInfo =  this.userInfo
+          console.log(this.temInfo)
           $("#profileForm").validate({
             rules: {
               names: "required"
@@ -65,10 +65,25 @@
             },
             submitHandler: function (form) {
               alert("提交事件!");
-              // form.submit();
+              $.ajax({
+                url: 'tp5.com/login/index/checkCookie',
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+                  console.log(res)
+                },
+                error: (res) => {
+
+                }
+              })
             }
           })
         },
+        cancleClick(){
+          console.log(this.temInfo)
+          this.userInfo =  this.temInfo
+        }
       },
       mounted() {
 
@@ -77,6 +92,34 @@
 
       }
     })
+  </script>
+  <script>
+    function img_check(a, b, c) {
+      alert(b)
+      var a = $("#" + c);
+      this.AllowExt = ".jpg,.gif,.jpeg,.png,.pjpeg",
+        this.FileExt = a.val().substr(a.val().lastIndexOf(".")).toLowerCase(),
+        0 != this.AllowExt && -1 == this.AllowExt.indexOf(this.FileExt) ? errorTips("只支持jpg、gif、png、jpeg格式，请重新上传", "上传头像") : ($("#" + c + "_error").text("").hide(),
+          $.ajaxFileUpload({
+            url: b,
+            data: { headPic: a.val() },
+            dataType: "json",
+            method: 'post',
+            success: function (a) {
+              alert(a)
+              if (a.success) {
+                var b = a.content;
+                $("#portraitShow img").attr("src", ctx + "/" + b),
+                  $("#basicInfo .basicShow img").attr("src", ctx + "/" + b),
+                  $("#portraitNo").hide(),
+                  $("#portraitShow").show()
+              } else errorTips("上传失败，请重新上传", "上传头像")
+            },
+            error: function () {
+              errorTips("上传失败，请重新上传", "上传头像")
+            }
+          }))
+    }
   </script>
 </body>
 

@@ -17,6 +17,7 @@
       拉勾官网, 拉勾百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘,
       校招,社会招聘,社招" name="keywords">
   <meta name="baidu-site-verification" content="QIQ6KC1oZ6" />
+  <link rel="shortcut icon" href="./style/images/favicon.ico">
   <link rel="stylesheet" type="text/css" href="style/css/style.css" />
   <link rel="stylesheet" type="text/css" href="style/css/external.min.css" />
   <link rel="stylesheet" type="text/css" href="style/css/popup.css" />
@@ -446,6 +447,18 @@
         },
         addUserInfo() {
           this.dialogVisible = false
+          $.ajax({
+            url:window.lagou + '/jianli/index/addUserInfo',
+            xhrFields:{
+              withCrednetials:true
+            },
+            success:(res)=>{
+              console.log(res)
+            },
+            error:(res)=>{
+
+            }
+          })
           window.location.href = './jianli.html'
         },
         getUserInfo() {
@@ -495,9 +508,9 @@
           $.ajax({
             url: window.lagou + '/index/index/hotJobs',
             method: 'post',
-            // xhrFields: {
-            //   withCredentials: true
-            // },
+            xhrFields: {
+              withCredentials: true
+            },
             success: (res) => {
               _this.hotJobs = res
             },

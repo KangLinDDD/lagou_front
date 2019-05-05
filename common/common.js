@@ -29,6 +29,20 @@ function getDay (day) {
   tDate = doHandleMonth(tDate);
   return tYear + "-" + tMonth + "-" + tDate;
 }
+function getAllDay (time) {
+  var today = new Date();
+  // var targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * day;
+  today.setTime(time); //注意，这行是关键代码
+  var tYear = today.getFullYear()
+  var tMonth = today.getMonth();
+  var tDate = today.getDate();
+  var tHour =  today.getHours()
+  var tminutes = today.getMinutes()
+  var tseconds = today.getSeconds()
+  tMonth = doHandleMonth(tMonth + 1);
+  tDate = doHandleMonth(tDate);
+  return tYear + "-" + tMonth + "-" + tDate+ ' '+ tHour+":"+tminutes+":"+tseconds;
+}
 function doHandleMonth (month) {
   var m = month;
   if (month.toString().length == 1) {

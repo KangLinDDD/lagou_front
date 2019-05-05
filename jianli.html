@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  </script>
+  <script src="common/common.js"></script>
   <script src="config/config.js"></script>
   <script src="node_modules/vue/dist/vue.min.js"></script>
   <script src="node_modules/element-ui/lib/index.js"></script>
@@ -11,6 +11,7 @@
   <style type="text/css"></style>
   <meta content="no-siteapp" http-equiv="Cache-Control">
   <link media="handheld" rel="alternate">
+  <link rel="shortcut icon" href="./style/images/favicon.ico">
   <!-- end 云适配 -->
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <title>我的简历-拉勾网-最专业的互联网招聘平台</title>
@@ -31,7 +32,7 @@
 </head>
 
 <body>
-  <div id="body" v-cloak>
+  <div id="body" v-cloak @click="closeDialog">
     <div id="header">
       <div class="wrapper">
         <a class="logo" href="">
@@ -45,7 +46,7 @@
         </ul>
         <dl class="collapsible_menu">
           <dt>
-            <span>jason&nbsp;</span>
+            <span>{{tmpName}}</span>
             <span class="red dn" id="noticeDot-0"></span>
             <i></i>
           </dt>
@@ -70,46 +71,33 @@
         <div class="content_l">
           <div class="fl" id="resume_name">
             <div class="nameShow fl">
-              <h1 title="jason的简历">jason的简历</h1>
-              <span class="rename">重命名</span> | <a target="_blank" href="h/resume/preview.html">预览</a>
+              <h1>{{tmpName}}的简历</h1>
+              <a target="_blank" href="./preview.html">预览</a>
             </div>
-            <form class="fl dn" id="resumeNameForm">
-              <input type="text" value="jason的简历" name="resumeName" class="nameEdit c9">
-              <input type="submit" value="保存"> | <a target="_blank" href="h/resume/preview.html">预览</a>
-            </form>
           </div>
           <!--end #resume_name-->
-          <div class="fr c5" id="lastChangedTime">最后一次更新：<span>2014-07-01 15:14 </span></div>
-          <!--end #lastChangedTime-->
-          <div id="resumeScore">
-            <div class="score fl">
-              <canvas height="120" width="120" id="doughnutChartCanvas" style="width: 120px; height: 120px;"></canvas>
-              <div style="" class="scoreVal"><span>15</span>分</div>
-            </div>
-
-            <div class="which fl">
-              <div>工作经历最能体现自己的工作能力，且完善后才可投递简历哦！</div>
-              <span rel="workExperience"><a>马上去完善</a></span>
-            </div>
+          <div class="fr c5" id="lastChange dTime" v-show="updateTime">最后一次更新：<span>{{updateTime}}</span>
           </div>
-          <!--end #resumeScore-->
 
           <div class="profile_box" id="basicInfo">
             <h2>基本信息</h2>
-            <span class="c_edit" @click="changeBasicStatus" :class="{'dn':status.basic}"></span>
-            <div class="basicShow" :class="{'dn':status.basic}">
-              <span>jason | 男 | 大专 | 3年工作经验<br>
-                18644444444 | jason@qq.com<br>
+            <span class="c_edit" :class="{'dn':switchs.userInfo}" @click.stop="changeSwitchs('userInfo')"></span>
+            <div class="basicShow" :class="{'dn':switchs.userInfo}">
+              <span>{{userInfo.name}} <span v-show="userInfo.name">|</span>
+                <span v-show="userInfo.sex">{{userInfo.sex==1?'女':'男'}}</span> <span v-show="userInfo.sex">|</span>
+                {{education}} <span v-show="education">|</span> {{experience}}<br>
+                {{userInfo.tel}} <span v-show="userInfo.tel">|</span>
+                {{userInfo.email}}<br>
               </span>
               <div class="m_portrait">
                 <div></div>
-                <img width="120" height="120" alt="jason" src="style/images/default_headpic.png">
+                <img width="120" height="120" alt="" :src="headImg">
               </div>
             </div>
             <!--end .basicShow-->
 
-            <div class="basicEdit" :class="{'dn':!status.basic}">
-              <form id="profileForm" action="tp5.com/jianli/index/index" method="post">
+            <div class="basicEdit" :class="{'dn':!switchs.userInfo}">
+              <form id="profileForm">
                 <table>
                   <tbody>
                     <tr>
@@ -122,11 +110,11 @@
                       <td valign="top"></td>
                       <td>
                         <ul class="profile_radio clearfix reset">
-                          <li :class="{'current':!status.sex}" @click="setSex()">
+                          <li :class="{'current':!status.sex}" @click.stop="setSex()">
                             男<em></em>
                             <input type="radio" checked="checked" name="gender" value="男">
                           </li>
-                          <li @click="setSex()" :class="{'current':status.sex}">
+                          <li @click.stop="setSex()" :class="{'current':status.sex}">
                             女<em></em>
                             <input type="radio" name="gender" value="女">
                           </li>
@@ -185,8 +173,8 @@
                     <tr>
                       <td></td>
                       <td colspan="3">
-                        <input type="submit" @click.stop="saveUserInfo" value="保 存" class="">
-                        <a class="btn_profile_cancel" @click="clearData" href="javascript:;">取 消</a>
+                        <input type="submit" @click.stop="saveUserInfo" value="保 存" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click.stop="cancleEdit('userInfo')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -194,54 +182,42 @@
               </form>
               <!--end #profileForm-->
               <div class="new_portrait">
-                <div class="portrait_upload" id="portraitNo">
-                  <span>上传自己的头像</span>
-                </div>
-                <div class="portraitShow" id="portraitShow">
-                  <img width="120" height="120" src="style/images/default_headpic.png">
-                  <span>更换头像</span>
-                </div>
-                <input type="file" value="" title="支持jpg、jpeg、gif、png格式，文件小于5M"
-                  onchange="img_check(this,'h/resume/uploadPhoto.json','headPic');" name="headPic" id="headPic"
-                  class="myfiles">
-                <!-- <input type="hidden" id="headPicHidden" /> -->
-                <em>
-                  尺寸：120*120px <br>
-                  大小：小于5M
-                </em>
-                <span style="display:none;" id="headPic_error" class="error"></span>
+                <el-upload auto-upload="true" with-credentials=true show-file-list="false" :on-error="uploadError"
+                  :on-success="uploadSuccess" accept=".jpg,.jpeg,.png,.JPG,.JPEG"
+                  action="http://tp5.com/jianli/index/headImg" :file-list="fileList" list-type="text">
+                  <div class="portrait_upload" id="portraitNo">
+                    <span>上传自己的头像</span>
+                  </div>
+                  <div class="portraitShow" id="portraitShow">
+                    <img width="120" height="120" :src="headImg">
+                    <span>更换头像</span>
+                  </div>
+                  <em>尺寸：120*120px<br>大小：小于5M</em>
+                  <span style="display:none;" id="headPic_error" class="error"></span>
+                </el-upload>
               </div>
               <!--end .new_portrait-->
             </div>
             <!--end .basicEdit-->
-            <input type="hidden" id="nameVal" value="">
-            <!-- <input type="hidden" id="genderVal" value="男"> -->
-            <input type="hidden" id="topDegreeVal" value="大专">
-            <input type="hidden" id="workyearVal" value="应届毕业生">
-            <input type="hidden" id="currentStateVal" value="我目前已离职，可快速到岗">
-            <!-- <input type="hidden" id="emailVal" value="jason@qq.com"> -->
-            <!-- <input type="hidden" id="telVal" value="18644444444"> -->
-            <!-- <input type="hidden" id="pageType" value="1"> -->
           </div>
           <!--end #basicInfo-->
 
           <div class="profile_box" id="expectJob">
             <h2>期望工作</h2>
-            <span class="c_edit dn"></span>
-            <div class="expectShow dn">
-              <span></span>
-            </div>
+            <span class="c_edit" :class="{'dn':switchs.expectInfo}" @click.stop="changeSwitchs('expectInfo')"></span>
             <!--end .expectShow-->
-            <div class="expectEdit dn">
+            <div class="expectEdit" :class="{'dn':!switchs.expectInfo}">
               <form id="expectForm">
                 <table>
                   <tbody>
                     <tr>
                       <td>
-                        <input type="hidden" id="expectCity" value="" name="expectCity">
-                        <input type="button" value="期望城市，如：北京" id="select_expectCity"
-                          class="profile_select_287 profile_select_normal">
-                        <div class="boxUpDown boxUpDown_596 dn" id="box_expectCity" style="display: none;">
+                        <!-- <input type="hidden" id="expectCity" v-model="expectInfo.expectCity" name="expectCity"> -->
+                        <span class="city" v-show="!expectInfo.expectCity" @click.stop="changeStatus('citys')">期望城市，如：北京</span>
+                        <input type="button" style="display: block;" name="expectCity"
+                        v-model="expectInfo.expectCity" @click.stop="changeStatus('citys')"
+                          id="select_expectCity" class="profile_select_287 profile_select_normal">
+                        <div class="boxUpDown boxUpDown_596" :class="{'dn':!status.citys}" id="box_expectCity">
                           <dl>
                             <dt>热门城市</dt>
                             <dd>
@@ -334,15 +310,15 @@
                       </td>
                       <td>
                         <ul class="profile_radio clearfix reset">
-                          <li class="current">
+                          <li :class="{'current':expectInfo.nature==0}" @click.stop="changeNature(0)">
                             全职<em></em>
                             <input type="radio" checked="" name="type" value="全职">
                           </li>
-                          <li>
+                          <li :class="{'current':expectInfo.nature==1}" @click.stop="changeNature(1)">
                             兼职<em></em>
                             <input type="radio" name="type" value="兼职">
                           </li>
-                          <li>
+                          <li :class="{'current':expectInfo.nature==2}" @click.stop="changeNature(2)">
                             实习<em></em>
                             <input type="radio" name="type" value="实习">
                           </li>
@@ -351,29 +327,34 @@
                     </tr>
                     <tr>
                       <td>
-                        <input type="text" placeholder="期望职位，如：产品经理" value="" name="expectPosition" id="expectPosition">
+                        <input type="text" style="display: block;" placeholder="期望职位，如：产品经理" v-model="expectInfo.expectJob"
+                          name="expectPosition" id="expectPosition">
                       </td>
                       <td>
-                        <input type="hidden" id="expectSalary" value="" name="expectSalary">
-                        <input type="button" value="期望月薪" id="select_expectSalary"
-                          class="profile_select_287 profile_select_normal">
-                        <div class="boxUpDown boxUpDown_287 dn" id="box_expectSalary" style="display: none;">
+                        <el-select class="expect" name="exceptSalary" v-model="salary" placeholder="请选择">
+                          <el-option v-for="item in select.salary" :key="item.value" :label="item.label"
+                            :value="item.value">
+                          </el-option>
+                        </el-select>
+                        <!-- <input type="button" value="期望月薪" id="select_expectSalary"
+                          class="profile_select_287 profile_select_normal" @click="changeStatus('salary')">
+                        <div class="boxUpDown boxUpDown_287" :class="{'dn':!status.salary}" id="box_expectSalary">
                           <ul>
-                            <li>2k以下</li>
-                            <li>2k-5k</li>
-                            <li>5k-10k</li>
-                            <li>10k-15k</li>
-                            <li>15k-25k</li>
-                            <li>25k-50k</li>
-                            <li>50k以上</li>
+                            <li @click="setSalary(0,2)">2k以下</li>
+                            <li @click="setSalary(2,5)">2k-5k</li>
+                            <li @click="setSalary(5,10)">5k-10k</li>
+                            <li @click="setSalary(10,15)">10k-15k</li>
+                            <li @click="setSalary(15,25)">15k-25k</li>
+                            <li @click="setSalary(25,30)">25k-50k</li>
+                            <li @click="setSalary(50,'')">50k以上</li>
                           </ul>
-                        </div>
+                        </div> -->
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" value="保 存" @click.stop="saveExpectJob" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click="cancleEdit('expectInfo')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -382,18 +363,12 @@
               <!--end #expectForm-->
             </div>
             <!--end .expectEdit-->
-            <div class="expectAdd pAdd">
+            <div class="expectAdd pAdd" @click="changeSwitchs('expectInfo')" :class="{'dn':switchs.expectInfo}">
               填写准确的期望工作能大大提高求职成功率哦…<br>
               快来添加期望工作吧！
               <span>添加期望工作</span>
             </div>
             <!--end .expectAdd-->
-
-            <input type="hidden" id="expectJobVal" value="">
-            <input type="hidden" id="expectCityVal" value="">
-            <input type="hidden" id="typeVal" value="">
-            <input type="hidden" id="expectPositionVal" value="">
-            <input type="hidden" id="expectSalaryVal" value="">
           </div>
           <!--end #expectJob-->
 
@@ -1387,25 +1362,26 @@
 
           <div class="profile_box" id="selfDescription">
             <h2>自我描述</h2>
-            <span class="c_edit dn"></span>
+            <span class="c_edit" @click="changeSwitchs('self_describe')" :class="{'dn':switchs.self_describe}"></span>
             <div class="descriptionShow dn">
 
             </div>
             <!--end .descriptionShow-->
-            <div class="descriptionEdit dn">
+            <div class="descriptionEdit" :class="{'dn':!switchs.self_describe}">
               <form class="descriptionForm">
                 <table>
                   <tbody>
                     <tr>
                       <td colspan="2">
-                        <textarea class="selfDescription s_textarea" name="selfDescription" placeholder=""></textarea>
-                        <div class="word_count">你还可以输入 <span>500</span> 字</div>
+                        <textarea class="selfDescription s_textarea" v-model="self_describe" name="selfDescription" placeholder="请输入您的自我描述" :disabled="self_desc_length == 0"></textarea>
+                        <div class="word_count">你还可以输入 <span>
+                          {{self_desc_length}}</span> 字</div>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" value="保 存" @click="saveSelfDescripton" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click="cancleEdit('self_describe')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -1414,7 +1390,7 @@
               <!--end .descriptionForm-->
             </div>
             <!--end .descriptionEdit-->
-            <div class="descriptionAdd pAdd">
+            <div class="descriptionAdd pAdd" @click="changeSwitchs('self_describe')" :class="{'dn':switchs.self_describe}">
               描述你的性格、爱好以及吸引人的经历等，<br>
               让企业了解多元化的你！
               <span>添加自我描述</span>
@@ -1522,10 +1498,6 @@
         </div>
         <!--end .content_r-->
       </div>
-
-      <!-- <input type="hidden" id="userid" name="userid" value="314873"> -->
-
-      <!-------------------------------------弹窗lightbox ----------------------------------------->
       <div style="display:none;">
         <!-- 上传简历 -->
         <div class="popup" id="uploadFile">
@@ -1660,11 +1632,8 @@
         <!--/#deliverResumeConfirm-->
 
       </div>
-      <!------------------------------------- end ----------------------------------------->
-
-      <!-- <script src="style/js/Chart.min.js" type="text/javascript"></script> -->
-      <!-- <script src="style/js/profile.min.js" type="text/javascript"></script> -->
-      <!-- <div id="profileOverlay"></div> -->
+      <!-- <script src="style/js/Chart.min.js" type="text/javascript"></script>
+      <script src="style/js/profile.min.js" type="text/javascript"></script> -->
       <div class="" id="qr_cloud_resume" style="display: none;">
         <div class="cloud">
           <img width="134" height="134" src="">
@@ -1697,7 +1666,6 @@
 });
       </script> -->
       <div class="clear"></div>
-      <!-- <input type="hidden" value="97fd449bcb294153a671f8fe6f4ba655" id="resubmitToken"> -->
       <a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
     </div><!-- end #container -->
   </div><!-- end #body -->
@@ -1712,56 +1680,7 @@
       </div>
     </div>
   </div>
-
-  <!-- <script src="style/js/core.min.js" type="text/javascript"></script> -->
-  <!-- <script src="style/js/popup.min.js" type="text/javascript"></script> -->
-
-  <!--  -->
-
-  <!-- <script type="text/javascript">
-    $(function () {
-      $('#noticeDot-1').hide();
-      $('#noticeTip a.closeNT').click(function () {
-        $(this).parent().hide();
-      });
-    });
-    var index = Math.floor(Math.random() * 2);
-    var ipArray = new Array('42.62.79.226', '42.62.79.227');
-    var url = "ws://" + ipArray[index] + ":18080/wsServlet?code=314873";
-    var CallCenter = {
-      init: function (url) {
-        var _websocket = new WebSocket(url);
-        _websocket.onopen = function (evt) {
-          console.log("Connected to WebSocket server.");
-        };
-        _websocket.onclose = function (evt) {
-          console.log("Disconnected");
-        };
-        _websocket.onmessage = function (evt) {
-          //alert(evt.data);
-          var notice = jQuery.parseJSON(evt.data);
-          if (notice.status[0] == 0) {
-            $('#noticeDot-0').hide();
-            $('#noticeTip').hide();
-            $('#noticeNo').text('').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
-            $('#noticeNoPage').text('').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
-          } else {
-            $('#noticeDot-0').show();
-            $('#noticeTip strong').text(notice.status[0]);
-            $('#noticeTip').show();
-            $('#noticeNo').text('(' + notice.status[0] + ')').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
-            $('#noticeNoPage').text(' (' + notice.status[0] + ')').show().parent('a').attr('href', '' + '/mycenter/delivery.html');
-          }
-          $('#noticeDot-1').hide();
-        };
-        _websocket.onerror = function (evt) {
-          console.log('Error occured: ' + evt);
-        };
-      }
-    };
-    CallCenter.init(url);
-  </script> -->
-
+  
   <div id="cboxOverlay" style="display: none;"></div>
   <div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;">
     <div id="cboxWrapper">
@@ -1793,20 +1712,34 @@
     var app = new Vue({
       el: '#body',
       data: {
+        // basic: true,
+        tmpName:'',
+        fileList: [],
+        headImg: '',
+        updateTime: '',
+        salary: '',
+        self_describe:'',
         userInfo: {
-          name: "",
+          name: '',
           sex: '',
           education: '',
           experience: '',
           tel: '',
           email: '',
-          status: '',
-          headImgUrl: ''
+          status: ''
         },
+        expectInfo: {
+          expectCity: '',
+          nature: 0,
+          expectJob: ''
+        },
+        // 状态控制
         status: {
-          basic: false,
-          sex: false
+          sex: false,
+          salary: false,
+          citys: false
         },
+        // 下拉
         select: {
           education: [
             {
@@ -1832,10 +1765,6 @@
           ],
           experience: [
             {
-              value: 0,
-              label: '不限'
-            },
-            {
               value: 1,
               label: '应届毕业生'
             },
@@ -1860,47 +1789,229 @@
               label: '10年以上'
             }
           ],
-          status:[
+          status: [
             {
-              value:0,
-              label:'我目前已离职，可快速到岗'
+              value: 0,
+              label: '我目前已离职，可快速到岗'
             },
             {
-              value:1,
-              label:'我目前正在职，正考虑换个新环境'
+              value: 1,
+              label: '我目前正在职，正考虑换个新环境'
             },
             {
-              value:2,
-              label:'我暂时不想找工作'
+              value: 2,
+              label: '我暂时不想找工作'
             },
             {
-              value:3,
-              label:'我是应届毕业生'
+              value: 3,
+              label: '我是应届毕业生'
+            }
+          ],
+          salary: [
+            {
+              value: '0,2',
+              label: '2k以下'
+            },
+            {
+              value: '2,5',
+              label: '2k-5k'
+            },
+            {
+              value: '5,10',
+              label: '5k-10k'
+            },
+            {
+              value: '10,15',
+              label: '10k-15k'
+            },
+            {
+              value: '15,25',
+              label: '15k-25k'
+            }, {
+              value: '25,50',
+              label: '25k-50k'
+            },
+            {
+              value: '50,""',
+              label: '50k以上'
             }
           ]
+        },
+        // 开关，控制每个模块
+        switchs: {
+          userInfo: false,
+          expectInfo: false,
+          self_describe:false,
+          works:false
+        },
+        template:{
+          userInfo: {
+          name: '',
+          sex: '',
+          education: '',
+          experience: '',
+          tel: '',
+          email: '',
+          status: ''
+        },
+          expectInfo: {
+            expectCity: '',
+            nature: 0,
+            expectJob: ''
+          },
+          self_describe:'',
+          works:{}
+        }
+      },
+      computed: {
+        education: function () {
+          switch (this.userInfo.education) {
+            case '1': {
+              return '大专'
+              break
+            }
+            case '2': {
+              return '本科'
+              break
+            }
+            case '3': {
+              return '硕士'
+              break
+            }
+            case '4': {
+              return '博士'
+              break
+            }
+            case '5': {
+              return '其他'
+              break
+            }
+            default: {
+              return ''
+            }
+          }
+        },
+        experience: function () {
+          switch (this.userInfo.experience) {
+            case 1: {
+              return '应届毕业生'
+              break
+            }
+            case 2: {
+              return '一年以下'
+              break
+            }
+            case 3: {
+              return '1-3年'
+              break
+            }
+            case 4: {
+              return '3-5年'
+              break
+            }
+            case 5: {
+              return '5-10年'
+              break
+            }
+            case 6: {
+              return '10年以上'
+              break
+            }
+            default: {
+              return ''
+              break
+            }
+          }
+        },
+        min_salary: function () {
+          return this.salary.split(',')[0]
+        },
+        max_salary: function () {
+          return this.salary.split(',')[1]
+        },
+        self_desc_length:function (){
+          return  500 - this.self_describe.length
         }
       },
       methods: {
-        changeBasicStatus() {
-          this.status.basic = !this.status.basic
+        closeDialog(){
+          this.status.citys = false
+        },
+        setSalary(min, max) {
+          this.expectInfo.min_salary = min
+          this.expectInfo.max_salary = max
+          this.changeStatus('salary')
+        },
+        changeStatus(val) {
+          this.status[val] = !this.status[val]
+        },
+        changeNature(val) {
+          this.expectInfo.nature = val
+        },
+        changeSwitchs(val) {
+          this.switchs[val] = !this.switchs[val]
+          this.template[val] = JSON.stringify(this[val])
+        },
+        checkCookie() {
+          var _this = this
+          $.ajax({
+            url: window.lagou + '/login/index/checkCookie',
+            xhrFields: {
+              withCredentials: true
+            },
+            success: (res) => {
+              if (res.id) {
+                _this.userInfo.name = res.name
+                _this.tmpName = res.name?res.name:'游客'
+              } else {
+                window.location.href = './login.html'
+              }
+            },
+            error: (res) => {
+
+            }
+          })
+        },
+        getUserInfo(){
+          $.ajax({
+            url:window.lagou + '/user/index/getUserInfo',
+            xhrFields:{
+              withCredentials:true
+            },
+            success:(res)=>{
+              this.updateTime = res.updateTime
+              var { name, sex, education, experience, tel, email, status } = res
+              this.userInfo = { name, sex, education, experience, tel, email, status }
+              this.template.userInfo = JSON.stringify(this.userInfo)
+              this.userInfo.education = education?''+education:''
+              this.headImg = res.headImgUrl?res.headImgUrl:'style/images/default_headpic.png'
+            },
+            error:(res)=>{
+
+            }
+          })
+        },
+        uploadSuccess(response, file, fileList) {
+          this.headImg = response
+        },
+        uploadError(err, file, fileList) {
+          this.headImg = 'style/images/default_headpic.png'
         },
         clearData() {
-          this.userInfo = {}
+          this.userInfo.name = ''
+          this.userInfo.sex = ''
+          this.userInfo.education = ''
+          this.userInfo.experience = ''
+          this.userInfo.tel = ''
+          this.userInfo.email = ''
+          this.userInfo.status = ''
         },
         setSex() {
           this.status.sex = !this.status.sex
           this.userInfo.sex = this.status.sex ? 1 : 0
         },
-        // setEducation(val) {
-        //   this.userInfo.education = val
-        // },
-        // setExperience(val) {
-        //   this.userInfo.experience = val
-        // },
-        // setStatus(val) {
-        //   this.userInfo.status = val
-        // },
         saveUserInfo() {
+          var _this = this
           $('#profileForm').validate({
             rules: {
               name: {
@@ -1930,26 +2041,119 @@
                 email: '请输入有效的邮箱地址'
               }
             },
-            submitHandle(form) {
-              var _this = this
-              alert('====')
+            submitHandler(form) {
               $.ajax({
-                url: window.lagou + '/jianli/index/index',
+                url: window.lagou + '/jianli/index/addUserInfo',
                 data: _this.userInfo,
-                dataType:'json',
+                method: 'post',
+                dataType: 'json',
+                xhrFields: {
+                  withCredentials: true
+                },
                 success: (res) => {
-
+                  // 未登录
+                  if (res == 400) {
+                    window.location.href = './login.html'
+                  } else {
+                    _this.updateTime = _this.updateTime = getAllDay(new Date().getTime())
+                    _this.changeSwitchs('userInfo')
+                    _this.tmpName = _this.userInfo.name
+                  }
                 },
                 error: (res) => {
+                  console.log(res)
+                }
+              })
+            }
+          })
+        },
+        saveExpectJob(){
+          var _this = this
+          $("#expectForm").validate({
+            rules:{
+              expectCity:{
+                required:true
+              },
+              expectPosition:{
+                required:true
+              },
+              exceptSalary:{
+                required:true
+              }
+            },
+            messages:{
+              expectCity:{
+                required: '请输入期望城市'
+              },
+              expectPosition:{
+                required:'请输入期望职位'
+              },
+              exceptSalary:{
+                required:'请选择薪资范围'
+              }
+            },
+            submitHandler:(form)=>{
+              this.expectInfo.min_salary = this.min_salary
+              this.expectInfo.max_salary = this.max_salary
+              $.ajax({
+                url:window.lagou+'/jianli/index/addExpectInfo',
+                method:'post',
+                data:this.expectInfo,
+                dataType:'json',
+                xhrFields:{
+                  withCredentials:true
+                },
+                success:(res)=>{
+
+                },
+                error:(res)=>{
 
                 }
               })
             }
           })
         },
+        cancleEdit(val){
+          this[val] = JSON.parse(this.template[val])
+          this.switchs[val] = !this.switchs[val]
+        },
+        saveSelfDescripton(){
+          $(".descriptionForm").validate({
+            rules:{
+              required:true
+            },
+            messages:{
+              required:'请输入您的自我描述'
+            },
+            submitHandler:(form)=>{
+              $.ajax({
+                url:window.lagou + '/jianli/index/addExpectInfo',
+                method:'post',
+                xhrFields:{
+                  withCredentials:true
+                },
+                dataType:'json',
+                data:{self_describe:this.self_describe},
+                success:(res)=>{
+                  if(res == 1){
+                    this.changeSwitchs('self_describe')
+                  }
+                },
+                error:(res)=>{
+
+                }
+              })
+            }
+          })
+        }
       },
       mounted() {
-
+        this.checkCookie()
+        this.getUserInfo()
+        $("#box_expectCity dl dd span").on('click', (el) => {
+          this.expectInfo.expectCity = el.currentTarget.innerHTML
+          this.changeStatus('citys')
+        })
       },
       created() {
 
