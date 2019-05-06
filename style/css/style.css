@@ -5,6 +5,21 @@
 .error{
   color:#ff6a6a;
 }
+#container .el-input__suffix{right:20px;}
+#container .el-input__inner{width:288px;height:46px;}
+#container #educationalBackground .el-date-editor input{
+  width: 100%;
+  font-size: 14px;
+}
+#container #educationalBackground .startTime{
+  float: left;
+  margin-right: 20px;
+  width: 135px;
+}
+#container #educationalBackground .endTime{
+  float: left;
+  width: 135px;
+}
 .city{
   font: 18px/32px "微软雅黑","宋体",Arial;
     color: #999;
@@ -15,7 +30,7 @@
     top: 66px;
     cursor: pointer;
 }
-#expectJob .expectEdit .expect .el-input__icon{height: 46px;}
+#container .el-input__icon{height: 46px;}
 #expectJob .expectEdit .expect input[type="text"]{height:46px;display:block;}
 #headPic .el-upload--picture-card{width:auto;height:auto;}
 .el-select-dropdown__item.selected{color: #019875 !important}
@@ -1419,7 +1434,7 @@ ul.my_delivery{margin:20px 48px;}
 .experienceForm td,.educationalForm td,.workForm td{padding:0 0 17px 0 !important}
 .experienceForm input,.educationalForm input{margin:0}
 .experienceForm input[type="text"]:focus,.educationalForm input[type="text"]:focus{border:2px solid #c8e6de}
-.experienceForm input[type="text"],.educationalForm input[type="text"],.projectForm input[type="text"]{width:264px}
+.experienceForm input[type="text"],.educationalForm input[type="text"],.projectForm input[type="text"]{width:264px;display: block;}
 .educationalForm input[type="text"]{margin-right:7px}
 .experienceForm .redstar,.educationalForm .redstar,.projectForm .redstar{margin:15px 0 0 0;}
 .experienceForm .profile_select_139{margin-right:9px;*margin-right:7px;}
@@ -1429,14 +1444,14 @@ ul.my_delivery{margin:20px 48px;}
 .projectForm td{padding:0 0 17px 0 !important}
 .projectForm input{margin:0}.projectForm input[type="text"]:focus{border:2px solid #c8e6de}
 .projectForm .profile_select_139{margin-right:9px;*margin-right:7px;}
-.workForm input[type="text"]{width:570px;margin:0}
-.descriptionForm textarea,.workForm textarea{width:570px;height:100px;margin:0}
+.workForm input[type="text"]{width:570px;margin:0;display:block;}
+.descriptionForm textarea,.workForm textarea{width:570px;height:100px;margin:0;display:block;margin-bottom:5px;}
 .projectForm textarea{width:580px;height:100px;margin:0}
 .projectForm textarea:focus,.descriptionForm textarea:focus,.workForm textarea:focus{border:2px solid #c8e6de}
 .projectForm .word_count,.descriptionForm .word_count,.workForm .word_count{float:right;margin:-5px 22px -5px 0}
 #projectExperience .projectShow,#worksShow .workShow{padding:0 20px}
-#projectExperience .projectShow ul,#worksShow .workShow ul{width:100%;list-style:none;margin:0;padding:0;*margin-top:10px;}
-#projectExperience .projectShow .plist > li,#worksShow .workShow li{padding:10px 0;border-bottom:1px solid #e5e5e5;*overflow:hidden;*margin-top:15px;}
+#projectExperience .projectShow ul,#worksShow .workShow ul,#expectJob .expectShow ul,#workExperience .experienceShow ul,#educationalBackground .educationalShow ul{width:100%;list-style:none;margin:0;padding:0;*margin-top:10px;}
+#projectExperience .projectShow .plist > li,#worksShow .workShow li,#expectJob .expectShow li,#workExperience .experienceShow li,#educationalBackground .educationalShow li{padding:10px 0;border-bottom:1px solid #e5e5e5;*overflow:hidden;*margin-top:15px;}
 #projectExperience .projectShow .plist > li.noborder,#worksShow .workShow li.noborder{border-bottom:none;}
 #projectExperience .projectShow .plist > li .projectList,#worksShow .workShow li .workList{position:relative}
 #projectExperience .projectList .f16,#worksShow .workList .f16{*margin-top:-22px}

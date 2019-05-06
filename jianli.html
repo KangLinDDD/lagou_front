@@ -23,7 +23,8 @@
   <link href="style/css/external.min.css" type="text/css" rel="stylesheet">
   <link href="style/css/popup.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" href="./node_modules/element-ui/lib/theme-chalk/index.css">
-  <script type="text/javascript" src="style/js/jquery.1.10.1.min.js"></script>
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="style/js/jquery.1.10.1.min.js"></script> -->
   <script src="style/js/jquery.lib.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="style/js/ajaxfileupload.js"></script>
   <script src="style/js/additional-methods.js" type="text/javascript"></script>
@@ -57,12 +58,6 @@
           <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
         </dl>
-        <div class="dn" id="noticeTip">
-          <span class="bot"></span>
-          <span class="top"></span>
-          <a target="_blank" href="delivery.html"><strong>0</strong>条新投递反馈</a>
-          <a class="closeNT" href="javascript:;"></a>
-        </div>
       </div>
     </div><!-- end #header -->
     <div id="container">
@@ -85,7 +80,12 @@
             <div class="basicShow" :class="{'dn':switchs.userInfo}">
               <span>{{userInfo.name}} <span v-show="userInfo.name">|</span>
                 <span v-show="userInfo.sex">{{userInfo.sex==1?'女':'男'}}</span> <span v-show="userInfo.sex">|</span>
-                {{education}} <span v-show="education">|</span> {{experience}}<br>
+                <span v-if="userInfo.education == 0">其他</span>
+                <span v-if="userInfo.education == 1">专科</span>
+                <span v-if="userInfo.education == 2">本科</span>
+                <span v-if="userInfo.education == 3">硕士</span>
+                <span v-if="userInfo.education == 4">博士</span>
+                <span v-show="userInfo.education !== ''">|</span> {{experience}}<br>
                 {{userInfo.tel}} <span v-show="userInfo.tel">|</span>
                 {{userInfo.email}}<br>
               </span>
@@ -205,6 +205,24 @@
           <div class="profile_box" id="expectJob">
             <h2>期望工作</h2>
             <span class="c_edit" :class="{'dn':switchs.expectInfo}" @click.stop="changeSwitchs('expectInfo')"></span>
+            <div class="expectShow" 
+            :class="{'dn':!expectInfo.expectCity || switchs.expectInfo}">
+              <ul class="slist clearfix">
+                <li>
+                  <span>{{expectInfo.expectCity}}</span>
+                  <span v-show="expectInfo.nature!==''">|</span>
+                  <span v-if="expectInfo.nature == 0">全职</span>
+                  <span v-if="expectInfo.nature == 1">兼职</span>
+                  <span v-if="expectInfo.nature == 2">实习</span>
+                  <span v-else></span> 
+                  <span v-show="expectInfo.expectJob">|</span>
+                    {{expectInfo.expectJob}} 
+                    <span v-show="min_salary && max_salary">|</span> 
+                    <span v-show="min_salary && max_salary">
+                      {{min_salary}}k-{{max_salary}}k </span>
+                </li>
+              </ul>
+            </div>
             <!--end .expectShow-->
             <div class="expectEdit" :class="{'dn':!switchs.expectInfo}">
               <form id="expectForm">
@@ -336,19 +354,6 @@
                             :value="item.value">
                           </el-option>
                         </el-select>
-                        <!-- <input type="button" value="期望月薪" id="select_expectSalary"
-                          class="profile_select_287 profile_select_normal" @click="changeStatus('salary')">
-                        <div class="boxUpDown boxUpDown_287" :class="{'dn':!status.salary}" id="box_expectSalary">
-                          <ul>
-                            <li @click="setSalary(0,2)">2k以下</li>
-                            <li @click="setSalary(2,5)">2k-5k</li>
-                            <li @click="setSalary(5,10)">5k-10k</li>
-                            <li @click="setSalary(10,15)">10k-15k</li>
-                            <li @click="setSalary(15,25)">15k-25k</li>
-                            <li @click="setSalary(25,30)">25k-50k</li>
-                            <li @click="setSalary(50,'')">50k以上</li>
-                          </ul>
-                        </div> -->
                       </td>
                     </tr>
                     <tr>
@@ -363,7 +368,7 @@
               <!--end #expectForm-->
             </div>
             <!--end .expectEdit-->
-            <div class="expectAdd pAdd" @click="changeSwitchs('expectInfo')" :class="{'dn':switchs.expectInfo}">
+            <div class="expectAdd pAdd" @click="changeSwitchs('expectInfo')" :class="{'dn':expectInfo.expectCity || switchs.expectInfo}">
               填写准确的期望工作能大大提高求职成功率哦…<br>
               快来添加期望工作吧！
               <span>添加期望工作</span>
@@ -374,208 +379,22 @@
 
           <div class="profile_box" id="workExperience">
             <h2>工作经历 <span> （投递简历时必填）</span></h2>
-            <span class="c_add dn"></span>
-            <div class="experienceShow dn">
-              <form class="experienceForm borderBtm dn">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <input type="text" placeholder="公司名称" name="companyName" class="companyName">
-                      </td>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <input type="text" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <div class="fl">
-                          <input type="hidden" class="companyYearStart" value="" name="companyYearStart">
-                          <input type="button" value="开始年份"
-                            class="profile_select_139 profile_select_normal select_companyYearStart">
-                          <div class="box_companyYearStart boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="companyMonthStart" value="" name="companyMonthStart">
-                          <input type="button" value="开始月份"
-                            class="profile_select_139 profile_select_normal select_companyMonthStart">
-                          <div style="display: none;" class="box_companyMonthStart boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                      </td>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <div class="fl">
-                          <input type="hidden" class="companyYearEnd" value="" name="companyYearEnd">
-                          <input type="button" value="结束年份"
-                            class="profile_select_139 profile_select_normal select_companyYearEnd">
-                          <div class="box_companyYearEnd  boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>至今</li>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="companyMonthEnd" value="" name="companyMonthEnd">
-                          <input type="button" value="结束月份"
-                            class="profile_select_139 profile_select_normal select_companyMonthEnd">
-                          <div style="display: none;" class="box_companyMonthEnd boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <input type="hidden" class="expId" value="">
-              </form>
-              <!--end .experienceForm-->
+            <span class="c_add" @click="changeSwitchs('work_experience')" 
+            :class="{'dn':switchs.work_experience}"></span>
+            <div class="experienceShow" 
+            :class="{'dn':!work_experience.companyName || switchs.work_experience}">
 
-              <ul class="wlist clearfix">
+              <ul class="slist clearfix">
+                <li>
+                  <span>{{work_experience.startTime}}</span> 至
+                  <span>{{work_experience.endTime}}</span>
+                  <span>{{work_experience.jobName}}</span>
+                  <span>{{work_experience.companyName}}</span>
+                </li>
               </ul>
             </div>
             <!--end .experienceShow-->
-            <div class="experienceEdit dn">
+            <div class="experienceEdit" :class="{'dn':!switchs.work_experience}">
               <form class="experienceForm">
                 <table>
                   <tbody>
@@ -584,13 +403,13 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="公司名称" name="companyName" class="companyName">
+                        <input type="text" placeholder="公司名称" v-model="work_experience.companyName" name="companyName" class="companyName">
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="职位名称，如：产品经理" name="positionName" class="positionName">
+                        <input type="text" v-model="work_experience.jobName" placeholder="职位名称，如：产品经理" name="jobName" class="positionName">
                       </td>
                     </tr>
                     <tr>
@@ -598,171 +417,36 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <div class="fl">
-                          <input type="hidden" class="companyYearStart" value="" name="companyYearStart">
-                          <input type="button" value="开始年份"
-                            class="profile_select_139 profile_select_normal select_companyYearStart">
-                          <div class="box_companyYearStart boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="companyMonthStart" value="" name="companyMonthStart">
-                          <input type="button" value="开始月份"
-                            class="profile_select_139 profile_select_normal select_companyMonthStart">
-                          <div style="display: none;" class="box_companyMonthStart boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
+                        <el-date-picker
+                          name="startTime"
+                          v-model="work_experience.startTime"
+                          align="right"
+                          type="date"
+                          :picker-options="pickerOptionStart"
+                          value-format="yyyy-MM-dd"
+                          placeholder="开始日期">
+                        </el-date-picker>
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <div class="fl">
-                          <input type="hidden" class="companyYearEnd" value="" name="companyYearEnd">
-                          <input type="button" value="结束年份"
-                            class="profile_select_139 profile_select_normal select_companyYearEnd">
-                          <div class="box_companyYearEnd  boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>至今</li>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="companyMonthEnd" value="" name="companyMonthEnd">
-                          <input type="button" value="结束月份"
-                            class="profile_select_139 profile_select_normal select_companyMonthEnd">
-                          <div style="display: none;" class="box_companyMonthEnd boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
+                        <el-date-picker
+                          v-model="work_experience.endTime"
+                          name="endTime"
+                          align="right"
+                          type="date"
+                          :picker-options="pickerOptionEnd"
+                          value-format="yyyy-MM-dd" 
+                          placeholder="结束日期">
+                        </el-date-picker>
                       </td>
                     </tr>
                     <tr>
                       <td></td>
                       <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" value="保 存" @click="saveWorkExperience" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click="cancleEdit('work_experience')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -773,7 +457,8 @@
             </div>
             <!--end .experienceEdit-->
 
-            <div class="experienceAdd pAdd">
+            <div class="experienceAdd pAdd" 
+            :class="{'dn':work_experience.companyName || switchs.work_experience}"@click="changeSwitchs('work_experience')">
               工作经历最能体现自己的工作能力，<br>
               且完善后才可投递简历哦！
               <span>添加工作经历</span>
@@ -784,13 +469,21 @@
 
           <div class="profile_box" id="projectExperience">
             <h2>项目经验</h2>
-            <span class="c_add dn"></span>
-            <div class="projectShow dn">
+            <span class="c_add" @click="changeSwitchs('project_experience')" 
+            :class="{'dn':switchs.project_experience}"></span>
+            <div class="projectShow" 
+            :class="{'dn':!project_experience.projectName || switchs.project_experience}">
               <ul class="plist clearfix">
+                <li>
+                  <span>{{project_experience.projectName}}</span>
+                  <span>{{project_experience.job}}</span>
+                  <span>{{project_experience.startTime}}</span> 至
+                  <span>{{project_experience.endTime}}</span>
+                </li>
               </ul>
             </div>
             <!--end .projectShow-->
-            <div class="projectEdit dn">
+            <div class="projectEdit" :class="{'dn': !switchs.project_experience}">
               <form class="projectForm">
                 <table>
                   <tbody>
@@ -799,13 +492,13 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="项目名称" name="projectName" class="projectName">
+                        <input type="text" v-model="project_experience.projectName" placeholder="项目名称" name="projectName" class="projectName">
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="担任职务，如：产品负责人" name="thePost" class="thePost">
+                        <input type="text" placeholder="担任职务，如：产品负责人" name="thePost" v-model="project_experience.job" class="thePost">
                       </td>
                     </tr>
                     <tr>
@@ -813,7 +506,15 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <div class="fl">
+                        <el-date-picker
+                          v-model="project_experience.startTime"
+                          type="date"
+                          name="startTime"
+                          :picker-options="pickerOptionStart"
+                          value-format="yyyy-MM-dd"
+                          placeholder="开始时间">
+                        </el-date-picker>
+                        <!-- <div class="fl">
                           <input type="hidden" class="projectYearStart" value="" name="projectYearStart">
                           <input type="button" value="开始年份"
                             class="profile_select_139 profile_select_normal select_projectYearStart">
@@ -887,14 +588,21 @@
                               <li>12</li>
                             </ul>
                           </div>
-                        </div>
-                        <div class="clear"></div>
+                        </div> -->
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <div class="fl">
+                        <el-date-picker
+                          v-model="project_experience.endTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          name="endTime"
+                          :picker-options="pickerOptionEnd"
+                          placeholder="结束时间">
+                        </el-date-picker>
+                        <!-- <div class="fl">
                           <input type="hidden" class="projectYearEnd" value="" name="projectYearEnd">
                           <input type="button" value="结束年份"
                             class="profile_select_139 profile_select_normal select_projectYearEnd">
@@ -970,28 +678,23 @@
                             </ul>
                           </div>
                         </div>
-                        <div class="clear"></div>
+                        <div class="clear"></div> -->
                       </td>
                     </tr>
                     <tr>
                       <td valign="top"></td>
                       <td colspan="3">
                         <textarea class="projectDescription s_textarea" name="projectDescription"
+                        v-model="project_experience.describe"
                           placeholder="项目描述"></textarea>
                         <div class="word_count">你还可以输入 <span>500</span> 字</div>
                       </td>
                     </tr>
-                    <!-- <tr>
-									<td colspan="2">
-										<textarea placeholder="职责描述" name="ResponsDescription" class="ResponsDescription s_textarea"></textarea>
-										<div class="word_count">你还可以输入 <span>500</span> 字</div>
-									</td>
-	            				</tr> -->
                     <tr>
                       <td valign="top"></td>
                       <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" @click="saveProjectDesc" value="保 存" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click="changeSwitchs('project_experience')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -1001,7 +704,8 @@
               <!--end .projectForm-->
             </div>
             <!--end .projectEdit-->
-            <div class="projectAdd pAdd">
+            <div class="projectAdd pAdd" @click="changeSwitchs('project_experience')"
+            :class="{'dn':project_experience.projectName || switchs.project_experience}">
               项目经验是用人单位衡量人才能力的重要指标哦！<br>
               来说说让你难忘的项目吧！
               <span>添加项目经验</span>
@@ -1012,182 +716,25 @@
 
           <div class="profile_box" id="educationalBackground">
             <h2>教育背景<span>（投递简历时必填）</span></h2>
-            <span class="c_add dn"></span>
-            <div class="educationalShow dn">
-              <form class="educationalForm borderBtm dn">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <input type="text" placeholder="学校名称" name="schoolName" class="schoolName">
-                      </td>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <input type="hidden" class="degree" value="" name="degree">
-                        <input type="button" value="学历" class="profile_select_287 profile_select_normal select_degree">
-                        <div class="box_degree boxUpDown boxUpDown_287 dn" style="display: none;">
-                          <ul>
-                            <li>大专</li>
-                            <li>本科</li>
-                            <li>硕士</li>
-                            <li>博士</li>
-                            <li>其他</li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <input type="text" placeholder="专业名称" name="professionalName" class="professionalName">
-                      </td>
-                      <td valign="top">
-                        <span class="redstar">*</span>
-                      </td>
-                      <td>
-                        <div class="fl">
-                          <input type="hidden" class="schoolYearStart" value="" name="schoolYearStart">
-                          <input type="button" value="开始年份"
-                            class="profile_select_139 profile_select_normal select_schoolYearStart">
-                          <div class="box_schoolYearStart boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="schoolYearEnd" value="" name="schoolYearEnd">
-                          <input type="button" value="结束年份"
-                            class="profile_select_139 profile_select_normal select_schoolYearEnd">
-                          <div style="display: none;" class="box_schoolYearEnd  boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>2021</li>
-                              <li>2020</li>
-                              <li>2019</li>
-                              <li>2018</li>
-                              <li>2017</li>
-                              <li>2016</li>
-                              <li>2015</li>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <input type="hidden" class="eduId" value="">
-              </form>
+            <span class="c_add" @click="changeSwitchs('education')" :class="{'dn':switchs.education}"></span>
+            <div class="educationalShow" :class="{'dn':!education.education || switchs.education}">
+              <ul class="slist clearfix">
+                <li>
+                  <span>{{education.startYear}}至{{education.endYear}}</span>
+                  <span>{{education.schoolName}}</span>
+                  <span v-if="education.education == 1">专科</span>
+                  <span v-if="education.education == 2">本科</span>
+                  <span v-if="education.education == 3">硕士</span>
+                  <span v-if="education.education == 4">博士</span>
+                </li>
+              </ul>
               <!--end .educationalForm-->
 
               <ul class="elist clearfix">
               </ul>
             </div>
             <!--end .educationalShow-->
-            <div class="educationalEdit dn">
+            <div class="educationalEdit" :class="{'dn':!switchs.education}">
               <form class="educationalForm">
                 <table>
                   <tbody>
@@ -1196,23 +743,17 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="学校名称" name="schoolName" class="schoolName">
+                        <input type="text" v-model="education.schoolName" placeholder="学校名称" name="schoolName" class="schoolName">
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="hidden" class="degree" value="" name="degree">
-                        <input type="button" value="学历" class="profile_select_287 profile_select_normal select_degree">
-                        <div class="box_degree boxUpDown boxUpDown_287 dn" style="display: none;">
-                          <ul>
-                            <li>大专</li>
-                            <li>本科</li>
-                            <li>硕士</li>
-                            <li>博士</li>
-                            <li>其他</li>
-                          </ul>
-                        </div>
+                        <el-select class="basic" name="education" v-model="education.education" placeholder="请选择">
+                          <el-option v-for="item in select.education" :key="item.value" :label="item.label"
+                          :value="item.value">
+                          </el-option>
+                        </el-select>
                       </td>
                     </tr>
                     <tr>
@@ -1220,13 +761,31 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <input type="text" placeholder="专业名称" name="professionalName" class="professionalName">
+                        <input type="text" v-model="education.majorName" placeholder="专业名称" name="majorName" class="professionalName">
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <div class="fl">
+                        <el-date-picker
+                          v-model="education.startYear"
+                          align="right"
+                          class="startTime"
+                          name="startYear"
+                          value-format="yyyy"
+                          type="year"
+                          placeholder="开始年份">
+                        </el-date-picker>
+                        <el-date-picker
+                          v-model="education.endYear"
+                          align="right"
+                          class="endTime"
+                          name="endYear"
+                          value-format="yyyy"
+                          type="year"
+                          placeholder="结束年份">
+                        </el-date-picker>
+                        <!-- <div class="fl">
                           <input type="hidden" class="schoolYearStart" value="" name="schoolYearStart">
                           <input type="button" value="开始年份"
                             class="profile_select_139 profile_select_normal select_schoolYearStart">
@@ -1334,14 +893,15 @@
                             </ul>
                           </div>
                         </div>
-                        <div class="clear"></div>
+                        <div class="clear"></div> -->
                       </td>
                     </tr>
                     <tr>
                       <td></td>
                       <td colspan="3">
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" value="保 存" @click="saveEducation" class="btn_profile_save">
+                        <a class="btn_profile_cancel"
+                        @click="cancleEdit('education')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
@@ -1351,7 +911,7 @@
               <!--end .educationalForm-->
             </div>
             <!--end .educationalEdit-->
-            <div class="educationalAdd pAdd">
+            <div class="educationalAdd pAdd" :class="{'dn':education.education || switchs.education}" @click="changeSwitchs('education')">
               教育背景可以充分体现你的学习和专业能力，<br>
               且完善后才可投递简历哦！
               <span>添加教育经历</span>
@@ -1363,8 +923,10 @@
           <div class="profile_box" id="selfDescription">
             <h2>自我描述</h2>
             <span class="c_edit" @click="changeSwitchs('self_describe')" :class="{'dn':switchs.self_describe}"></span>
-            <div class="descriptionShow dn">
-
+            <div class="descriptionShow" 
+            :class="{'dn':!self_describe || switchs.self_describe}">
+              <span style="white-space: nowrap">自我描述：</span>
+              <span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">{{self_describe}}</span>
             </div>
             <!--end .descriptionShow-->
             <div class="descriptionEdit" :class="{'dn':!switchs.self_describe}">
@@ -1373,7 +935,7 @@
                   <tbody>
                     <tr>
                       <td colspan="2">
-                        <textarea class="selfDescription s_textarea" v-model="self_describe" name="selfDescription" placeholder="请输入您的自我描述" :disabled="self_desc_length == 0"></textarea>
+                        <textarea class="selfDescription s_textarea" v-model="self_describe" name="selfDescription" placeholder="请输入您的自我描述" maxlength="500"></textarea>
                         <div class="word_count">你还可以输入 <span>
                           {{self_desc_length}}</span> 字</div>
                       </td>
@@ -1390,7 +952,7 @@
               <!--end .descriptionForm-->
             </div>
             <!--end .descriptionEdit-->
-            <div class="descriptionAdd pAdd" @click="changeSwitchs('self_describe')" :class="{'dn':switchs.self_describe}">
+            <div class="descriptionAdd pAdd" @click="changeSwitchs('self_describe')" :class="{'dn':self_describe || switchs.self_describe}">
               描述你的性格、爱好以及吸引人的经历等，<br>
               让企业了解多元化的你！
               <span>添加自我描述</span>
@@ -1401,42 +963,47 @@
 
           <div class="profile_box" id="worksShow">
             <h2>作品展示</h2>
-            <span class="c_add dn"></span>
-            <div class="workShow dn">
+            <span class="c_add" @click="changeSwitchs('works')" :class="{'dn':switchs.works}"></span>
+            <div class="workShow" :class="{'dn':!works.url || switchs.works}">
               <ul class="slist clearfix">
+                <li>
+                  <span>作品链接:&nbsp;{{works.url}}</span>
+                </li>
+                <li>
+                    <span style="white-space: nowrap;">作品描述:&nbsp;</span><span>{{works.works_describe}}</span>
+                </li>
               </ul>
             </div>
             <!--end .workShow-->
-            <div class="workEdit dn">
+            <div class="workEdit" :class="{'dn':!switchs.works}">
               <form class="workForm">
                 <table>
                   <tbody>
                     <tr>
                       <td>
-                        <input type="text" placeholder="请输入作品链接" name="workLink" class="workLink">
+                        <input type="text" placeholder="请输入作品链接" v-model="works.url" name="workLink" class="workLink">
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <textarea maxlength="100" class="workDescription s_textarea" name="workDescription"
+                        <textarea maxlength="100" v-model="works.works_describe" class="workDescription s_textarea" name="workDescription"
                           placeholder="请输入说明文字"></textarea>
-                        <div class="word_count">你还可以输入 <span>100</span> 字</div>
+                        <div class="word_count">你还可以输入 <span>{{workShowLength}}</span> 字</div>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <input type="submit" value="保 存" class="btn_profile_save">
-                        <a class="btn_profile_cancel" href="javascript:;">取 消</a>
+                        <input type="submit" value="保 存" @click="saveWorks" class="btn_profile_save">
+                        <a class="btn_profile_cancel" @click="cancleEdit('works')" href="javascript:;">取 消</a>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <input type="hidden" class="showId" value="">
               </form>
               <!--end .workForm-->
             </div>
             <!--end .workEdit-->
-            <div class="workAdd pAdd">
+            <div class="workAdd pAdd" @click="changeSwitchs('works')" :class="{'dn':works.url || switchs.works}">
               好作品会说话！<br>
               快来秀出你的作品打动企业吧！
               <span>添加作品展示</span>
@@ -1444,7 +1011,6 @@
             <!--end .workAdd-->
           </div>
           <!--end #worksShow-->
-          <input type="hidden" id="resumeId" value="268472">
         </div>
         <!--end .content_l-->
         <div class="content_r">
@@ -1500,7 +1066,7 @@
       </div>
       <div style="display:none;">
         <!-- 上传简历 -->
-        <div class="popup" id="uploadFile">
+        <!-- <div class="popup" id="uploadFile">
           <table width="100%">
             <tbody>
               <tr>
@@ -1527,11 +1093,11 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <!--/#uploadFile-->
 
         <!-- 简历上传成功 -->
-        <div class="popup" id="uploadFileSuccess">
+        <!-- <div class="popup" id="uploadFileSuccess">
           <h4>简历上传成功！</h4>
           <table width="100%">
             <tbody>
@@ -1545,11 +1111,11 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <!--/#uploadFileSuccess-->
 
         <!-- 没有简历请上传 -->
-        <div class="popup" id="deliverResumesNo">
+        <!-- <div class="popup" id="deliverResumesNo">
           <table width="100%">
             <tbody>
               <tr>
@@ -1574,11 +1140,11 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <!--/#deliverResumesNo-->
 
         <!-- 上传附件简历操作说明-重新上传 -->
-        <div class="popup" id="fileResumeUpload">
+        <!-- <div class="popup" id="fileResumeUpload">
           <table width="100%">
             <tbody>
               <tr>
@@ -1601,11 +1167,11 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <!--/#fileResumeUpload-->
 
         <!-- 上传附件简历操作说明-重新上传 -->
-        <div class="popup" id="fileResumeUploadSize">
+        <!-- <div class="popup" id="fileResumeUploadSize">
           <table width="100%">
             <tbody>
               <tr>
@@ -1628,45 +1194,16 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <!--/#deliverResumeConfirm-->
 
       </div>
-      <!-- <script src="style/js/Chart.min.js" type="text/javascript"></script>
-      <script src="style/js/profile.min.js" type="text/javascript"></script> -->
       <div class="" id="qr_cloud_resume" style="display: none;">
         <div class="cloud">
           <img width="134" height="134" src="">
           <a class="close" href="javascript:;"></a>
         </div>
       </div>
-      <!-- <script>
-        $(function () {
-          $.ajax({
-            url: '' + "/mycenter/showQRCode",
-            type: "GET",
-            async: false
-          }).done(function (data) {
-            if (data.success) {
-              $('#qr_cloud_resume img').attr("src", data.content);
-            }
-          });
-          var sessionId = "resumeQR" + 314873;
-          if (!$.cookie(sessionId)) {
-            $.cookie(sessionId, 0, { expires: 1 });
-          }
-          if ($.cookie(sessionId) && $.cookie(sessionId) != 5){
-          $('#qr_cloud_resume').removeClass('dn');
-        }
-        $('#qr_cloud_resume .close').click(function () {
-          $('#qr_cloud_resume').fadeOut(200);
-          resumeQR = parseInt($.cookie(sessionId)) + 1;
-          $.cookie(sessionId, resumeQR, { expires: 1 });
-        });
-});
-      </script> -->
-      <div class="clear"></div>
-      <a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
     </div><!-- end #container -->
   </div><!-- end #body -->
   <div id="footer">
@@ -1712,13 +1249,32 @@
     var app = new Vue({
       el: '#body',
       data: {
-        // basic: true,
+        jianId:'',
         tmpName:'',
         fileList: [],
         headImg: '',
         updateTime: '',
         salary: '',
         self_describe:'',
+        project_experience:{
+          projectName:'',
+          job:'',
+          startTime:'',
+          endTime:'',
+          describe:''
+        },
+        temInfo:{},
+        education:{
+          schoolName:'',
+          education:'',
+          majorName:'',
+          startYear:'',
+          endYear:''
+        },
+        works:{
+          url:'',
+          works_describe:''
+        },
         userInfo: {
           name: '',
           sex: '',
@@ -1732,6 +1288,12 @@
           expectCity: '',
           nature: 0,
           expectJob: ''
+        },
+        work_experience:{
+          companyName:'',
+          jobName:'',
+          startTime:'',
+          endTime:''
         },
         // 状态控制
         status: {
@@ -1842,25 +1404,61 @@
           userInfo: false,
           expectInfo: false,
           self_describe:false,
-          works:false
+          works:false,
+          project_experience:false,
+          education:false,
+          work_experience:false
         },
         template:{
           userInfo: {
-          name: '',
-          sex: '',
-          education: '',
-          experience: '',
-          tel: '',
-          email: '',
-          status: ''
-        },
+            name: '',
+            sex: '',
+            education: '',
+            experience: '',
+            tel: '',
+            email: '',
+            status: ''
+          },
           expectInfo: {
             expectCity: '',
             nature: 0,
             expectJob: ''
           },
           self_describe:'',
-          works:{}
+          works:{
+            url:'',
+            works_describe:''
+          },
+          project_experience:{
+            projectName:'',
+            job:'',
+            startTime:'',
+            endTime:'',
+            describe:''
+          },
+          education:{
+            schoolName:'',
+            education:'',
+            majorName:'',
+            startYear:'',
+            endYear:''
+          },
+          work_experience:{
+            companyName:'',
+            jobName:'',
+            startTime:'',
+            endTime:''
+          },
+        },
+        pickerOptionStart: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+        },
+        pickerOptionEnd: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
         }
       },
       computed: {
@@ -1931,16 +1529,52 @@
         },
         self_desc_length:function (){
           return  500 - this.self_describe.length
+        },
+        workShowLength:function(){
+          return 100 - this.works.works_describe.length
         }
       },
       methods: {
+        getJianliInfo(){
+          $.ajax({
+            url:window.lagou + '/jianli/index/getJianLi',
+            xhrFields:{
+              withCredentials:true
+            },
+            method:'post',
+            success:(res)=>{
+              var {expectInfo,work_experience,project_experience,education,self_describe,works} = res
+              this.expectInfo =  expectInfo
+              this.salary = expectInfo.min_salary+','+expectInfo.max_salary
+              this.work_experience = work_experience[0]
+              this.project_experience = project_experience
+              // this.education = {}
+              this.education = JSON.parse(education[0])
+              console.log(education[0].education)
+              console.log(work_experience[0].companyName)
+              this.self_describe = self_describe
+              this.works = works
+            },
+            error:()=>{}
+          })
+        },
+        checkJianLi(){
+          $.ajax({
+            url:window.lagou + '/jianli/index/check',
+            xhrFields:{
+              withCredentials:true
+            },
+            method:'post',
+            success:(res)=>{
+              this.jianId = res.id
+            },
+            error:(res)=>{
+
+            }
+          })
+        },
         closeDialog(){
           this.status.citys = false
-        },
-        setSalary(min, max) {
-          this.expectInfo.min_salary = min
-          this.expectInfo.max_salary = max
-          this.changeStatus('salary')
         },
         changeStatus(val) {
           this.status[val] = !this.status[val]
@@ -1950,7 +1584,7 @@
         },
         changeSwitchs(val) {
           this.switchs[val] = !this.switchs[val]
-          this.template[val] = JSON.stringify(this[val])
+          this.temInfo = JSON.stringify(this[val])
         },
         checkCookie() {
           var _this = this
@@ -1968,7 +1602,7 @@
               }
             },
             error: (res) => {
-
+              window.location.href="./login.html"
             }
           })
         },
@@ -1987,7 +1621,7 @@
               this.headImg = res.headImgUrl?res.headImgUrl:'style/images/default_headpic.png'
             },
             error:(res)=>{
-
+              window.location.href="./login.html"
             }
           })
         },
@@ -1996,15 +1630,6 @@
         },
         uploadError(err, file, fileList) {
           this.headImg = 'style/images/default_headpic.png'
-        },
-        clearData() {
-          this.userInfo.name = ''
-          this.userInfo.sex = ''
-          this.userInfo.education = ''
-          this.userInfo.experience = ''
-          this.userInfo.tel = ''
-          this.userInfo.email = ''
-          this.userInfo.status = ''
         },
         setSex() {
           this.status.sex = !this.status.sex
@@ -2104,7 +1729,7 @@
                   withCredentials:true
                 },
                 success:(res)=>{
-
+                  _this.changeSwitchs('expectInfo')
                 },
                 error:(res)=>{
 
@@ -2114,16 +1739,20 @@
           })
         },
         cancleEdit(val){
-          this[val] = JSON.parse(this.template[val])
+          this[val] = JSON.parse(this.temInfo)
           this.switchs[val] = !this.switchs[val]
         },
         saveSelfDescripton(){
           $(".descriptionForm").validate({
             rules:{
-              required:true
+              selfDescription:{
+                required:true
+              }
             },
             messages:{
-              required:'请输入您的自我描述'
+              selfDescription:{
+                required:'请输入您的自我描述'
+              }
             },
             submitHandler:(form)=>{
               $.ajax({
@@ -2145,11 +1774,217 @@
               })
             }
           })
+        },
+        saveWorks(){
+          this.works.jianId = this.jianId
+          $(".workForm").validate({
+            rules:{
+              workLink:{
+                required:true
+              },
+              workDescription:{
+                required:true
+              }
+            },
+            messages:{
+              workLink:{
+                required:'请输入作品链接'
+              },
+              workDescription:{
+                required:'请输入作品说明'
+              }
+            },
+            submitHandler:(form)=>{
+              $.ajax({
+                url:window.lagou + '/jianli/index/addWorkShow',
+                dataType:'json',
+                data:this.works,
+                method:'post',
+                xhrFields:{
+                  withCredentials:true
+                },
+                success:(res)=>{
+                  this.changeSwitchs('works')
+                },
+                error:(res)=>{
+
+                }
+              })
+            }
+          })
+        },
+        saveProjectDesc(){
+          $(".projectForm").validate({
+            rules:{
+              projectName:{
+                required:true
+              },
+              thePost:{
+                required:true
+              },
+              startTime:{
+                required:true,
+              },
+              endTime:{
+                required:true,
+                min:this.project_experience.startTime
+              },
+              projectDescription:{
+                required:true
+              }
+            },
+            messages:{
+              projectName:{
+                required:'请输入项目名称'
+              },
+              thePost:{
+                required:'请输入在项目中担任的职务'
+              },
+              startTime:{
+                required:'请选择开始时间'
+              },
+              endTime:{
+                required:'请选择结束时间',
+                min:'结束时要大于开始时间'
+              },
+              projectDescription:{
+                required:'请输入项目描述'
+              }
+            },
+            submitHandler:(form)=>{
+              this.project_experience.jianId = this.jianId
+              $.ajax({
+                url:window.lagou + '/jianli/index/updateProject',
+                method:'post',
+                dataType:'json',
+                data:this.project_experience,
+                xhrFields:{
+                  withCredentials:true
+                },
+                success:(res)=>{
+                  this.changeSwitchs('project_experience')
+                },
+                error:(res)=>{
+
+                }
+              })
+            }
+          })
+        },
+        saveEducation(){
+          $(".educationalForm").validate({
+            rules:{
+              schoolName:{
+                required:true
+              },
+              education:{
+                required:true
+              },
+              majorName:{
+                required:true
+              },
+              startYear:{
+                required:true
+              },
+              endYear:{
+                required:true
+              }
+            },
+            messages:{
+              schoolName:{
+                required:'请输入学校名字'
+              },
+              education:{
+                required:'请选择学历'
+              },
+              majorName:{
+                required:'请输入专业名称'
+              },
+              startYear:{
+                required:'请选择开始时间'
+              },
+              endYear:{
+                required:'请选择结束时间'
+              }
+            },
+            submitHandler:(form)=>{
+              this.education.jianId = this.jianId
+              $.ajax({
+                url:window.lagou + '/jianli/index/updateEducation',
+                dataType:'json',
+                data:this.education,
+                method:'post',
+                xhrFields:{
+                  withCredentials:true
+                },
+                success:(res)=>{
+                  this.changeSwitchs('education')
+                },
+                error:(res)=>{
+
+                }
+              })
+            }
+          })
+        },
+        saveWorkExperience(){
+          $(".experienceForm").validate({
+            rules:{
+              companyName:{
+                required:true
+              },
+              jobName:{
+                required:true
+              },
+              startTime:{
+                required:true
+              },
+              endTime:{
+                required:true,
+                min:this.work_experience.startTime
+              }
+            },
+            messages:{
+              companyName:{
+                required:'请输入公司名称'
+              },
+              jobName:{
+                required:'请输入职位名称'
+              },
+              startTime:{
+                required:'请选择开始时间'
+              },
+              endTime:{
+                required:'请选择结束时间',
+                min:'结束时间要大于开始时间'
+              }
+            },
+            submitHandler:(form)=>{
+              this.work_experience.jianId = this.jianId
+              $.ajax({
+                url:window.lagou + '/jianli/index/updateWorkExperience',
+                dataType:'json',
+                data:this.work_experience,
+                method:'post',
+                xhrFields:{
+                  withCredentials:true
+                },
+                success:(res)=>{
+                  this.changeSwitchs('work_experience')
+                },
+                error:(res)=>{
+
+                }
+              })
+            }
+          })
         }
       },
       mounted() {
         this.checkCookie()
         this.getUserInfo()
+        this.checkJianLi()
+        this.getJianliInfo()
         $("#box_expectCity dl dd span").on('click', (el) => {
           this.expectInfo.expectCity = el.currentTarget.innerHTML
           this.changeStatus('citys')

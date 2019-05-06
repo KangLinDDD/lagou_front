@@ -31,7 +31,6 @@ function getDay (day) {
 }
 function getAllDay (time) {
   var today = new Date();
-  // var targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * day;
   today.setTime(time); //注意，这行是关键代码
   var tYear = today.getFullYear()
   var tMonth = today.getMonth();
@@ -66,4 +65,8 @@ function getTimeStamp(day){
 }
 function timeStampToDay(timestamp){
   return Math.floor((new Date().getTime() - timestamp)/(1000 * 60 * 60 * 24) +1)
+}
+function changeDate(time){
+  var d = new Date(time);  
+  var  resDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 }
