@@ -5,6 +5,18 @@
 .error{
   color:#ff6a6a;
 }
+.work_show{
+  display: inline-block;
+  max-width: 80%;
+  word-break: break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  top: 6px;
+}
+.slist .c_edit,.plist .c_edit{top:inherit;}
 #container .el-input__suffix{right:20px;}
 #container .el-input__inner{width:288px;height:46px;}
 #container #educationalBackground .el-date-editor input{
@@ -686,6 +698,8 @@ ul.hot_pos i{width: 12px;height: 14px;position:absolute;background:url(img/hot.p
 .newIntro dd{overflow:hidden;}
 .c_edit{ width:25px; height:25px; position:absolute; right:7px; top:7px;z-index:10; background:url(img/c_edit.png) 0 1px no-repeat;}
 .c_edit:hover{ background-position:-30px 0px;}
+.c_delete{ width:25px; height:25px; position:absolute; right:35px; top:inherit;z-index:10; background:url(img/bbs_icon.png) 0 0 no-repeat;}
+.c_delete:hover{ background-position:-25px 0px;}
 .member_wrap{position:relative;}
 .c_add{ width:25px; height:25px; position:absolute; right:37px; top:7px; background:url(img/c_edit.png) 0 -25px no-repeat;}
 .c_add:hover{ background-position:-29px -25px;}

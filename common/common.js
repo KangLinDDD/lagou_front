@@ -18,6 +18,12 @@ function clearParams (params) {
   }
   return params
 }
+function setJsonToNull(params){
+  for (var param in params) {
+    params[param] = ''
+  }
+  return params
+}
 function getDay (day) {
   var today = new Date();
   var targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * day;
