@@ -109,10 +109,15 @@
                   withCredentials: true
                 },
                 success: function (res) {
-                  if (res.statusCode === 200) {
+                  if (res.type === 0) {
+                    // 普通用户
                     _this.loginFailed = false
                     window.location.href = './index.html'
-                  } else {
+                  }else if(res.type === 1){
+                    // hr用户
+                    _this.loginFailed = false
+                    window.location.href = './auth.html'
+                  } else{
                     //    登录失败
                     _this.loginFailed = true
                     console.log(res)

@@ -151,8 +151,7 @@
         </div>
         <dl class="hotSearch">
           <dt>热门搜索：</dt>
-          <dd v-for="hot in hotSearch" :key="hot.id"><a
-              @click="changeJob(hot.searchName)">{{hot.searchName}}</a>
+          <dd v-for="hot in hotSearch" :key="hot.id"><a @click="changeJob(hot.searchName)">{{hot.searchName}}</a>
           </dd>
         </dl>
         <div class="breakline"></div>
@@ -427,9 +426,9 @@
         }
       },
       methods: {
-        login(){
+        login() {
           var href = window.href
-          window.location.href="./login.html?"+jsonToUrl(this.searchData)
+          window.location.href = "./login.html?" + jsonToUrl(this.searchData)
         },
         getHotSearch() {
           var _this = this
@@ -524,7 +523,7 @@
           }
           window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
-        changeJob(job){
+        changeJob(job) {
           this.searchData.jobName = job
           window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         }

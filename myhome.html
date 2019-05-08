@@ -1,0 +1,814 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script src="config/config.js"></script>
+  <script src="node_modules/vue/dist/vue.min.js"></script>
+
+  <script src="style/js/allmobilize.min.js" charset="utf-8" id="allmobilize"></script>
+  <meta content="no-siteapp" http-equiv="Cache-Control">
+  <link media="handheld" rel="alternate">
+  <!-- end 云适配 -->
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>拉勾网-最专业的互联网招聘平台</title>
+  <meta content="23635710066417756375" property="qc:admins">
+  <meta name="description" content="平潭协创进出口贸易有限公司 福建平潭协创进出口贸易有限公司 上海 移动互联网 天使轮 150-500人 测试的发打发打发大范德萨发">
+  <meta name="keywords" content="平潭协创进出口贸易有限公司 福建平潭协创进出口贸易有限公司 上海 移动互联网 天使轮 150-500人 测试的发打发打发大范德萨发">
+  <link href="style/images/favicon.ico" rel="Shortcut Icon">
+  <link href="style/css/style.css" type="text/css" rel="stylesheet">
+  <link href="style/css/external.min.css" type="text/css" rel="stylesheet">
+  <link href="style/css/popup.css" type="text/css" rel="stylesheet">
+  <link rel="stylesheet" href="node_modules/element-ui/lib/theme-chalk/index.css">
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+  <!-- <script type="text/javascript" src="style/js/jquery.1.10.1.min.js"></script> -->
+  <!-- <script src="style/js/jquery.lib.min.js" type="text/javascript"></script> -->
+  <script type="text/javascript" src="style/js/ajaxfileupload.js"></script>
+  <script src="node_modules/element-ui/lib/index.js"></script>
+  <script src="style/js/additional-methods.js" type="text/javascript"></script>
+  <!-- <script src="style/js/conv.js" type="text/javascript"></script> -->
+  <script src="style/js/ajaxCross.json" charset="UTF-8"></script>
+  <style>
+    #companyFeatures-error {
+      position: relative;
+      left: -179px;
+    }
+
+    .btn_small,
+    .btn_cancel_s {
+      margin-top: 24px;
+    }
+
+    .editTags input[type="text"] {
+      display: block;
+    }
+
+    #tagForms .el-select .error {
+      font-size: 18px;
+    }
+
+    #stageform .stageSelect .el-input input {
+      width: 144px;
+      height: 40px;
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="body" v-cloak>
+    <div id="header">
+      <div class="wrapper">
+        <a class="logo" href="index.html">
+          <img width="229" height="43" alt="拉勾招聘-专注互联网招聘" src="style/images/logo.png">
+        </a>
+        <ul id="navheader" class="reset">
+          <li><a href="index.html">首页</a></li>
+          <li class="current"><a href="myhome.html">公司</a></li>
+          <li>
+            <a rel="nofollow" href="http://www.sucaihuo.com/templates">简历管理</a>
+          </li>
+          <li><a rel="nofollow" href="create.html">发布职位</a></li>
+        </ul>
+        <dl class="collapsible_menu">
+          <dt>
+            <span>jason&nbsp;</span>
+            <span class="red dn" id="noticeDot-1"></span>
+            <i></i>
+          </dt>
+          <dd><a href="positions.html">我发布的职位</a></dd>
+          <dd><a href="positions.html">我收到的简历</a></dd>
+          <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
+          <dd><a href="jianli.html">我要找工作</a></dd>
+          <dd><a href="accountBind.html">帐号设置</a></dd>
+          <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
+        </dl>
+      </div>
+    </div><!-- end #header -->
+    <div id="container">
+      <div class="clearfix">
+        <div class="content_l">
+          <div class="c_detail">
+            <div style="background-color:#fff;" class="c_logo">
+              <el-upload action="http://tp5.com/company/index/addLogo" :show-file-list="false" with-credentials=true
+                :on-error="uploadError" :on-success="uploadSuccess" :file-list="fileList" list-type="text"
+                accept=".jpg,.jpeg,.png,.JPG,.JPEG">
+                <img width="190" height="190" alt="公司logo" :src="basic.logo">
+                <span>更换公司图片<br>190px*190px 小于5M</span>
+              </el-upload>
+            </div>
+            <div class="c_box companyName">
+              <h2 :class="{'dn':switchs.basic}">公司名称</h2>
+              <em :class="{'dn':switchs.basic}" @mouseenter="changeSwitchs('confirm')" @mouseleave="changeSwitchs('confirm')" class="unvalid"></em>
+              <span class="va" :class="{'dn':!switchs.confirm}">拉勾未认证企业</span>
+              <a target="_blank" class="applyC" :class="{'dn':switchs.basic}" href="./auth.html">申请认证</a>
+              <div class="clear"></div>
+              <h1 class="fullname" :class="{'dn':basic.companyName && switchs.basic}">{{basic.companyName}}
+              </h1>
+              <form class="clear editDetail" :class="{'dn':!switchs.basic}" id="editDetailForm">
+                <input type="text" placeholder="请输入公司名称" maxlength="15" v-model="basic.companyName" name="companyName"
+                  class="valid">
+                <input type="text" placeholder="请输入公司简称" v-model="basic.easyname" maxlength="15" name="companyShortName"
+                  id="companyShortName" class="valid">
+                <input type="text" placeholder="一句话描述公司优势，核心价值，限50字" maxlength="50" v-model="basic.coreValues"
+                  name="companyFeatures" id="companyFeatures" class="valid">
+                <input type="submit" @click="saveCompanyBasic" value="保存" id="saveDetail" class="btn_small">
+                <a id="cancelDetail" @click="cancleEdit('basic')" class="btn_cancel_s">取消</a>
+              </form>
+
+              <div class="clear oneword" :class="{'dn':switchs.basic}">
+                <img width="17" height="15" src="style/images/quote_l.png">&nbsp; <span>{{basic.easyname}}</span>
+                &nbsp;<img width="17" height="15" src="style/images/quote_r.png">
+                <div><span>{{basic.coreValues}}</span></div>
+              </div>
+            </div>
+            <a title="编辑基本信息" class="c_edit" :class="{'dn':switchs.basic}" @click="changeSwitchs('basic')"
+              id="editCompanyDetail" href="javascript:void(0);"></a>
+            <div class="clear"></div>
+          </div>
+
+          <div class="c_breakline"></div>
+
+          <div id="Product">
+
+            <div class="product_wrap">
+
+              <!--无产品 -->
+              <!-- <dl class="c_section dn">
+                <dt>
+                  <h2><em></em>公司产品</h2>
+                </dt>
+                <dd>
+                  <div class="addnew">
+                    酒香不怕巷子深已经过时啦！<br>
+                    把自己优秀的产品展示出来吸引人才围观吧！<br>
+                    <a class="product_edit" href="javascript:void(0)">+添加公司产品</a>
+                  </div>
+                </dd>
+              </dl> -->
+
+              <!--产品编辑-->
+              <dl id="newProduct" class="newProduct" :class="{'dn':!switchs.product}">
+                <dt>
+                  <h2><em></em>公司产品</h2>
+                </dt>
+                <dd>
+                  <form method="post" class="productForm">
+                    <div class="new_product">
+
+                      <div class="product_upload dn productNo">
+                        <div style="background-color: rgb(147, 183, 187);">
+                          <span>上传产品图片</span>
+                          <br>
+                          尺寸：380*220px 大小：小于5M
+                        </div>
+                      </div>
+                      <div class="product_upload productShow">
+                        <img width="380" height="220" src="style/images/product_default.png">
+                        <span>更换产品图片<br>380*220px 小于5M</span>
+                      </div>
+
+                      <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M"
+                        name="myfiles" id="myfiles0">
+                    </div>
+
+                    <div class="cp_intro">
+                      <input type="text" placeholder="请输入产品名称" value="发大发" name="product" class="valid">
+                      <input type="text" placeholder="请输入产品网址" value="http://www.weimob.com" name="productUrl"
+                        class="valid">
+                      <textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500"
+                        value="发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf"
+                        class="s_textarea valid"
+                        name="productProfile">随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写</textarea>
+                      <div class="word_count fr">你还可以输入 <span>437</span> 字</div>
+                      <div class="clear"></div>
+                      <input type="submit" value="保存" class="btn_small">
+                      <a class="btn_cancel_s product_delete" href="javascript:void(0)">取消</a>
+                      <input type="hidden" value="11867" class="product_id">
+                    </div>
+                  </form>
+                </dd>
+              </dl>
+              <!--有产品-->
+              <dl class="c_product" :class="{'dn':switchs.product}">
+                <dt>
+                  <h2><em></em>公司产品</h2>
+                </dt>
+                <dd>
+                  <img width="380" height="220" alt="" src="style/images/product_default.png">
+                  <div class="cp_intro">
+                    <h3><a target="_blank" href="http://www.zmtpost.com">随便写</a></h3>
+                    <div class="scroll-pane" style="overflow: hidden; padding: 0px; width: 260px;">
+
+                      <div class="jspContainer" style="width: 260px; height: 140px;">
+                        <div class="jspPane" style="padding: 0px; top: 0px; width: 260px;">
+                          <div>{{}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <a title="编辑公司产品" class="c_edit product_edit" @click="changeSwitchs('product')" href="javascript:void(0)"></a>
+                </dd>
+              </dl>
+
+            </div>
+          </div> <!-- end #Product -->
+
+          <div id="Profile">
+            <div class="profile_wrap">
+              <!--编辑介绍-->
+              <dl class="c_section newIntro" :class="{'dn':!switchs.introduce}">
+                <dt>
+                  <h2><em></em>公司介绍</h2>
+                </dt>
+                <dd>
+                  <form id="companyDesForm">
+                    <textarea placeholder="请分段详细描述公司简介、企业文化等" name="companyProfile" id="companyProfile"
+                      v-model="introduce" class="valid"></textarea>
+                    <div class="word_count fr">你还可以输入 <span>{{introduceNums}}</span> 字</div>
+                    <div class="clear"></div>
+                    <input type="submit" value="保存" @click="saveIntroduce" id="submitProfile" class="btn_small">
+                    <a id="delProfile" @click="cancleEdit('introduce')" class="btn_cancel_s"
+                      href="javascript:void(0)">取消</a>
+                  </form>
+                </dd>
+              </dl>
+              <dl class="c_section">
+                <dt>
+                  <h2><em></em>公司介绍</h2>
+                </dt>
+                <dd>
+                  <div class="c_intro">{{introduce?introduce:'请添加公司介绍'}}</div>
+                  <a title="编辑公司介绍" id="editIntro" class="c_edit" :class="{'dn':switchs.introduce}"
+                    @click="changeSwitchs('introduce')" href="javascript:void(0)"></a>
+                </dd>
+              </dl>
+            </div>
+
+          </div><!-- end #Profile -->
+          <div id="flag"></div>
+        </div> <!-- end .content_l -->
+        <div class="content_r">
+          <div id="Tags">
+            <div id="c_tags_show" :class="{'dn':switchs.cityInfo}" class="c_tags solveWrap">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>地点</td>
+                    <td>{{cityInfo.city?cityInfo.city:'请输入地点'}}</td>
+                  </tr>
+                  <tr>
+                    <td>领域</td>
+                    <td>{{cityInfo.field?cityInfo.field:'请输入所属领域'}}</td>
+                  </tr>
+                  <tr>
+                    <td>规模</td>
+                    <td>
+                      <span v-if="cityInfo.scale === 0">少于15人</span>
+                      <span v-else-if="cityInfo.scale === 1">15-50人</span>
+                      <span v-else-if="cityInfo.scale === 2">50-150人</span>
+                      <span v-else-if="cityInfo.scale === 3">150-500人</span>
+                      <span v-else-if="cityInfo.scale === 4">500-2000人</span>
+                      <span v-else-if="cityInfo.scale === 5">2000人以上</span>
+                      <span v-else>请选择公司规模</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>主页</td>
+                    <td>
+                      <a target="_blank" :href="cityInfo.url?'http://'+cityInfo.url:'javascript:void(0)'">
+                        {{cityInfo.url?cityInfo.url:'请输入公司主页'}}</a></td>
+                  </tr>
+                </tbody>
+              </table>
+              <a id="editTags" class="c_edit" :class="{'dn':switchs.cityInfo}" @click="changeSwitchs('cityInfo')"
+                href="javascript:void(0)"></a>
+            </div>
+            <div id="c_tags_edit" class="c_tags editTags" :class="{'dn':!switchs.cityInfo}">
+              <form id="tagForms">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>地点</td>
+                      <td>
+                        <div>
+                          <input type="text" placeholder="请输入地点" v-model="cityInfo.city" name="city" id="city"
+                            class="valid">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>领域</td>
+                      <td>
+                        <div>
+                          <input type="text" name="field" v-model="cityInfo.field" placeholder="请输入所属领域"
+                            id="select_ind">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>规模</td>
+                      <td>
+                        <div>
+                          <el-select size="mini" name="scale" v-model="cityInfo.scale" placeholder="请选择">
+                            <el-option v-for="(item,index) in select.cityInfo" :label="item.label" :value="item.value">
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>主页</td>
+                      <td>
+                        <div>
+                          <input type="text" placeholder="请输入网址" v-model="cityInfo.url" name="companyUrl"
+                            id="companyUrl" class="valid">
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <input type="submit" value="保存" @click="saveCityInfo" id="submitFeatures" class="btn_small">
+                <a id="cancelFeatures" class="btn_cancel_s" href="javascript:void(0)">取消</a>
+                <div class="clear"></div>
+              </form>
+            </div>
+          </div><!-- end #Tags -->
+
+          <dl class="c_section c_stages">
+            <dt>
+              <h2><em></em>融资阶段</h2>
+              <a title="编辑融资阶段" class="c_edit" :class="{'dn':switchs.dev_statge}" @click="changeSwitchs('dev_statge')"
+                href="javascript:void(0)"></a>
+            </dt>
+            <dd>
+              <ul class="reset stageshow" :class="{'dn':switchs.dev_statge}">
+                <li>目前阶段：
+                  <span class="c5" v-if="dev_statge === 0">未融资</span>
+                  <span class="c5" v-else-if="dev_statge === 1">天使轮</span>
+                  <span class="c5" v-else-if="dev_statge === 2">A轮</span>
+                  <span class="c5" v-else-if="dev_statge === 3">B轮</span>
+                  <span class="c5" v-else-if="dev_statge === 4">C轮</span>
+                  <span class="c5" v-else-if="dev_statge === 5">D轮</span>
+                  <span class="c5" v-else-if="dev_statge === 6">上市公司</span>
+                  <span class="c5" v-else>请选择发展阶段</span>
+                </li>
+              </ul>
+              <form :class="{'dn':!switchs.dev_statge}" id="stageform">
+                <div class="stageSelect">
+                  <label>目前阶段</label>
+                  <el-select v-model="dev_statge" name="dev_statge" placeholder="请选择">
+                    <el-option v-for="(item,index) in select.dev_statge" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </div>
+                <input type="submit" value="保存" @click="saveDevStatge" class="btn_small">
+                <a id="cancelStages" class="btn_cancel_s" @click="cancleEdit('dev_statge')"
+                  href="javascript:void(0)">取消</a>
+                <div class="clear"></div>
+              </form>
+            </dd>
+          </dl>
+
+          <div id="Member">
+            <!--有创始团队-->
+            <dl class="c_section c_member">
+              <dt>
+                <h2><em></em>创始团队</h2>
+                <!-- <a title="添加创始人" class="c_edit" :class="{'dn':switchs.founder}" @click="changeSwitchs('founder')" href="javascript:void(0)"></a> -->
+              </dt>
+              <dd>
+                <div class="member_wrap">
+                  <!-- 编辑创始人 -->
+                  <div class="member_info newMember" :class="{'dn':!switchs.founder}">
+                    <form class="memberForm">
+                      <el-upload action="http://tp5.com/company/index/addFounderImg" with-credentials=true
+                        :show-file-list=false :file-list="fileList1" :on-error="uploadError"
+                        :on-success="uploadFounderImgSucc" list-type="text" accept=".jpg,.jpeg,.png,.JPG,.JPEG">
+                        <div class="new_portrait">
+                          <div class="portraitShow">
+                            <img width="120" height="120" :src="founderHeadImg">
+                            <span>更换头像</span>
+                          </div>
+                          尺寸：120*120px <br>
+                          大小：小于5M
+                          </em>
+                        </div>
+                      </el-upload>
+                      <input type="text" placeholder="请输入创始人姓名" v-model="founder.name" name="name" class="valid">
+                      <textarea placeholder="请输入创始人个人简介" v-model="founder.instroduction" name="instroduction"
+                        maxlength="500" class="s_textarea valid"></textarea>
+                      <div class="word_count fr">你还可以输入 <span>{{founderLength}}</span> 字</div>
+                      <div class="clear"></div>
+                      <input type="submit" value="保存" @click="saveFounder" class="btn_small">
+                      <a class="btn_cancel_s member_delete" @click="cancleEdit('founder')"
+                        href="javascript:void(0)">取消</a>
+                      <input type="hidden" value="11493" class="leader_id">
+                    </form>
+                  </div>
+
+                  <!-- 显示创始人 -->
+                  <div class="member_info" :class="{'dn':switchs.founder}">
+                    <a title="编辑创始人" class="c_edit member_edit" href="javascript:void(0)"
+                      @click="changeSwitchs('founder')"></a>
+                    <div class="m_portrait">
+                      <div></div>
+                      <img width="120" height="120" alt="孙泰英" :src="founderHeadImg">
+                    </div>
+                    <div class="m_name">{{founder.name}}</div>
+                    <div class="m_intro">{{founder.instroduction}}</div>
+                  </div>
+
+                </div><!-- end .member_wrap -->
+              </dd>
+            </dl>
+          </div> <!-- end #Member -->
+        </div>
+      </div>
+      <div class="clear"></div>
+      <a rel="nofollow" title="回到顶部" id="backtop" style="display: none;"></a>
+    </div><!-- end #container -->
+  </div><!-- end #body -->
+  <div id="footer">
+    <div class="wrapper">
+      <a rel="nofollow" target="_blank" href="about.html">联系我们</a>
+      <a target="_blank" href="http://www.lagou.com/af/zhaopin.html">互联网公司导航</a>
+      <a rel="nofollow" target="_blank" href="http://e.weibo.com/lagou720">拉勾微博</a>
+      <a rel="nofollow" href="javascript:void(0)" class="footer_qr">拉勾微信<i></i></a>
+      <div class="copyright">&copy;2013-2014 Lagou <a
+          href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action" target="_blank">京ICP备14023790号-2</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    var app = new Vue({
+      el: '#body',
+      data: {
+        founderHeadImg: 'style/images/leader_default.png',
+        fileList: [],
+        fileList1: [],
+        introduce: '',
+        dev_statge: '',
+        product:{
+          
+        },
+        basic: {
+          logo: 'style/images/logo_default.png',
+          companyName: '',
+          easyname: '',
+          coreValues: ''
+        },
+        founder: {
+          name: '',
+          instroduction: '',
+        },
+        cityInfo: {
+          city: '',
+          field: '',
+          scale: '',
+          url: ''
+        },
+        tmpInfo: '',
+        switchs: {
+          basic: false,
+          introduce: false,
+          cityInfo: false,
+          dev_statge: false,
+          founder: false,
+          confirm:false,
+          product:false
+        },
+        select: {
+          cityInfo: [
+            {
+              value: 0,
+              label: '15人以下'
+            },
+            {
+              value: 1,
+              label: '15-50人'
+            },
+            {
+              value: 2,
+              label: '50-150人'
+            },
+            {
+              value: 3,
+              label: '150-500人'
+            },
+            {
+              value: 4,
+              label: '500-2000人'
+            },
+            {
+              value: 5,
+              label: '2000人以上'
+            },
+          ],
+          dev_statge: [
+            {
+              value: 0,
+              label: '未融资'
+            },
+            {
+              value: 1,
+              label: '天使轮'
+            },
+            {
+              value: 2,
+              label: 'A轮'
+            },
+            {
+              value: 3,
+              label: 'B轮'
+            },
+            {
+              value: 4,
+              label: 'C轮'
+            },
+            {
+              value: 5,
+              label: 'D轮'
+            },
+            {
+              value: 6,
+              label: '上市公司'
+            }
+          ]
+        }
+      },
+      computed: {
+        introduceNums: function () {
+          return 1000 - this.introduce.length
+        },
+        founderLength: function () {
+          return 500 - this.founder.instroduction.length
+        }
+      },
+      methods: {
+        getAllData(){
+          $.ajax({
+            url:window.lagou+'/company/index/getAllData',
+            method:'post',
+            dataType:'json',
+            xhrFields:{
+              withCredentials:true
+            },
+            method:'post',
+            success:(res)=>{
+              var {introduce,dev_statge,basic,founder,cityInfo,founderHeadImg} = res
+              this.introduce = introduce
+              this.dev_statge = dev_statge
+              this.basic = basic
+              this.founder = founder
+              this.cityInfo = cityInfo
+              this.founderHeadImg = founderHeadImg
+              // this.introduce = introduce
+            },
+            error:(res)=>{
+              
+            }
+          })
+        },
+        checkCookie() {
+          var _this = this
+          $.ajax({
+            url: window.lagou + '/login/index/checkCookie',
+            xhrFields: {
+              withCredentials: "true"
+            },
+            success: (res) => {
+              if (!res.id) {
+                window.location.href = './login.html'
+              }
+            },
+            error: (res) => {
+              window.location.href = "./login.html"
+            }
+          })
+        },
+        changeSwitchs(val) {
+          this.switchs[val] = !this.switchs[val]
+          this.tmpInfo = '' + JSON.stringify(this[val])
+        },
+        cancleEdit(val) {
+          this[val] = JSON.parse(this.tmpInfo)
+          this.switchs[val] = !this.switchs[val]
+        },
+        saveCompanyBasic() {
+          $("#editDetailForm").validate({
+            rules: {
+              companyName: {
+                required: true
+              },
+              companyShortName: {
+                required: true
+              },
+              companyFeatures: {
+                required: true
+              }
+            },
+            messages: {
+              companyName: {
+                required: '请输入公司名称'
+              },
+              companyShortName: {
+                required: '请输入公司简称'
+              },
+              companyFeatures: {
+                required: '一句话描述公司优势'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addData',
+                method: 'post',
+                xhrFields: {
+                  withCredentials: 'true'
+                },
+                dataType: 'json',
+                data: this.basic,
+                success: (res) => {
+                  this.switchs.basic = !this.switchs.basic
+                },
+                error: (res) => {
+
+                }
+              })
+            }
+          })
+        },
+        uploadError(err, file, fileList) {
+          this.$message({
+            type:'error',
+            message:'上传错误，请重新上传'
+          })
+          // window.location.href = "./login.html"
+        },
+        uploadSuccess(response, file, fileList) {
+          this.logo = response
+        },
+        uploadFounderImgSucc(response, file, fileList) {
+          this.founderHeadImg = response
+        },
+        saveIntroduce() {
+          $('#companyDesForm').validate({
+            rules: {
+              companyProfile: {
+                required: true
+              }
+            },
+            messages: {
+              companyProfile: {
+                required: '请输入公司介绍'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addData',
+                dataType: 'json',
+                method: 'post',
+                data: { introduce: this.introduce },
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+                  this.switchs.introduce = !this.switchs.introduce
+                },
+                error: (err) => {
+
+                }
+              })
+            }
+          })
+        },
+        saveCityInfo() {
+          $("#tagForms").validate({
+            rules: {
+              city: {
+                required: true
+              },
+              field: {
+                required: true
+              },
+              scale: {
+                required: true
+              },
+              companyUrl: {
+                required: true
+              }
+            },
+            messages: {
+              city: {
+                required: '请输入地点'
+              },
+              field: {
+                required: '请输入公司领域'
+              },
+              scale: {
+                required: '请选择规模'
+              },
+              companyUrl: {
+                required: '请输入公司主页'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addData',
+                method: 'post',
+                dataType: 'json',
+                data: this.cityInfo,
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+                  this.switchs.cityInfo = !this.switchs.cityInfo
+                },
+                error: (err) => {
+
+                }
+              })
+            }
+          })
+        },
+        saveDevStatge() {
+          $("#stageform").validate({
+            rules: {
+              dev_statge: {
+                required: true
+              }
+            },
+            messages: {
+              dev_statge: {
+                required: '请选择融资阶段'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addData',
+                method: 'post',
+                dataType: 'json',
+                data: { dev_statge: this.dev_statge },
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+
+                  this.switchs.dev_statge = !this.switchs.dev_statge
+                  console.log(typeof this.dev_statge)
+                },
+                error: (err) => {
+
+                }
+              })
+            }
+          })
+        },
+        saveFounder() {
+          $(".memberForm").validate({
+            rules: {
+              name: {
+                required: true
+              },
+              instroduction: {
+                required: true
+              }
+            },
+            messages: {
+              name: {
+                required: '请输入创始人名字'
+              },
+              instroduction: {
+                required: '请输入创始人介绍'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addFounderInfo',
+                method: 'post',
+                dataType: 'json',
+                data: this.founder,
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+                  this.switchs.founder = !this.switchs.founder
+                  console.log(typeof this.dev_statge)
+                },
+                error: (err) => {
+
+                }
+              })
+            }
+          })
+        }
+      },
+      mounted() {
+        this.checkCookie()
+        this.getAllData()
+      }
+    })
+  </script>
+</body>
+
+</html>

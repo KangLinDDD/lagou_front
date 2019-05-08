@@ -2,6 +2,7 @@
 [v-cloak] {
   display: none!important;
 }
+#tagForms .el-select input{width:184px;}
 .error{
   color:#ff6a6a;
 }
@@ -705,7 +706,15 @@ ul.hot_pos i{width: 12px;height: 14px;position:absolute;background:url(img/hot.p
 .c_add:hover{ background-position:-29px -25px;}
 /**modify nancy**/
 /* .c_intro{font-size:18px; text-indent:2em; line-height:30px;word-wrap:break-word;} */
-.c_intro{font-size:18px; line-height:30px;word-wrap:break-word;}
+.c_intro{    
+  font-size: 18px;
+  line-height: 30px;
+  max-height: 200px;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: normal;}
 ul.c_jobs{margin:-10px 0 0 0;*margin:-50px 0 0 -20px;}
 .c_jobs li{ margin-bottom:30px;border-left:3px solid #91cebe; background:#fff; height:60px;}
 .c_jobs a{height:60px;color:#555;  display:block; padding:0 10px 0 15px; overflow:hidden;}
