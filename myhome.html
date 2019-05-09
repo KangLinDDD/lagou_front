@@ -52,6 +52,11 @@
       height: 40px;
       margin-top: 0;
     }
+
+    .cp_intro input,
+    .cp_intro textarea {
+      display: block;
+    }
   </style>
 </head>
 
@@ -66,21 +71,19 @@
           <li><a href="index.html">首页</a></li>
           <li class="current"><a href="myhome.html">公司</a></li>
           <li>
-            <a rel="nofollow" href="http://www.sucaihuo.com/templates">简历管理</a>
+            <a rel="nofollow" href="">简历管理</a>
           </li>
           <li><a rel="nofollow" href="create.html">发布职位</a></li>
         </ul>
-        <dl class="collapsible_menu">
+        <dl class="collapsible_menu" v-show="basic.easyname">
           <dt>
-            <span>jason&nbsp;</span>
+            <span>{{basic.easyname}}</span>
             <span class="red dn" id="noticeDot-1"></span>
             <i></i>
           </dt>
           <dd><a href="positions.html">我发布的职位</a></dd>
           <dd><a href="positions.html">我收到的简历</a></dd>
           <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
-          <dd><a href="jianli.html">我要找工作</a></dd>
-          <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
         </dl>
       </div>
@@ -93,15 +96,18 @@
               <el-upload action="http://tp5.com/company/index/addLogo" :show-file-list="false" with-credentials=true
                 :on-error="uploadError" :on-success="uploadSuccess" :file-list="fileList" list-type="text"
                 accept=".jpg,.jpeg,.png,.JPG,.JPEG">
-                <img width="190" height="190" alt="公司logo" :src="basic.logo">
+                <img width="190" height="190" alt="公司logo" :src="logo">
                 <span>更换公司图片<br>190px*190px 小于5M</span>
               </el-upload>
             </div>
             <div class="c_box companyName">
               <h2 :class="{'dn':switchs.basic}">公司名称</h2>
-              <em :class="{'dn':switchs.basic}" @mouseenter="changeSwitchs('confirm')" @mouseleave="changeSwitchs('confirm')" class="unvalid"></em>
-              <span class="va" :class="{'dn':!switchs.confirm}">拉勾未认证企业</span>
-              <a target="_blank" class="applyC" :class="{'dn':switchs.basic}" href="./auth.html">申请认证</a>
+              <em :class="{'dn':switchs.basic,'unvalid':confirmStatus!= 1,'valid':confirmStatus== 1}" @mouseenter="changeSwitchs('confirm')"
+                @mouseleave="changeSwitchs('confirm')" ></em>
+              <span class="va" v-if="confirmStatus!==1" :class="{'dn':!switchs.confirm}">拉勾未认证企业</span>
+              <span class="va" v-else :class="{'dn':!switchs.confirm}">拉勾已认证企业</span>
+              <a v-if="confirmStatus!==1" target="_blank" class="applyC" :class="{'dn':switchs.basic}" href="./auth.html">申请认证</a>
+              <a v-else target="_blank" class="applyC" :class="{'dn':switchs.basic}" href="./auth.html">认证通过</a>
               <div class="clear"></div>
               <h1 class="fullname" :class="{'dn':basic.companyName && switchs.basic}">{{basic.companyName}}
               </h1>
@@ -132,58 +138,33 @@
           <div id="Product">
 
             <div class="product_wrap">
-
-              <!--无产品 -->
-              <!-- <dl class="c_section dn">
-                <dt>
-                  <h2><em></em>公司产品</h2>
-                </dt>
-                <dd>
-                  <div class="addnew">
-                    酒香不怕巷子深已经过时啦！<br>
-                    把自己优秀的产品展示出来吸引人才围观吧！<br>
-                    <a class="product_edit" href="javascript:void(0)">+添加公司产品</a>
-                  </div>
-                </dd>
-              </dl> -->
-
               <!--产品编辑-->
               <dl id="newProduct" class="newProduct" :class="{'dn':!switchs.product}">
                 <dt>
                   <h2><em></em>公司产品</h2>
                 </dt>
                 <dd>
-                  <form method="post" class="productForm">
+                  <el-upload style="float: left;" action="http://tp5.com/company/index/addProductImg" :on-success="produceImgSuccess" :file-list="fileList2" :show-file-list="false" with-credentials=true accept=".jpg,.jpeg,.png,.JPG,.JPEG" list-type="text">
                     <div class="new_product">
-
-                      <div class="product_upload dn productNo">
-                        <div style="background-color: rgb(147, 183, 187);">
-                          <span>上传产品图片</span>
-                          <br>
-                          尺寸：380*220px 大小：小于5M
-                        </div>
-                      </div>
                       <div class="product_upload productShow">
-                        <img width="380" height="220" src="style/images/product_default.png">
+                        <img width="380" height="220" :src="productImg">
                         <span>更换产品图片<br>380*220px 小于5M</span>
                       </div>
-
-                      <input type="file" title="支持jpg、jpeg、gif、png格式，文件小于5M"
-                        name="myfiles" id="myfiles0">
                     </div>
-
+                  </el-upload>
+                  <form class="productForm">
                     <div class="cp_intro">
-                      <input type="text" placeholder="请输入产品名称" value="发大发" name="product" class="valid">
-                      <input type="text" placeholder="请输入产品网址" value="http://www.weimob.com" name="productUrl"
+                      <input type="text" placeholder="请输入产品名称" v-model="product.productName" name="productName"
                         class="valid">
-                      <textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500"
-                        value="发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf发达发生的faf"
-                        class="s_textarea valid"
-                        name="productProfile">随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写随便写</textarea>
+                      <input type="text" placeholder="请输入产品网址" v-model="product.productUrl" name="productUrl"
+                        class="valid">
+                      <textarea placeholder="请简短描述该产品定位、产品特色、用户群体等" maxlength="500" class="s_textarea valid"
+                        v-model="product.productInstroduce" name="productInstroduce"></textarea>
                       <div class="word_count fr">你还可以输入 <span>437</span> 字</div>
                       <div class="clear"></div>
-                      <input type="submit" value="保存" class="btn_small">
-                      <a class="btn_cancel_s product_delete" href="javascript:void(0)">取消</a>
+                      <input type="submit" value="保存" @click="saveProduct" class="btn_small">
+                      <a class="btn_cancel_s product_delete" @click="cancleEdit('product')"
+                        href="javascript:void(0)">取消</a>
                       <input type="hidden" value="11867" class="product_id">
                     </div>
                   </form>
@@ -195,19 +176,21 @@
                   <h2><em></em>公司产品</h2>
                 </dt>
                 <dd>
-                  <img width="380" height="220" alt="" src="style/images/product_default.png">
+                  <img width="380" height="220" alt="" :src="productImg">
                   <div class="cp_intro">
-                    <h3><a target="_blank" href="http://www.zmtpost.com">随便写</a></h3>
+                    <h3>
+                      <a target="_blank" :href="product.productUrl">{{product.productName}}</a>
+                    </h3>
                     <div class="scroll-pane" style="overflow: hidden; padding: 0px; width: 260px;">
-
                       <div class="jspContainer" style="width: 260px; height: 140px;">
                         <div class="jspPane" style="padding: 0px; top: 0px; width: 260px;">
-                          <div>{{}}</div>
+                          <div>{{product.productInstroduce}}</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <a title="编辑公司产品" class="c_edit product_edit" @click="changeSwitchs('product')" href="javascript:void(0)"></a>
+                  <a title="编辑公司产品" class="c_edit product_edit" @click="changeSwitchs('product')"
+                    href="javascript:void(0)"></a>
                 </dd>
               </dl>
 
@@ -329,7 +312,7 @@
                   </tbody>
                 </table>
                 <input type="submit" value="保存" @click="saveCityInfo" id="submitFeatures" class="btn_small">
-                <a id="cancelFeatures" class="btn_cancel_s" href="javascript:void(0)">取消</a>
+                <a id="cancelFeatures" @click="cancleEdit('cityInfo')" class="btn_cancel_s" href="javascript:void(0)">取消</a>
                 <div class="clear"></div>
               </form>
             </div>
@@ -444,16 +427,21 @@
     var app = new Vue({
       el: '#body',
       data: {
+        productImg:'style/images/product_default.png',
         founderHeadImg: 'style/images/leader_default.png',
+        logo: 'style/images/logo_default.png',
         fileList: [],
         fileList1: [],
+        confirmStatus:0,
+        fileList2:[],
         introduce: '',
         dev_statge: '',
-        product:{
-          
+        product: {
+          productName: '',
+          productUrl: '',
+          productInstroduce: ''
         },
         basic: {
-          logo: 'style/images/logo_default.png',
           companyName: '',
           easyname: '',
           coreValues: ''
@@ -475,8 +463,8 @@
           cityInfo: false,
           dev_statge: false,
           founder: false,
-          confirm:false,
-          product:false
+          confirm: false,
+          product: false
         },
         select: {
           cityInfo: [
@@ -546,27 +534,30 @@
         }
       },
       methods: {
-        getAllData(){
+        getAllData() {
           $.ajax({
-            url:window.lagou+'/company/index/getAllData',
-            method:'post',
-            dataType:'json',
-            xhrFields:{
-              withCredentials:true
+            url: window.lagou + '/company/index/getAllData',
+            method: 'post',
+            dataType: 'json',
+            xhrFields: {
+              withCredentials: true
             },
-            method:'post',
-            success:(res)=>{
-              var {introduce,dev_statge,basic,founder,cityInfo,founderHeadImg} = res
+            method: 'post',
+            success: (res) => {
+              var { logo,introduce, dev_statge, basic, founder, cityInfo, founderHeadImg,product,productImg,confirmStatus } = res
               this.introduce = introduce
               this.dev_statge = dev_statge
               this.basic = basic
+              this.logo = logo?logo:this.logo
               this.founder = founder
               this.cityInfo = cityInfo
-              this.founderHeadImg = founderHeadImg
-              // this.introduce = introduce
+              this.product = product
+              this.confirmStatus = confirmStatus
+              this.productImg = productImg?productImg:this.productImg
+              this.founderHeadImg = founderHeadImg?founderHeadImg:this.founderHeadImg
             },
-            error:(res)=>{
-              
+            error: (res) => {
+
             }
           })
         },
@@ -640,13 +631,16 @@
         },
         uploadError(err, file, fileList) {
           this.$message({
-            type:'error',
-            message:'上传错误，请重新上传'
+            type: 'error',
+            message: '上传错误，请重新上传'
           })
           // window.location.href = "./login.html"
         },
         uploadSuccess(response, file, fileList) {
           this.logo = response
+        },
+        produceImgSuccess(response, file, fileList){
+          this.productImg = response
         },
         uploadFounderImgSucc(response, file, fileList) {
           this.founderHeadImg = response
@@ -796,6 +790,49 @@
                   console.log(typeof this.dev_statge)
                 },
                 error: (err) => {
+
+                }
+              })
+            }
+          })
+        },
+        saveProduct() {
+          $(".productForm").validate({
+            rules: {
+              productName: {
+                required: true
+              },
+              productUrl: {
+                required: true
+              },
+              productInstroduce: {
+                required: true
+              }
+            },
+            messages: {
+              productName: {
+                required: '请输入产品名称'
+              },
+              productUrl: {
+                required: '请输入产品url'
+              },
+              productInstroduce: {
+                required: '请输入产品介绍'
+              }
+            },
+            submitHandler: (form) => {
+              $.ajax({
+                url: window.lagou + '/company/index/addProduct',
+                dataType: 'json',
+                method: 'post',
+                data: this.product,
+                xhrFields: {
+                  withCredentials: true
+                },
+                success: (res) => {
+                  this.switchs.product = !this.switchs.product
+                },
+                error: (res) => {
 
                 }
               })
