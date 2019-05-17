@@ -112,7 +112,7 @@
               <h1 class="fullname" :class="{'dn':basic.companyName && switchs.basic}">{{basic.companyName}}
               </h1>
               <form class="clear editDetail" :class="{'dn':!switchs.basic}" id="editDetailForm">
-                <input type="text" placeholder="请输入公司名称" maxlength="15" v-model="basic.companyName" name="companyName"
+                <input type="text" :disabled="basic.companyName!==''" placeholder="请输入公司名称" maxlength="15" v-model="basic.companyName" name="companyName"
                   class="valid">
                 <input type="text" placeholder="请输入公司简称" v-model="basic.easyname" maxlength="15" name="companyShortName"
                   id="companyShortName" class="valid">
@@ -216,7 +216,7 @@
                   </form>
                 </dd>
               </dl>
-              <dl class="c_section">
+              <dl class="c_section" :class="{'dn':switchs.introduce}">
                 <dt>
                   <h2><em></em>公司介绍</h2>
                 </dt>

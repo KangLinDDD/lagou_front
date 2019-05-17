@@ -74,12 +74,12 @@
               <div class="menu_sub dn">
                 <dl class="reset" v-for="sorts in item.sorts" :key="sorts.id">
                   <dt>
-                    <a href="h/jobs/list_后端开发?labelWords=label">
+                    <a href="">
                       {{sorts.name}}
                     </a>
                   </dt>
                   <dd>
-                    <a href="" v-for="(name,nameIndex) in sorts.child" :key="nameIndex"
+                    <a :href="'./list.html?jobName='+name" v-for="(name,nameIndex) in sorts.child" :key="nameIndex"
                       :class="{'curr':item.tops.includes(name)}">{{name}}</a>
                   </dd>
                 </dl>

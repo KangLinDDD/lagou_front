@@ -43,7 +43,6 @@
         <ul id="navheader" class="reset">
           <li><a href="index.html">首页</a></li>
           <li><a href="companylist.html">公司</a></li>
-          <li><a target="_blank" href="h/toForum.html">论坛</a></li>
           <li class="current"><a rel="nofollow" href="jianli.html">我的简历</a></li>
         </ul>
         <dl class="collapsible_menu">
@@ -505,81 +504,6 @@
                         <el-date-picker v-model="time.startTime" type="date" name="startTime"
                           :picker-options="pickerOptionStart" value-format="yyyy-MM-dd" placeholder="开始时间">
                         </el-date-picker>
-                        <!-- <div class="fl">
-                          <input type="hidden" class="projectYearStart" value="" name="projectYearStart">
-                          <input type="button" value="开始年份"
-                            class="profile_select_139 profile_select_normal select_projectYearStart">
-                          <div class="box_projectYearStart  boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="projectMonthStart" value="" name="projectMonthStart">
-                          <input type="button" value="开始月份"
-                            class="profile_select_139 profile_select_normal select_projectMonthStart">
-                          <div style="display: none;" class="box_projectMonthStart boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div> -->
                       </td>
                       <td valign="top">
                         <span class="redstar">*</span>
@@ -588,83 +512,6 @@
                         <el-date-picker v-model="time.endTime" type="date" value-format="yyyy-MM-dd" name="endTime"
                           :picker-options="pickerOptionEnd" placeholder="结束时间">
                         </el-date-picker>
-                        <!-- <div class="fl">
-                          <input type="hidden" class="projectYearEnd" value="" name="projectYearEnd">
-                          <input type="button" value="结束年份"
-                            class="profile_select_139 profile_select_normal select_projectYearEnd">
-                          <div class="box_projectYearEnd  boxUpDown boxUpDown_139 dn" style="display: none;">
-                            <ul>
-                              <li>至今</li>
-                              <li>2014</li>
-                              <li>2013</li>
-                              <li>2012</li>
-                              <li>2011</li>
-                              <li>2010</li>
-                              <li>2009</li>
-                              <li>2008</li>
-                              <li>2007</li>
-                              <li>2006</li>
-                              <li>2005</li>
-                              <li>2004</li>
-                              <li>2003</li>
-                              <li>2002</li>
-                              <li>2001</li>
-                              <li>2000</li>
-                              <li>1999</li>
-                              <li>1998</li>
-                              <li>1997</li>
-                              <li>1996</li>
-                              <li>1995</li>
-                              <li>1994</li>
-                              <li>1993</li>
-                              <li>1992</li>
-                              <li>1991</li>
-                              <li>1990</li>
-                              <li>1989</li>
-                              <li>1988</li>
-                              <li>1987</li>
-                              <li>1986</li>
-                              <li>1985</li>
-                              <li>1984</li>
-                              <li>1983</li>
-                              <li>1982</li>
-                              <li>1981</li>
-                              <li>1980</li>
-                              <li>1979</li>
-                              <li>1978</li>
-                              <li>1977</li>
-                              <li>1976</li>
-                              <li>1975</li>
-                              <li>1974</li>
-                              <li>1973</li>
-                              <li>1972</li>
-                              <li>1971</li>
-                              <li>1970</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="fl">
-                          <input type="hidden" class="projectMonthEnd" value="" name="projectMonthEnd">
-                          <input type="button" value="结束月份"
-                            class="profile_select_139 profile_select_normal select_projectMonthEnd">
-                          <div style="display: none;" class="box_projectMonthEnd boxUpDown boxUpDown_139 dn">
-                            <ul>
-                              <li>01</li>
-                              <li>02</li>
-                              <li>03</li>
-                              <li>04</li>
-                              <li>05</li>
-                              <li>06</li>
-                              <li>07</li>
-                              <li>08</li>
-                              <li>09</li>
-                              <li>10</li>
-                              <li>11</li>
-                              <li>12</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div class="clear"></div> -->
                       </td>
                     </tr>
                     <tr>
@@ -1237,25 +1084,36 @@
       },
       methods: {
         deleteValues(val, index) {
-          $.ajax({
-            url: window.lagou + '/jianli/index/delete',
-            dataType: 'json',
-            data: { id: this[val][index].id, name: val },
-            method: 'post',
-            xhrFields: {
-              withCredentials: 'true'
-            },
-            success: (res) => {
-              this[val].splice(index, 1)
-              this.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            },
-            error: (res) => {
+          this.$confirm('此操作将永久删除该条记录, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            $.ajax({
+              url: window.lagou + '/jianli/index/delete',
+              dataType: 'json',
+              data: { id: this[val][index].id, name: val },
+              method: 'post',
+              xhrFields: {
+                withCredentials: 'true'
+              },
+              success: (res) => {
+                this[val].splice(index, 1)
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              },
+              error: (res) => {
 
-            }
-          })
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
         },
         setValues(val, index) {
           this.optionIndex = index
