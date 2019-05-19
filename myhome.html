@@ -71,13 +71,13 @@
           <li><a href="index.html">首页</a></li>
           <li class="current"><a href="myhome.html">公司</a></li>
           <li>
-            <a rel="nofollow" href="">简历管理</a>
+            <a rel="nofollow" href="positions.html">简历管理</a>
           </li>
           <li><a rel="nofollow" href="create.html">发布职位</a></li>
         </ul>
         <dl class="collapsible_menu" v-show="basic.easyname">
           <dt>
-            <span>{{basic.easyname}}</span>
+            <span>{{easyname}}</span>
             <span class="red dn" id="noticeDot-1"></span>
             <i></i>
           </dt>
@@ -430,6 +430,7 @@
         productImg:'style/images/product_default.png',
         founderHeadImg: 'style/images/leader_default.png',
         logo: 'style/images/logo_default.png',
+        easyname:'',
         fileList: [],
         fileList1: [],
         confirmStatus:0,
@@ -530,7 +531,11 @@
           return 1000 - this.introduce.length
         },
         founderLength: function () {
-          return 500 - this.founder.instroduction.length
+          if(this.founder.instroduction){
+            return 500 - this.founder.instroduction.length
+          }else{
+            return 500;
+          }
         }
       },
       methods: {
@@ -548,6 +553,7 @@
               this.introduce = introduce
               this.dev_statge = dev_statge
               this.basic = basic
+              this.easyname=basic.easyname
               this.logo = logo?logo:this.logo
               this.founder = founder
               this.cityInfo = cityInfo
@@ -621,6 +627,7 @@
                 data: this.basic,
                 success: (res) => {
                   this.switchs.basic = !this.switchs.basic
+                  this.easyname=this.basic.easyname
                 },
                 error: (res) => {
 

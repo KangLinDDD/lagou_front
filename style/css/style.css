@@ -2,9 +2,34 @@
 [v-cloak] {
   display: none!important;
 }
+.jobs{
+  height:auto;
+  background: #fff!important;
+  font-size: 16px;
+}
+.jobs ul{
+  list-style:none;
+  overflow:hidden;
+  max-width: 515px;
+}
+.jobs span{
+  float: left;
+}
+.jobs ul li{
+  float: left;
+  margin-left: 8px;
+  min-width: 4rem;
+}
+.jobs .select_option li span{
+  color: #000!important;
+  font-weight: normal;
+}
 #tagForms .el-select input{width:184px;}
 .error{
   color:#ff6a6a;
+}
+.select_option li,.select_option>span{
+  float: left;
 }
 .work_show{
   display: inline-block;
@@ -64,7 +89,8 @@ body{margin:0;padding:0; font:14px/22px "微软雅黑","宋体",Arial; color:#33
 .clearfix:after{content: "";height: 0;clear: both;visibility: hidden;}
 .clearfix{display: inline-block;}  /* for IE/Mac */
 h1,h2,h3,h4,h5{font-weight:normal;}
-input[type="text"],input[type="password"]{border:2px solid #f1f1f1;outline:none;font:20px/32px "微软雅黑","宋体",Arial; width: 600px;height: 30px;  padding: 6px 10px; margin-top:20px;transition:border 0.2s ease-in 0s;}
+input[type="text"],input[type="password"]{border:2px solid #f1f1f1;outline:none;font:20px/32px "微软雅黑","宋体",Arial; width: 600px;height: 30px;  padding: 6px 10px; 
+  transition:border 0.2s ease-in 0s;}
 input[type="button"],input[type="submit"]{font-family:"微软雅黑","宋体",Arial;outline:none;cursor:pointer;border:none;}
 input[type="text"]:focus,input[type="password"]:focus{border:2px solid #d4e2e4;}
 textarea{ border:2px solid #f1f1f1; width:600px; height:260px;outline:none; resize:none; font:20px/32px "微软雅黑","宋体",Arial; padding:6px 10px; margin-top:20px;transition:border 0.2s ease-in 0s;}

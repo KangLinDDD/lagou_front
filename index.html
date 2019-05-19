@@ -38,25 +38,35 @@
           </a>
           <ul class="reset" id="navheader">
             <li class="current"><a href="index.html">首页</a></li>
-            <li><a href="companylist.html">公司</a></li>
-            <li><a href="jianli.html" rel="nofollow">我的简历</a></li>
-            <li><a href="create.html" rel="nofollow">发布职位</a></li>
+            <li v-show="userType===0"><a href="companylist.html">公司</a></li>
+            <li v-show="userType===1"><a href="myhome.html">公司</a></li>
+            <li v-show="userType===0"><a href="jianli.html" rel="nofollow">我的简历</a></li>
+            <li v-show="userType===1"><a href="positions.html" rel="nofollow">简历管理</a></li>
+            <li v-show="userType===1"><a href="create.html" rel="nofollow">发布职位</a></li>
           </ul>
           <ul class="loginTop" v-if="!logined">
             <li><a href="login.html" rel="nofollow">登录</a></li>
             <li>|</li>
             <li><a href="register.html" rel="nofollow">注册</a></li>
           </ul>
-          <dl class="collapsible_menu" v-else>
+          <dl class="collapsible_menu" v-else-if="userType===0">
             <dt>
               <span>{{userInfo.name}}</span>
-              <span class="red dn" id="noticeDot-0"></span>
-              <i></i>
             </dt>
             <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
             <dd><a href="collections.html">我收藏的职位</a></dd>
             <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
-            <dd><a href="create.html">我要招人</a></dd>
+            <dd><a href="accountBind.html">帐号设置</a></dd>
+            <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
+          </dl>
+          <dl class="collapsible_menu" v-else>
+            <dt>
+              <span>{{easyname}}</span>
+              <i></i>
+            </dt>
+            <dd><a href="positions.html">我发布的职位</a></dd>
+            <dd><a href="positions.html">我收到的简历</a></dd>
+            <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
             <dd><a href="accountBind.html">帐号设置</a></dd>
             <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
           </dl>
@@ -233,7 +243,7 @@
               <li class="clearfix" v-for="(item,index) in hotJobs" :key="index" :class="{'odd':index%2===0}">
                 <div class="hot_pos_l">
                   <div class="mb10">
-                    <a href="#" target="_blank">{{item.jobName}}</a>
+                    <a :href="'./jobdetail.html?jobId='+item.jobId" target="_blank">{{item.jobName}}</a>
                     &nbsp;
                     <span class="c9">[{{item.city}}]</span>
                   </div>
@@ -421,6 +431,8 @@
       el: '#app',
       data: {
         types: [],
+        easyname:'',
+        userType:0,
         job_lists: [],
         current: '',
         hotJobs: [],
@@ -437,7 +449,7 @@
         this.gethotJobs()
         this.getNewJobs()
         this.getHotSearch()
-        this.getUserInfo()
+        this.checkCookie()
         window.addEventListener('scroll', this.menu)
       },
       methods: {
@@ -460,7 +472,7 @@
           })
           window.location.href = './jianli.html'
         },
-        getUserInfo() {
+        checkCookie() {
           var _this = this
           $.ajax({
             url: window.lagou + '/login/index/checkCookie',
@@ -472,14 +484,20 @@
             success: (res) => {
               // 普通用户
               if (res.type === 0) {
+                this.userType=res.type
                 _this.userInfo.id = res.id
                 _this.userInfo.name = res.name ? res.name : '游客'
                 _this.dialogVisible = res.name==='' ? true : false
                 _this.logined = true
               }else if(res.type === 1){
                 // hr用户
+                this.userType=res.type
+                _this.easyname = res.easyname ? res.easyname : '游客'
+                _this.logined = true
               }else{
+                
                 // 登录失败
+                window.location.href="./login.html"
               }
             }, error: (res) => {
               console.log('error')

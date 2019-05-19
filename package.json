@@ -18,9 +18,13 @@
   },
   "homepage": "https://github.com/KangLinDDD/lagou_front#readme",
   "dependencies": {
+    "china-area-data": "^4.0.0",
     "element-ui": "^2.7.2",
     "jquery-validation": "^1.19.0",
     "layui-layer": "^1.0.9",
-    "vue": "^2.6.10"
+    "tinymce": "^4.4.3",
+    "vue": "^2.6.10",
+    "vue-resource": "^1.5.1",
+    "vue2-editor": "^2.6.6"
   }
 }

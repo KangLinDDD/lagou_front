@@ -83,6 +83,72 @@ function checkNature (val) {
     return 1;
   } else if (val === "实习") {
     return 2;
+  } else {
+    return 1;
+  }
+}
+function getNature (val) {
+  switch (val) {
+    case 0:
+      return '全职'
+      break;
+    case 1:
+      return '兼职'
+      break;
+    case 2:
+      return '实习'
+      break;
+    default:
+      break;
+  }
+}
+function getExperience (val) {
+  switch (val) {
+    case 0:
+      return '不限'
+      break;
+    case 1:
+      return '应届毕业生'
+      break;
+    case 2:
+      return '1年以下'
+    case 3:
+      return '1-3年'
+      break;
+    case 4:
+      return '3-5年'
+      break;
+    case 5:
+      return '5-10年'
+      break;
+    case 6:
+      return '10年以上'
+      break;
+    default:
+      break;
+  }
+}
+function getEdu (val) {
+  switch (val) {
+    case 0:
+      return '不限'
+      break;
+    case 1:
+      return '大专'
+      break;
+    case 2:
+      return '本科'
+    case 3:
+      return '硕士'
+      break;
+    case 4:
+      return '博士'
+      break;
+    case 5:
+      return '5-10年'
+      break;
+    default:
+      break;
   }
 }
 function checkExperience (val) {

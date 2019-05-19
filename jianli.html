@@ -1177,11 +1177,18 @@
               withCredentials: "true"
             },
             success: (res) => {
-              if (res.id) {
+              if (res.id&&res.type===0) {
                 _this.userInfo.name = res.name
                 _this.tmpName = res.name ? res.name : '游客'
-              } else {
-                window.location.href = './login.html'
+              } else if(res.type===1){
+                this.$confirm( '当前登陆的用户不支持填写简历，是否重新登陆？','提示',{
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                }).then(()=>{
+                  window.location.href='./login.html'
+                }).catch(()=>{
+                  window.location.href='./index.html'
+                })
               }
             },
             error: (res) => {
