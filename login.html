@@ -109,22 +109,16 @@
                   withCredentials: true
                 },
                 success: function (res) {
+                  var arr = document.referrer.match(/[a-zA-Z1-9_]+\.html/g)
+                  console.log(arr&&arr[0]!=='register.html')
                   if(!res){
-                     //    登录失败
-                     _this.loginFailed = true
+                     // 登录失败
+                     this.loginFailed = true
                     console.log(res)
-                  }else if (res.type === 0) {
-                    // 普通用户
-                    _this.loginFailed = false
-                    window.location.href = './index.html'
-                  }else if(res.type === 1){
-                    // hr用户
-                    _this.loginFailed = false
-                    window.location.href = './myhome.html'
-                  } else{
-                    //    登录失败
-                    _this.loginFailed = true
-                    console.log(res)
+                  }else if (arr&&arr[0]!=='register.html'&&arr[0]!=='login.html') {
+                    window.history.back(-1)
+                  }else{
+                    window.location.href="index.html"
                   }
                 },
                 error: function (res) {

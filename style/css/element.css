@@ -39,3 +39,14 @@
   color: #fff;
   background: #019875;
 }
+#container .salary .el-input,#container .salary .el-input .el-input__inner{
+  width: 170px;
+}
+#container .salary .el-input .el-input__suffix-inner{
+  line-height: 46px;
+  font-size: 18px;
+}
+#quill-container{
+  max-height: 300px;
+  overflow: scroll;
+}

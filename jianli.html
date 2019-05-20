@@ -45,16 +45,18 @@
           <li><a href="companylist.html">公司</a></li>
           <li class="current"><a rel="nofollow" href="jianli.html">我的简历</a></li>
         </ul>
-        <dl class="collapsible_menu">
+        <ul class="loginTop" v-if="!logined">
+          <li><a href="login.html" rel="nofollow">登录</a></li>
+          <li>|</li>
+          <li><a href="register.html" rel="nofollow">注册</a></li>
+        </ul>
+        <dl class="collapsible_menu" v-else-if="temInfo.type===0">
           <dt>
-            <span>{{tmpName}}</span>
-            <span class="red dn" id="noticeDot-0"></span>
-            <i></i>
+            <span>{{userInfo.name}}</span>
           </dt>
           <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
           <dd><a href="collections.html">我收藏的职位</a></dd>
           <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
-          <dd><a href="create.html">我要招人</a></dd>
           <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
         </dl>
@@ -126,7 +128,7 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <el-select class="basic" v-model="userInfo.education" placeholder="请选择">
+                        <el-select class="basic" v-model="userInfo.education" placeholder="请选择教育程度">
                           <el-option v-for="item in select.education" :key="item.value" :label="item.label"
                             :value="item.value">
                           </el-option>
@@ -136,7 +138,7 @@
                         <span class="redstar">*</span>
                       </td>
                       <td>
-                        <el-select class="basic" v-model="userInfo.experience" placeholder="请选择">
+                        <el-select class="basic" v-model="userInfo.experience" placeholder="请选择工作经验">
                           <el-option v-for="item in select.experience" :key="item.value" :label="item.label"
                             :value="item.value">
                           </el-option>
@@ -163,7 +165,7 @@
                     <tr>
                       <td valign="top"> </td>
                       <td colspan="3">
-                        <el-select class="basic status" v-model="userInfo.status" placeholder="请选择">
+                        <el-select class="basic status" v-model="userInfo.status" placeholder="请选择当前状态">
                           <el-option v-for="item in select.status" :key="item.value" :label="item.label"
                             :value="item.value">
                           </el-option>
@@ -835,6 +837,7 @@
     var app = new Vue({
       el: '#body',
       data: {
+        logined:false,
         jianId: '',
         optionIndex: '',
         tmpName: '',
@@ -913,7 +916,7 @@
               label: '1-3年'
             },
             {
-              value: 4,
+              value: '4',
               label: '3-5年'
             },
             {
@@ -1177,17 +1180,18 @@
               withCredentials: "true"
             },
             success: (res) => {
-              if (res.id&&res.type===0) {
-                _this.userInfo.name = res.name
+              if (res.id && res.type === 0) {
+                this.temInfo=res
+                this.logined=true
                 _this.tmpName = res.name ? res.name : '游客'
-              } else if(res.type===1){
-                this.$confirm( '当前登陆的用户不支持填写简历，是否重新登陆？','提示',{
+              } else if (res.type === 1) {
+                this.$confirm('当前登陆的用户不支持填写简历，是否重新登陆？', '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
-                }).then(()=>{
-                  window.location.href='./login.html'
-                }).catch(()=>{
-                  window.location.href='./index.html'
+                }).then(() => {
+                  window.location.href = './login.html'
+                }).catch(() => {
+                  window.location.href = './index.html'
                 })
               }
             },

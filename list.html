@@ -46,11 +46,21 @@
           <li><a href="jianli.html" rel="nofollow">我的简历</a></li>
           <li><a href="create.html" rel="nofollow">发布职位</a></li>
         </ul>
-        <ul class="loginTop">
-          <li><a @click="login" rel="nofollow">登录</a></li>
+        <ul class="loginTop" v-if="!logined">
+          <li><a href="login.html" rel="nofollow">登录</a></li>
           <li>|</li>
           <li><a href="register.html" rel="nofollow">注册</a></li>
         </ul>
+        <dl class="collapsible_menu" v-else-if="userInfo.type===0">
+          <dt>
+            <span>{{userInfo.name}}</span>
+          </dt>
+          <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
+          <dd><a href="collections.html">我收藏的职位</a></dd>
+          <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
+          <dd><a href="accountBind.html">帐号设置</a></dd>
+          <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
+        </dl>
       </div>
     </div><!-- end #header -->
     <div id="container">
@@ -284,7 +294,7 @@
           <li class="clearfix" v-for="(item,index) in jobList" :key="index" :class="{'odd':index%2===0}">
             <div class="hot_pos_l">
               <div class="mb10">
-                <a href="" :title="item.jobName" target="_blank">{{item.jobName}}</a>
+                <a :href="'./jobdetail.html?jobId='+item.jobId" target="_blank">{{item.jobName}}</a>
                 &nbsp;
                 <span class="c9">[{{item.city}}]</span>
               </div>
@@ -338,8 +348,10 @@
         </el-pagination>
       </div>
       <a id="backtop" title="回到顶部" rel="nofollow"></a>
-    </div><!-- end #container -->
-  </div><!-- end #body -->
+    </div>
+    <!-- end #container -->
+  </div>
+  <!-- end #body -->
   <div id="footer">
     <div class="wrapper">
       <a href="h/about.html" target="_blank" rel="nofollow">联系我们</a>
@@ -350,13 +362,14 @@
           href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">京ICP备14023790号-2</a></div>
     </div>
   </div>
-
-  <script type="text/javascript" src="style/js/core.min.js"></script>
-  <script type="text/javascript" src="style/js/popup.min.js"></script>
+  <!-- <script type="text/javascript" src="style/js/core.min.js"></script>
+  <script type="text/javascript" src="style/js/popup.min.js"></script> -->
   <script>
     var app = new Vue({
       el: '#body',
       data: {
+        logined: false,
+        userInfo: {},
         hotSearch: [],
         jobList: [],
         jobName: '',
@@ -382,6 +395,9 @@
           natureIndex: '',
           updatetimeIndex: ''
         }
+      },
+      mounted(){
+        this.checkCookie()
       },
       created() {
         this.searchData = window.getParams() ? window.getParams() : {}
@@ -425,9 +441,31 @@
         }
       },
       methods: {
-        login() {
-          var href = window.href
-          window.location.href = "./login.html?" + jsonToUrl(this.searchData)
+        checkCookie() {
+          $.ajax({
+            url: window.lagou + '/login/index/checkCookie',
+            xhrFields: {
+              withCredentials: "true"
+            },
+            success: (res) => {
+              // 普通用户
+              if (res.type === 0) {
+                this.userInfo = res
+                this.userInfo.name = res.name ? res.name : '游客'
+                this.logined = true
+              } else if (res.type === 1) {
+                // hr用户
+                this.userInfo.easyname = res.easyname ? res.easyname : '游客'
+                this.logined = true
+              } else {
+                // 登录失败
+                window.location.href = "./login.html"
+              }
+            },
+            error: (res) => {
+              window.location.href = "./login.html"
+            }
+          })
         },
         getHotSearch() {
           var _this = this
@@ -478,7 +516,7 @@
           window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
         getJobLists() {
-          // this.searchData = {}
+          this.searchData = { jobName: this.jobName }
           window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         },
         searchDatas() {
@@ -527,9 +565,6 @@
           window.location.href = window.local + '/list.html?' + jsonToUrl(this.searchData)
         }
       },
-      updated() {
-
-      }
     })
   </script>
   <script>

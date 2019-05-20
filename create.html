@@ -26,9 +26,6 @@
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
   <script src="style/js/jquery.lib.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="style/css/element.css">
-  <!-- <script>
-    tinymce.init({ selector: 'textarea', toolbar: "newnote print preview | undo redo | fontsizeselect", language: "zh_CN", })
-  </script> -->
   <!--[if lte IE 8]>
     <script type="text/javascript" src="style/js/excanvas.js"></script>
 <![endif]-->
@@ -105,10 +102,10 @@
         <dl class="company_center_aside">
           <dt>我发布的职位</dt>
           <dd>
-            <a href="positions.html">有效职位</a>
+            <a href="positions.html?status=0">有效职位</a>
           </dd>
           <dd>
-            <a href="positions.html">已下线职位</a>
+            <a href="positions.html?status=1">已下线职位</a>
           </dd>
         </dl>
         <div class="subscribe_side mt20">
@@ -137,7 +134,8 @@
               class="demo-ruleForm">
               <el-form-item label="职位类别" prop="job_type">
                 <el-select v-model="job.job_sort">
-                  <el-option :value="job.job_sort" :label="job.job_sort" :label="jobType.job_sort" class="jobs" v-for="(jobType,index) in jobs" :key="index">
+                  <el-option :value="job.job_sort" :label="job.job_sort" :label="jobType.job_sort" class="jobs"
+                    v-for="(jobType,index) in jobs" :key="index">
                     <span>{{jobType.name}}</span>
                     <ul class="select_option">
                       <li v-for="(job_sort,sortIndex) in jobType.job_sorts" :key="sortIndex"
@@ -172,14 +170,17 @@
                 <el-input v-model="job.min_salary" placeholder="最低报酬">
                   <span slot="suffix">k</span>
                 </el-input>
-                <el-input v-model="job.max_salary" placeholder="最高报酬"></el-input>
+                <el-input v-model="job.max_salary" placeholder="最高报酬">
+                  <span slot="suffix">k</span>
+                </el-input>
               </el-form-item>
               <el-form-item class="department" label="工作城市" prop="city">
                 <el-input v-model="job.city" placeholder="请输入工作城市"></el-input>
               </el-form-item>
               <el-form-item label="工作经验" prop="experience">
                 <el-select v-model="job.experience">
-                  <el-option v-for="(exp,index) in select.experience" :key="index" :label="exp.label" :value="exp.value">
+                  <el-option v-for="(exp,index) in select.experience" :key="index" :label="exp.label"
+                    :value="exp.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -192,7 +193,7 @@
               <el-form-item label="工作诱惑" prop="advantage">
                 <el-input v-model="job.advantage" placeholder="20字描述该职位的吸引力"></el-input>
               </el-form-item>
-              <el-form-item label="工作描述" prop="describe">
+              <el-form-item class="describe" label="工作描述" prop="describe">
                 <vue-editor v-model="job.describe" @blur="checkDescribe" @text-change="checkDescribe"></vue-editor>
                 <div class="el-form-item__error" v-show="checkDes">
                   请填写工作描述
@@ -379,8 +380,6 @@
       <script type="text/javascript">
         function showInfo(e) {
           map.clearOverlays();//清除所有覆盖物
-          //map.centerAndZoom(new BMap.Point(olng, olat), 11);//重定义中心点
-          //alert(e.point.lng + ", " + e.point.lat);
           var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat));  // 创建标注
           marker.addEventListener("mouseup", function (em) {//覆盖物监听事件--释放鼠标时定位覆盖物位置
             var pt = em.point;//移动后重新定位
@@ -405,7 +404,7 @@
           marker.enableDragging();    //可拖拽
           map.addOverlay(marker);     // 将标注添加到地图中
 
-          /////////////////////地址定位
+          // 地址定位
           var pt = e.point;
           gc.getLocation(pt, function (rs) {
             var addComp = rs.addressComponents;
@@ -424,13 +423,10 @@
             $('#lat').val(e.point.lat);
             $('#lng').val(e.point.lng);
           });
-
-          //////////////////////重置中心点
+          // 重置中心点
           olng = e.point.lng;
           olat = e.point.lat;
         }
-
-
         $(function () {
           //百度地图API功能
           var map = new BMap.Map("allmap");
@@ -483,33 +479,6 @@
   </div>
   <script src="style/js/core.min.js" type="text/javascript"></script>
   <script src="style/js/popup.min.js" type="text/javascript"></script>
-  <div id="cboxOverlay" style="display: none;"></div>
-  <div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;">
-    <div id="cboxWrapper">
-      <div>
-        <div id="cboxTopLeft" style="float: left;"></div>
-        <div id="cboxTopCenter" style="float: left;"></div>
-        <div id="cboxTopRight" style="float: left;"></div>
-      </div>
-      <div style="clear: left;">
-        <div id="cboxMiddleLeft" style="float: left;"></div>
-        <div id="cboxContent" style="float: left;">
-          <div id="cboxTitle" style="float: left;"></div>
-          <div id="cboxCurrent" style="float: left;"></div><button type="button" id="cboxPrevious"></button><button
-            type="button" id="cboxNext"></button><button id="cboxSlideshow"></button>
-          <div id="cboxLoadingOverlay" style="float: left;"></div>
-          <div id="cboxLoadingGraphic" style="float: left;"></div>
-        </div>
-        <div id="cboxMiddleRight" style="float: left;"></div>
-      </div>
-      <div style="clear: left;">
-        <div id="cboxBottomLeft" style="float: left;"></div>
-        <div id="cboxBottomCenter" style="float: left;"></div>
-        <div id="cboxBottomRight" style="float: left;"></div>
-      </div>
-    </div>
-    <div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div>
-  </div>
   <script>
     var app = new Vue({
       el: '#body',
@@ -560,6 +529,10 @@
           ],
           experience: [
             {
+              value: 0,
+              label: '不限'
+            },
+            {
               value: 1,
               label: '应届毕业生'
             },
@@ -605,7 +578,7 @@
             { required: true, message: '请选择职位类别', trigger: ["blur"] }
           ],
           jobName: [
-            { required: true, message: '请填写职位名称', trigger: ['blur','change'] }
+            { required: true, message: '请填写职位名称', trigger: ['blur', 'change'] }
           ],
           nature: [
             { required: true, message: '请选择工作性质', trigger: 'blur' }
@@ -642,7 +615,7 @@
               withCredentials: "true"
             },
             success: (res) => {
-              if (res !== null) {
+              if (res.id !== '') {
                 _this.easyname = res.easyname ? res.easyname : '游客'
               } else {
                 window.location.href = './login.html'
@@ -655,7 +628,7 @@
         },
         getData() {
           $.ajax({
-            url: window.lagou + '/company/index/getJobById',
+            url: window.lagou + '/job/index/getJobById',
             data: { jobId: this.jobId },
             dataType: 'json',
             method: 'post',
@@ -664,6 +637,7 @@
             },
             success: (res) => {
               this.job = res
+              console.log(this.job.experience)
             },
             error: (err) => {
 
@@ -695,26 +669,26 @@
             }
           });
         },
-        createJob(){
-          this.$http.post(window.lagou+'/company/index/createJob',{'jobId':this.jobId,data:this.job,option:this.option},{headers: {'Content-Type':'application/x-www-form-urlencoded'},emulateJSON:true}).then((res)=>{
-            if(res.body==='1'){
+        createJob() {
+          this.$http.post(window.lagou + '/company/index/createJob', { 'jobId': this.jobId, data: this.job, option: this.option }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, emulateJSON: true }).then((res) => {
+            if (res.body === '1') {
               this.$message({
-                type:'success',
-                message:'发布成功',
-                onClose:()=>{
-                  window.location.href="./positions.html"
+                type: 'success',
+                message: '发布成功',
+                onClose: () => {
+                  window.location.href = "./positions.html?status=0"
                 }
               })
-            }else if(res.body==='0'){
+            } else if (res.body === '0') {
               this.$message({
-                type:'warning',
-                message:'请修改之后再发布'
+                type: 'warning',
+                message: '请修改之后再发布'
               })
             }
-          }).catch((err)=>{})
+          }).catch((err) => { })
         }
       },
-      created(){
+      created() {
         // 设置post请求携带cookie
         Vue.http.interceptors.push((request, next) => {
           request.credentials = true;

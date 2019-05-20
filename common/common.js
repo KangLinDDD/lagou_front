@@ -102,6 +102,33 @@ function getNature (val) {
       break;
   }
 }
+function getDevStage (val) {
+  switch (val) {
+    case 0:
+      return '未融资'
+      break;
+    case 1:
+      return '天使轮'
+      break;
+    case 2:
+      return 'A轮'
+      break;
+    case 3:
+      return 'B轮'
+      break;
+    case 4:
+      return 'C轮'
+      break;
+    case 5:
+      return 'D轮及以上'
+      break;
+    case 6:
+      return '上市公司'
+      break;
+    default:
+      break;
+  }
+}
 function getExperience (val) {
   switch (val) {
     case 0:
@@ -146,6 +173,29 @@ function getEdu (val) {
       break;
     case 5:
       return '5-10年'
+      break;
+    default:
+      break;
+  }
+}
+function getScale (val) {
+  switch (val) {
+    case 0:
+      return '少于15人'
+      break;
+    case 1:
+      return '15-50人'
+      break;
+    case 2:
+      return '50-150人'
+    case 3:
+      return '150-500人'
+      break;
+    case 4:
+      return '500-2000人'
+      break;
+    case 5:
+      return '2000人以上'
       break;
     default:
       break;
