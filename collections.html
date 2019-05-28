@@ -15,7 +15,6 @@
     content="拉勾,拉勾网,拉勾招聘,拉钩, 拉钩网 ,互联网招聘,拉勾互联网招聘, 移动互联网招聘, 垂直互联网招聘, 微信招聘, 微博招聘, 拉勾官网, 拉勾百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘, 校招,社会招聘,社招">
   <meta content="QIQ6KC1oZ6" name="baidu-site-verification">
   <link href="style/images/favicon.ico" rel="Shortcut Icon">
-  <link href="style/css/style.css" type="text/css" rel="stylesheet">
   <link href="style/css/external.min.css" type="text/css" rel="stylesheet">
   <link href="style/css/popup.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" href="node_modules/element-ui/lib/theme-chalk/index.css">
@@ -24,6 +23,8 @@
   <script src="node_modules/vue-resource/dist/vue-resource.min.js"></script>
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
   <script src="style/js/jquery.lib.min.js" type="text/javascript"></script>
+  <link href="style/css/style.css" type="text/css" rel="stylesheet">
+  <link rel="stylesheet" href="style/css/element.css">
   <!--[if lte IE 8]>
     <script type="text/javascript" src="style/js/excanvas.js"></script>
 <![endif]-->
@@ -52,7 +53,7 @@
           </dt>
           <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
           <dd><a href="collections.html">我收藏的职位</a></dd>
-          <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
+          <dd class="btm"><a href="delivery.html">我的投递</a></dd>
           <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
         </dl>
@@ -64,6 +65,13 @@
         </div>
       </div>
     </div>
+    <el-dialog class="deliveryTip" title="提示" center :visible.sync="dialogDelivery" width="30%">
+      <span class="deliveryTip">是否投递？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelivery = false">取 消</el-button>
+        <el-button type="primary" class="ele-button" @click="delivery">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- end #header -->
     <div id="container">
       <div class="clearfix">
@@ -87,11 +95,13 @@
                         </a>
                       </h2>
                       <span class="co_time">发布时间：{{item.updatetime}}</span>
-                      <div class="co_cate">{{item.easyname}} / {{item.city}} / {{getExperience(item.experience)}} / {{getEdu(item.education)}}</div>
+                      <div class="co_cate">{{item.easyname}} / {{item.city}} / {{getExperience(item.experience)}} /
+                        {{getEdu(item.education)}}</div>
                       <span class="co_youhuo c7">{{item.advantage}}</span>
-                      <a class="collection_link" target="_blank" href="">投个简历</a>
+                      <a class="collection_link" @click="setJobId(item.jobId)" href="#">投个简历</a>
                       <i></i>
-                      <a class="collectionCancel collection_link collected" href="javascript:;" @click="cancleCollect(item.id)">
+                      <a class="collectionCancel collection_link collected" href="javascript:;"
+                        @click="cancleCollect(item.id)">
                         取消收藏
                         <span>已取消收藏</span>
                       </a>
@@ -101,16 +111,17 @@
               </form>
             </dd>
           </dl>
-          <el-pagination v-show="total/10>1" class="Pagination myself" :current-page="currentPage" background layout="prev, pager, next"
-            page-size="10" :total="total" prev-text="上一页" next-text="下一页" @current-change="changePage">
+          <el-pagination v-show="total/10>1" class="Pagination myself" :current-page="currentPage" background
+            layout="prev, pager, next" page-size="10" :total="total" prev-text="上一页" next-text="下一页"
+            @current-change="changePage">
           </el-pagination>
         </div>
         <div class="content_r">
           <div class="mycenterR" id="myInfo">
             <h2>我的信息</h2>
             <a href="collections.html">我收藏的职位</a>
-            <br>
-            <a target="_blank" href="subscribe.html">我订阅的职位</a>
+            <!-- <br> -->
+            <!-- <a target="_blank" href="subscribe.html">我订阅的职位</a> -->
           </div>
           <!--end #myInfo-->
           <div class="greybg qrcode mt20">
@@ -138,6 +149,7 @@
     var app = new Vue({
       el: '#body',
       data: {
+        dialogDelivery: false,
         currentPage: 1,
         total: 0,
         jobs: [],
@@ -152,7 +164,7 @@
               withCredentials: "true"
             },
             success: (res) => {
-              if (res.id === '' || res===null) {
+              if (res.id === '' || res === null) {
                 window.location.href = "./login.html"
                 return
               }
@@ -173,7 +185,7 @@
                 })
               } else {
                 // 登录失败
-                // window.location.href = "./login.html"
+                window.location.href = "./login.html"
               }
             },
             error: (res) => {
@@ -181,28 +193,51 @@
             }
           })
         },
+        setJobId(jobId){
+          this.jobId=jobId
+          this.dialogDelivery=true
+        },
+        delivery() {
+          this.$http.post(window.lagou + '/jianli/index/delivery', { jobId:this.jobId }, { credentials: true, emulateJSON: true }).then((res) => {
+            if (res.body === '1') {
+              this.dialogDelivery = false
+              this.$message({
+                type: 'success',
+                message: '投递成功，请静候佳音！',
+                duration: 1000,
+              })
+            } else if (res.body === '2') {
+              this.dialogDelivery = false
+              this.$message({
+                type: 'success',
+                message: '请勿重复投递',
+                duration: 1500
+              })
+            }
+          }).catch((err) => { })
+        },
         getCollect() {
           this.$http.post(window.lagou + '/job/index/getCollect', { currentPage: this.currentPage }, { credentials: true, emulateJSON: true }).then((res) => {
-            this.jobs=res.body.data
-            this.total=res.body.total
+            this.jobs = res.body.data
+            this.total = res.body.total
           }).catch((err) => { })
         },
         changePage(currentPage) {
           window.location.href = './collections.html?currentPage=' + currentPage
         },
-        cancleCollect(id,index){
-          this.$http.post(window.lagou+'/job/index/cancleCollect',{id},{credentials:true,emulateJSON:true}).then((res)=>{
-            if(res.body===1){
+        cancleCollect(id, index) {
+          this.$http.post(window.lagou + '/job/index/cancleCollect', { id }, { credentials: true, emulateJSON: true }).then((res) => {
+            if (res.body === 1) {
               this.$message({
-                type:'success',
-                message:'取消收藏',
-                duration:1000,
-                onClose:()=>{
+                type: 'success',
+                message: '取消收藏',
+                duration: 1000,
+                onClose: () => {
                   this.getCollect()
                 }
               })
             }
-          }).catch((err)=>{})
+          }).catch((err) => { })
         }
       },
       created() {

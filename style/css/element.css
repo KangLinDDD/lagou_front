@@ -50,3 +50,19 @@
   max-height: 300px;
   overflow: scroll;
 }
+.deliveryTip .el-dialog__body {
+  text-align: center;
+  font-size: 18px;
+}
+.el-message-box__btns .el-button{
+  color: #fff;
+}
+.el-message-box__btns .el-button{
+  background: #91cebe;
+  border-color: #91cebe;
+}
+.el-message-box__btns .el-button:hover{
+  background: #019875;
+  border-color: #019875;
+  color: #fff;
+}

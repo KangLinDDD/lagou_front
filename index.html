@@ -41,7 +41,7 @@
             <li v-show="userType===0"><a href="companylist.html">公司</a></li>
             <li v-show="userType===1"><a href="myhome.html">公司</a></li>
             <li v-show="userType===0"><a href="jianli.html" rel="nofollow">我的简历</a></li>
-            <li v-show="userType===1"><a href="positions.html" rel="nofollow">简历管理</a></li>
+            <li v-show="userType===1"><a href="./filterResumes.html?status=0" rel="nofollow">简历管理</a></li>
             <li v-show="userType===1"><a href="create.html" rel="nofollow">发布职位</a></li>
           </ul>
           <ul class="loginTop" v-if="!logined">
@@ -55,7 +55,7 @@
             </dt>
             <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
             <dd><a href="collections.html">我收藏的职位</a></dd>
-            <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
+            <dd class="btm"><a href="delivery.html">我的投递</a></dd>
             <dd><a href="accountBind.html">帐号设置</a></dd>
             <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
           </dl>
@@ -64,8 +64,8 @@
               <span>{{easyname}}</span>
               <i></i>
             </dt>
-            <dd><a href="positions.html">我发布的职位</a></dd>
-            <dd><a href="collections.html">我收到的简历</a></dd>
+            <dd><a href="positions.html?status=0">我发布的职位</a></dd>
+            <dd><a href="filterResumes.html">我收到的简历</a></dd>
             <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
             <dd><a href="accountBind.html">帐号设置</a></dd>
             <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
@@ -294,7 +294,7 @@
               <li class="clearfix" v-for="(item,index) in newJobs" :key="index" :class="{'odd':index%2===0}">
                 <div class="hot_pos_l">
                   <div class="mb10">
-                    <a href="#" target="_blank">{{item.jobName}}</a>
+                    <a :href="'./jobdetail.html?jobId='+item.jobId" target="_blank">{{item.jobName}}</a>
                     &nbsp;
                     <span class="c9">[{{item.city}}]</span>
                   </div>
@@ -342,8 +342,6 @@
               <a href="list.html?city=%E5%85%A8%E5%9B%BD" class="btn fr" target="_blank">查看更多</a>
             </ul>
           </div>
-
-          <div class="clear"></div>
           <div id="linkbox">
             <dl>
               <dt>友情链接</dt>

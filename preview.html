@@ -3,6 +3,7 @@
 
 <head>
   <script src="config/config.js"></script>
+  <script src="common/common.js"></script>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <title>简历预览-我的简历-拉勾网-最专业的互联网招聘平台</title>
   <meta content="23635710066417756375" property="qc:admins">
@@ -50,8 +51,10 @@
             <span v-if="userInfo.education == 2">本科</span>
             <span v-if="userInfo.education == 3">硕士</span>
             <span v-if="userInfo.education == 4">博士</span>
-            <span v-show="userInfo.education !== ''">|</span> 
-            {{experience}}工作经验<br>
+            <span v-show="userInfo.education !== ''">|</span>
+            {{getExperience(this.userInfo.experience)}}
+            <span v-show="this.userInfo.experience!=0&&this.userInfo.experience!=1">工作经验</span>
+            <br>
             {{userInfo.tel}} <span v-show="userInfo.tel">|</span>
             {{userInfo.email}}<br>
           </span>
@@ -219,14 +222,17 @@
               break
             }
             default: {
-              return ''
+              return '111'
               break
             }
           }
         },
       },
       mounted() {
-        this.checkJianLi()
+        this.jianId = getParams().jianId
+        if (this.jianId === '') {
+          this.checkJianLi()
+        }
         this.getUserInfo()
         this.getJianliInfo()
       },
@@ -248,14 +254,19 @@
         },
         getUserInfo() {
           $.ajax({
-            url: window.lagou + '/user/index/getUserInfo',
+            url: window.lagou + '/user/index/getUserInfoByJianId',
             xhrFields: {
               withCredentials: "true"
             },
+            method: 'post',
+            data: { jianId: this.jianId },
+            dataType: 'json',
             success: (res) => {
               var { name, sex, education, experience, tel, email, status } = res
               this.userInfo = { name, sex, education, experience, tel, email, status }
               this.userInfo.education = education ? '' + education : ''
+              this.userInfo.experience = experience ? experience : ''
+              console.log(this.userInfo.experience)
               this.userInfo.headImgUrl = res.headImgUrl ? res.headImgUrl : 'style/images/default_headpic.png'
             },
             error: (res) => {
@@ -266,10 +277,12 @@
         },
         getJianliInfo() {
           $.ajax({
-            url: window.lagou + '/jianli/index/getJianLi',
+            url: window.lagou + '/jianli/index/getInfoById',
             xhrFields: {
               withCredentials: "true"
             },
+            data: { jianId: this.jianId },
+            dataType: 'json',
             method: 'post',
             success: (res) => {
               var { expectInfo, work_experience, project_experience, education, self_describe, works } = res

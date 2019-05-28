@@ -67,7 +67,7 @@
           <li><a href="index.html">首页</a></li>
           <li class="current"><a href="myhome.html">公司</a></li>
           <li>
-            <a rel="nofollow" href="positions.html">简历管理</a>
+            <a rel="nofollow" href="./filterResumes.html?status=0">简历管理</a>
           </li>
           <li><a rel="nofollow" href="create.html">发布职位</a></li>
         </ul>
@@ -76,7 +76,7 @@
             <li>|</li>
             <li><a href="register.html" rel="nofollow">注册</a></li>
         </ul>
-        <dl class="collapsible_menu" v-show="basic.easyname">
+        <dl class="collapsible_menu" v-else>
           <dt>
             <span>{{easyname}}</span>
             <span class="red dn" id="noticeDot-1"></span>
@@ -551,11 +551,16 @@
             },
             method: 'post',
             success: (res) => {
+              if(res.confirmStatus===null){
+                this.easyname='游客'
+                this.introduce=''
+                return
+              }
               var { logo,introduce, dev_statge, basic, founder, cityInfo, founderHeadImg,product,productImg,confirmStatus } = res
               this.introduce = introduce
               this.dev_statge = dev_statge
               this.basic = basic
-              this.easyname=basic.easyname
+              this.easyname=basic.easyname?basic.easyname:'游客'
               this.logo = logo?logo:this.logo
               this.founder = founder
               this.cityInfo = cityInfo

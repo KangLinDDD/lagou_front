@@ -52,7 +52,7 @@
         </ul>
         <dl class="collapsible_menu" v-else-if="temInfo.type===0">
           <dt>
-            <span>{{userInfo.name}}</span>
+            <span>{{tmpName}}</span>
           </dt>
           <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
           <dd><a href="collections.html">我收藏的职位</a></dd>
@@ -837,12 +837,12 @@
     var app = new Vue({
       el: '#body',
       data: {
-        logined:false,
+        logined: false,
         jianId: '',
         optionIndex: '',
         tmpName: '',
         fileList: [],
-        headImg: '',
+        headImg: 'style/images/default_headpic.png',
         updateTime: '',
         time: {
           startTime: '',
@@ -1136,11 +1136,15 @@
               var { expectInfo, work_experience, project_experience, education, self_describe, works } = res
               this.expectInfo = expectInfo
               this.salary = expectInfo.min_salary + ',' + expectInfo.max_salary
-              this.work_experience = work_experience
+              this.work_experience = work_experience?work_experience:[]
               this.project_experience = project_experience
               this.education = education
               this.self_describe = self_describe
-              this.works = works
+              this.works = works ? works : {
+                url: '',
+                works_describe: ''
+              }
+
             },
             error: () => { }
           })
@@ -1153,7 +1157,7 @@
             },
             method: 'post',
             success: (res) => {
-              this.jianId = res.id
+              this.jianId = res
             },
             error: (res) => {
 
@@ -1179,10 +1183,15 @@
             xhrFields: {
               withCredentials: "true"
             },
+            method: 'post',
             success: (res) => {
+              if (res.id === '') {
+                window.location.href = "./login.html"
+                return
+              }
               if (res.id && res.type === 0) {
-                this.temInfo=res
-                this.logined=true
+                this.temInfo = res
+                this.logined = true
                 _this.tmpName = res.name ? res.name : '游客'
               } else if (res.type === 1) {
                 this.$confirm('当前登陆的用户不支持填写简历，是否重新登陆？', '提示', {
@@ -1206,13 +1215,17 @@
             xhrFields: {
               withCredentials: "true"
             },
+            method: 'post',
             success: (res) => {
-              this.updateTime = res.updateTime
-              var { name, sex, education, experience, tel, email, status } = res
-              this.userInfo = { name, sex, education, experience, tel, email, status }
-              this.template.userInfo = JSON.stringify(this.userInfo)
-              this.userInfo.education = education ? education : ''
-              this.headImg = res.headImgUrl ? res.headImgUrl : 'style/images/default_headpic.png'
+              if (res) {
+                this.updateTime = res.updateTime
+                var { name, sex, education, experience, tel, email, status } = res
+                this.userInfo = { name, sex, education, experience, tel, email, status }
+                this.tmpName = name
+                this.template.userInfo = JSON.stringify(this.userInfo)
+                this.userInfo.education = education ? education : ''
+                this.headImg = res.headImgUrl ? res.headImgUrl : 'style/images/default_headpic.png'
+              }
             },
             error: (res) => {
               window.location.href = "./login.html"
@@ -1622,9 +1635,6 @@
           this.expectInfo.expectCity = el.currentTarget.innerHTML
           this.changeStatus('citys')
         })
-      },
-      created() {
-
       }
     })
   </script>

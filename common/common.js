@@ -246,3 +246,36 @@ function checkEdu (val) {
       break;
   }
 }
+function getSex (val) {
+  switch (val) {
+    case 0:
+      return '男'
+      break;
+    case 1:
+      return '女'
+      break;
+    default:
+      break;
+  }
+}
+function getDelInfo (val) {
+  switch (val) {
+    case 1:
+      return '待定'
+      break;
+    case 2:
+      return '简历已通过'
+      break;
+    case 3:
+      return '不合适'
+      break;
+    case 4:
+      return '已联系'
+      break;
+    case 5:
+      return '已查看'
+      break;
+    default:
+      break;
+  }
+}

@@ -46,7 +46,6 @@
         <ul id="navheader" class="reset">
           <li><a href="index.html">首页</a></li>
           <li><a href="companylist.html">公司</a></li>
-          <li><a target="_blank" href="toForum.html">论坛</a></li>
           <li><a rel="nofollow" href="jianli.html">我的简历</a></li>
         </ul>
         <ul class="loginTop" v-if="!logined">
@@ -60,7 +59,7 @@
           </dt>
           <dd><a rel="nofollow" href="jianli.html">我的简历</a></dd>
           <dd><a href="collections.html">我收藏的职位</a></dd>
-          <dd class="btm"><a href="subscribe.html">我的订阅</a></dd>
+          <dd class="btm"><a href="delivery.html">我的投递</a></dd>
           <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
         </dl>
@@ -69,7 +68,7 @@
             <span>{{userInfo.easyname}}</span>
             <i></i>
           </dt>
-          <dd><a href="positions.html">我发布的职位</a></dd>
+          <dd><a href="positions.html?status=0">我发布的职位</a></dd>
           <dd><a href="positions.html">我收到的简历</a></dd>
           <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
           <dd><a href="accountBind.html">帐号设置</a></dd>
@@ -136,7 +135,7 @@
               <!-- <a title="设置默认投递简历" @click="selectResume" class="inline fl cboxElement">重新设置</a> -->
             </dd>
             <dd>
-              <a title="投个简历" class="btn fr btn_apply" @click="openDelivery" href="#">投个简历</a>
+              <a title="投个简历" class="btn fr btn_apply" @click.prevent="openDelivery" href="#">投个简历</a>
             </dd>
           </dl>
         </div>
@@ -234,7 +233,8 @@
           }).catch((err)=>{})
         },
         collectJob(){
-          if(this.collect){
+          if(this.collect===true){
+            this.cancleCollectByJobId(this.jobId)
             return
           }
           this.$http.post(window.lagou+'/job/index/collect',{jobId:this.jobId},{credentials:true,emulateJSON:true}).then((res)=>{
@@ -244,7 +244,7 @@
                 message:'收藏成功',
                 duration:1000,
                 onClose:()=>{
-
+                  this.collect=true
                 }
               })
             }
@@ -252,11 +252,34 @@
 
           })
         },
+        cancleCollectByJobId(id) {
+          this.$http.post(window.lagou + '/job/index/cancleCollectByJobId', { id }, { credentials: true, emulateJSON: true }).then((res) => {
+            if (res.body === 1) {
+              this.$message({
+                type: 'success',
+                message: '取消收藏',
+                duration: 1000,
+                onClose: () => {
+                  this.collect=false
+                }
+              })
+            }
+          }).catch((err) => { })
+        },
         changeConfirm() {
           this.confirm = !this.confirm
         },
         delivery() {
-          this.$http.post(window.lagou + '/jianli/index/delivery', { jobId: this.jobId }, { credentials: true, emulateJSON: true }).then((res) => {
+          if(this.userInfo.type!==0){
+            this.dialogDelivery = false
+            this.$message({
+              type:'error',
+              message:'当前角色不支持投递简历',
+              duration:2000
+            })
+            return
+          }
+          this.$http.post(window.lagou + '/jianli/index/delivery', { jobId: this.jobId,companyId:this.jobData.companyId}, { credentials: true, emulateJSON: true }).then((res) => {
             if (res.body === '1') {
               this.dialogDelivery = false
               this.$message({

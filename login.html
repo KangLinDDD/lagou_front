@@ -110,14 +110,13 @@
                 },
                 success: function (res) {
                   var arr = document.referrer.match(/[a-zA-Z1-9_]+\.html/g)
-                  console.log(arr&&arr[0]!=='register.html')
                   if(!res){
                      // 登录失败
                      this.loginFailed = true
-                    console.log(res)
-                  }else if (arr&&arr[0]!=='register.html'&&arr[0]!=='login.html') {
+                  }else if (arr&&(arr[0]!=='register.html'&& arr[0]!=='login.html')) {
                     window.history.back(-1)
                   }else{
+                    // window.history.back(-1)
                     window.location.href="index.html"
                   }
                 },

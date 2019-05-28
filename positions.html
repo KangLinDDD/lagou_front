@@ -52,7 +52,7 @@
             <i></i>
           </dt>
           <dd><a href="positions.html">我发布的职位</a></dd>
-          <dd><a href="positions.html">我收到的简历</a></dd>
+          <dd><a href="filterResumes.html">我收到的简历</a></dd>
           <dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
           <dd><a href="accountBind.html">帐号设置</a></dd>
           <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
@@ -71,28 +71,28 @@
         <dl class="company_center_aside">
           <dt>我收到的简历</dt>
           <dd>
-            <a href="unHandleResumes.html">待处理简历</a>
+            <a :href="'filterResumes.html?status='+0">待处理简历</a>
           </dd>
           <dd>
-            <a href="canInterviewResumes.html">待定简历</a>
+            <a :href="'filterResumes.html?status='+1">待定简历</a>
           </dd>
           <dd>
-            <a href="haveNoticeResumes.html">已通知面试简历</a>
+            <a :href="'filterResumes.html?status='+2">已通知面试简历</a>
           </dd>
           <dd>
-            <a href="haveRefuseResumes.html">不合适简历</a>
+            <a :href="'filterResumes.html?status='+3">不合适简历</a>
           </dd>
           <!-- <dd class="btm">
-            <a href="autoFilterResumes.html">自动过滤简历</a>
+            <a href="filterResumes.html?status=">自动过滤简历</a>
           </dd> -->
         </dl>
         <dl class="company_center_aside">
           <dt>我发布的职位</dt>
-          <dd :class="{'current':searchData.status==='0'}">
-            <a href="positions.html?status=0">有效职位</a>
+          <dd :class="{'current':searchData.status===0}">
+            <a href="" @click.prevent="changeSwitch(0)">有效职位</a>
           </dd>
-          <dd :class="{'current':searchData.status==='1'}">
-            <a href="positions.html?status=1">已下线职位</a>
+          <dd :class="{'current':searchData.status===1}">
+            <a href="" @click.prevent="changeSwitch(1)">已下线职位</a>
           </dd>
         </dl>
       </div><!-- end .sidebar -->
@@ -115,10 +115,10 @@
               <ul class="reset my_jobs">
                 <li v-for="(item,index) in jobs" :key="index">
                   <h3>
-                    <a target="_self" href="http://www.lagou.com/jobs/149594.html">{{item.jobName}}</a>
+                    <a target="_self" :href="'./jobdetail.html?jobId='+item.jobId">{{item.jobName}}</a>
                     <span>[{{item.city}}]</span>
                   </h3>
-                  <span class="receivedResumeNo"><a href="unHandleResumes.html?positionId=149594">应聘简历（1）</a></span>
+                  <span class="receivedResumeNo"><a href="unHandleResumes.html?positionId=149594">应聘简历（0）</a></span>
                   <div>{{getNature(item.nature)}} / {{item.min_salary}}k-{{item.max_salary}}k /
                     {{getExperience(item.experience)}} / {{getEdu(item.education)}}</div>
                   <div class="c9">发布时间： {{item.updatetime}}</div>
@@ -166,10 +166,14 @@
         currentPage: 1,
         total: 0,
         searchData: {
-          status:''
+          status:0
         }
       },
       methods: {
+        changeSwitch(val){
+          this.searchData.status=val
+          this.getJobs()
+        },
         checkCookie() {
           $.ajax({
             url: window.lagou + '/login/index/checkCookie',
@@ -232,7 +236,7 @@
         }
       },
       mounted() {
-        this.searchData = getParams()?getParams():this.searchData
+        // this.searchData = getParams()?getParams():this.searchData
         this.checkCookie()
         this.getJobs()
       }
